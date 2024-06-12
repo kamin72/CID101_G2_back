@@ -1,11 +1,14 @@
 <template>
-  <div style="height: 50px" class="d-flex align-items-center justify-content-center login">
+  <div
+    style="height: 50px; width: 100%"
+    class="d-flex align-items-center justify-content-center login position-fixed"
+  >
     <div class="col-11 login-wrap d-flex align-items-center justify-content-end">
       <span class="pe-4">黃韻如，您好</span>
       <span class="material-symbols-outlined" style="cursor: pointer"> login </span>
     </div>
   </div>
-  <aside class="navBar">
+  <aside class="navBar position-fixed">
     <div class="logo">
       <img src="../assets/image/logo/logo1-w.png" />
     </div>
