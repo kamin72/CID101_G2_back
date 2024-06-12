@@ -28,11 +28,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>PeiPei</td>
-          <td>mgr.01</td>
-          <td>超級管理員</td>
+        <tr v-for="(entry, index) in entries" :key="index">
+          <th scope="row">{{ index + 1 }}</th>
+          <td>{{ entry.name }}</td>
+          <td>{{ entry.account }}</td>
+          <td>{{ entry.access }}</td>
           <td>
             <div class="form-check form-switch col">
               <input
@@ -40,6 +40,7 @@
                 type="checkbox"
                 role="switch"
                 id="flexSwitchCheckDefault"
+                v-model="entry.switchState"
               />
             </div>
           </td>
@@ -47,27 +48,9 @@
             <RouterLink to="/editMember">
               <button type="button" class="btn btn-primary">編輯</button>
             </RouterLink>
-            <button type="button" class="btn btn-secondary">刪除</button>
-          </td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>PeiPei</td>
-          <td>mgr.01</td>
-          <td>超級管理員</td>
-          <td>
-            <div class="form-check form-switch col">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                role="switch"
-                id="flexSwitchCheckDefault"
-              />
-            </div>
-          </td>
-          <td class="d-flex gap-2 justify-content-center">
-            <button type="button" class="btn btn-primary">編輯</button>
-            <button type="button" class="btn btn-secondary">刪除</button>
+            <button type="button" class="btn btn-secondary" @click="clearColumn(index)">
+              刪除
+            </button>
           </td>
         </tr>
       </tbody>
@@ -92,3 +75,24 @@
     </nav>
   </div>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      entries: []
+    }
+  },
+  created() {
+    const { name, account, access } = this.$route.query
+    if (name && account && access) {
+      this.entries.push({ name, account, access, switchState: true })
+    }
+  },
+  methods: {
+    clearColumn(index) {
+      this.entries.splice(index, 1)
+    }
+  }
+}
+</script>
