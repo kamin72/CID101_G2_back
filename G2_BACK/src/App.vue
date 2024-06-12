@@ -1,17 +1,16 @@
 <template>
+  <Navigator />
   <RouterView />
-  <div>123</div>
-  <TestView />
 </template>
 
 <script>
 import { RouterView } from 'vue-router'
-import TestView from '@/components/TestView.vue'
+import Navigator from '@/components/Navigator.vue'
 
 export default {
   components: {
     RouterView,
-    TestView
+    Navigator
   }
 }
 </script>
