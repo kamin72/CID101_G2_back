@@ -1,10 +1,14 @@
-import React from "react";
-import { Button } from "antd";
+import './assets/main.css'
 
-const App = () => (
-  <div className="App">
-    <Button type="primary">Button</Button>
-  </div>
-);
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 
-export default App;
+import App from './App.vue'
+import router from './router'
+
+const app = createApp(App)
+
+app.use(createPinia())
+app.use(router)
+
+app.mount('#app')
