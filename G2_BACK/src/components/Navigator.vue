@@ -8,43 +8,53 @@
       <span class="material-symbols-outlined" style="cursor: pointer"> login </span>
     </div>
   </div>
-  <aside class="navBar position-fixed">
+  <aside class="navBar position-fixed z-2">
     <div class="logo">
       <img src="../assets/image/logo/logo1.png" />
     </div>
     <nav>
       <ul>
-        <li>
-          <a href="">管理員管理</a>
-        </li>
-        <li>
-          <a href="">最新消息管理</a>
-        </li>
-        <li>
-          <a href="">課程管理</a>
-        </li>
-        <li>
-          <a href="">會員管理</a>
-        </li>
-        <li>
-          <a href="">詢價單管理</a>
-        </li>
-        <li>
-          <a href="">商品管理</a>
-        </li>
-        <li>
-          <a href="">問答管理</a>
-        </li>
-        <li>
-          <a href="">優惠券管理</a>
-        </li>
+        <router-link to="/" active-class="active-link">
+          <li>管理員管理</li>
+        </router-link>
+        <router-link to="" active-class="active-link">
+          <li>最新消息管理</li>
+        </router-link>
+        <router-link to="" active-class="active-link">
+          <li>課程管理</li>
+        </router-link>
+        <router-link to="/login" active-class="active-link">
+          <li>會員管理</li>
+        </router-link>
+        <router-link to="" active-class="active-link">
+          <li>詢價單管理</li>
+        </router-link>
+        <router-link to="" active-class="active-link">
+          <li>商品管理</li>
+        </router-link>
+        <router-link to="" active-class="active-link">
+          <li>問答管理</li>
+        </router-link>
+        <router-link to="" active-class="active-link">
+          <li>優惠券管理</li>
+        </router-link>
       </ul>
     </nav>
   </aside>
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {}
+  },
+  computed: {}
+}
 </script>
 
-<style lang="scss"></style>
+<style scoped lang="scss">
+.active-link li {
+  background-color: #dc3545;
+  color: white;
+}
+</style>
