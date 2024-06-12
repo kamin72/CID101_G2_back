@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-button variant="primary">Button</b-button>
+    <button type="button" class="btn btn-primary">Primary</button>
   </div>
 </template>
 
