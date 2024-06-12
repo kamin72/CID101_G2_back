@@ -27,6 +27,11 @@ const router = createRouter({
       path: '/editMember',
       name: 'editMember',
       component: () => import('@/components/membermange/EditMember.vue')
+    },
+    {
+      path: '/courseManage',
+      name: 'courseManage',
+      component: () => import('../views/CourseManage.vue')
     }
   ]
 })

@@ -10,7 +10,7 @@
   </div>
   <aside class="navBar position-fixed z-2">
     <div class="logo">
-      <img src="../assets/image/logo/logo1.png" />
+      <img src="../assets/image/logo/logo1-w.png" />
     </div>
     <nav>
       <ul>
