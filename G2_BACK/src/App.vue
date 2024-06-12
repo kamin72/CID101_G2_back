@@ -1,20 +1,16 @@
 <template>
   <RouterView />
-  <Test />
+  <TestView />
 </template>
 
 <script>
 import { RouterView } from 'vue-router'
-import Test from '@/components/Test.vue'
+import TestView from '@/components/TestView.vue'
+
 export default {
   components: {
     RouterView,
-    Test,
+    TestView
   }
 }
 </script>
-<style>
-body {
-  background-color: #ede7de;
-}
-</style>
