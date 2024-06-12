@@ -7,7 +7,7 @@
   </div>
   <aside class="navBar">
     <div class="logo">
-      <img src="../assets/image/logo/logo1.png" />
+      <img src="../assets/image/logo/logo1-w.png" />
     </div>
     <nav>
       <ul>

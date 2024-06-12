@@ -11,7 +11,9 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "bootstrap": "^5.3.3",
+    "D": "^1.0.0",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
