@@ -14,7 +14,7 @@
     <div class="mt-3 w-50">
       <label for="access" class="form-label fw-bolder">品種</label>
       <select class="form-select" aria-label="Default select example">
-        <option selected>來源</option>
+        <option selected>品種</option>
         <option value="波爾多混釀">波爾多混釀</option>
         <option value="黑皮諾">黑皮諾</option>
         <option value="帕洛米諾">帕洛米諾</option>

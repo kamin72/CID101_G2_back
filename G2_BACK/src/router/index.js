@@ -34,9 +34,21 @@ const router = createRouter({
       component: () => import('../views/CourseManage.vue')
     },
     {
-      path: '/OrderManage',
-      name: 'OrderManage',
-      component: () => import('@/views/OrderManage.vue')
+      path: '/orderManage',
+      name: 'orderManage',
+      component: () => import('@/views/OrderManage.vue'),
+      children: [
+        {
+          path: 'ordercount',
+          name: 'ordercount',
+          component: () => import('../components/ordermanage/OrderCount.vue')
+        },
+        {
+          path: 'orderquery',
+          name: 'orderquery',
+          component: () => import('../components/ordermanage/OrderQuery.vue')
+        }
+      ]
     }
   ]
 })

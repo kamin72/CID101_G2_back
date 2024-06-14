@@ -2,22 +2,15 @@
   <div class="container">
     <span class="fs-1 fw-bolder">詢價單管理</span>
     <div class="d-flex gap-3">
-      <RouterLink to="/">
-        <button
-          type="button"
-          class="btn btn-primary active"
-          aria-pressed="true"
-          data-bs-toggle="button"
-        >
-          詢價單查詢
-        </button>
+      <RouterLink to="/orderManage/orderquery">
+        <button type="button" class="btn btn-primary">詢價單查詢</button>
       </RouterLink>
-      <RouterLink to="/addNew">
-        <button type="button" class="btn btn-primary active" aria-pressed="true">詢價單統計</button>
+      <RouterLink to="/orderManage/ordercount">
+        <button type="button" class="btn btn-primary">詢價單統計</button>
       </RouterLink>
     </div>
-    <OrderQuery />
-    <OrderCount />
+    <OrderQuery v-if="$route.path === '/orderManage/orderquery'" />
+    <OrderCount v-if="$route.path === '/orderManage/ordercount'" />
   </div>
 </template>
 
