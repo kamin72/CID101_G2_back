@@ -32,6 +32,21 @@ const router = createRouter({
       path: '/courseManage',
       name: 'courseManage',
       component: () => import('../views/CourseManage.vue')
+    },
+    {
+      path: '/productManage',
+      name: 'productManage',
+      component: () => import('../views/ProductManage.vue')
+    },
+    {
+      path: '/addProduct',
+      name: 'addProduct',
+      component: () => import('@/components/productManage/AddProduct.vue')
+    },
+    {
+      path: '/editProduct',
+      name: 'editProduct',
+      component: () => import('@/components/productManage/EditProduct.vue')
     }
   ]
 })

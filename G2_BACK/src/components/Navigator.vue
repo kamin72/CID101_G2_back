@@ -29,7 +29,7 @@
         <router-link to="" active-class="active-link">
           <li>詢價單管理</li>
         </router-link>
-        <router-link to="" active-class="active-link">
+        <router-link to="/productManage" active-class="active-link">
           <li>商品管理</li>
         </router-link>
         <router-link to="" active-class="active-link">
