@@ -3,10 +3,8 @@
       <span class="fs-1 fw-bolder">商品管理</span>
       <div class="d-flex gap-3 justify-content-end">
         <div class="input-group z-0 col-6 w-auto">
-          <input
-            type="text"
-            class="form-control"
-            placeholder=""
+          <input type="text" class="form-control"
+            placeholder="請輸入商品資訊"
             aria-label="Example text with two button addons"
           />
           <button class="btn btn-outline-primary" type="button">搜尋</button>
@@ -17,7 +15,7 @@
       </div>
   
       <table class="table mt-5 text-center">
-        <thead>
+        <thead class="table-dark">
           <tr>
             <th scope="col">編號</th>
             <th scope="col">商品圖片</th>

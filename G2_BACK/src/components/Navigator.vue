@@ -23,7 +23,7 @@
         <router-link to="" active-class="active-link">
           <li>最新消息管理</li>
         </router-link>
-        <router-link to="" active-class="active-link">
+        <router-link to="/courseManage" active-class="active-link">
           <li>課程管理</li>
         </router-link>
         <router-link to="/login" active-class="active-link">
