@@ -14,8 +14,8 @@
                         <button class="btn btn-primary me-1" type="button" id="button-search">搜尋</button>
                     </div>
                     <RouterLink to="/addCourse">
-                    <button type="button" class="btn btn-primary" style="height: 40px;">新增</button>
-                  </RouterLink>
+                        <button type="button" class="btn btn-primary" style="height: 40px;">新增</button>
+                    </RouterLink>
                 </div>
             </div>
             <table class="table align-middle">
@@ -32,95 +32,31 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- 資料四 -->
-                    <tr>
-                        <th scope="row">4</th>
-                        <td>品酒初級課程2</td>
-                        <td>王大明</td>
-                        <td>2024/05/10 14:00-<br>2024/05/10 16:00</td>
-                        <th>A</th>
-                        <td>NT. 3400</td>
+                    <tr v-for="course in courses" :key="course.id">
+                        <th scope="row">{{ course.id }}</th>
+                        <td>{{ course.name }}</td>
+                        <td>{{ course.teacher }}</td>
+                        <td>{{ course.time }}</td>
+                        <th>{{ course.classroom }}</th>
+                        <td>NT. {{ course.price }}</td>
                         <td>
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" role="switch"
-                                    id="flexSwitchCheckChecked" checked>
+                                    :id="'flexSwitchCheck' + course.id" v-model="course.isActive">
                             </div>
                         </td>
                         <td>
                             <div class="button-wrap d-flex">
-                                <button type="button" class="btn btn-primary d-flex align-items-center me-1"
-                                    style="height: 40px;">編輯</button>
+                                <RouterLink :to="'/addCourse/' + course.id">
+                                    <button type="button" class="btn btn-primary d-flex align-items-center me-1"
+                                        style="height: 40px;">
+                                        編輯
+                                    </button>
+                                </RouterLink>
                                 <button type="button" class="btn btn-secondary d-flex align-items-center"
-                                    style="height: 40px;">刪除</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- 資料三 -->
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>品酒進階課程1</td>
-                        <td>王大明</td>
-                        <td>2024/05/09 14:00-<br>2024/05/09 16:00</td>
-                        <th>A</th>
-                        <td>NT. 4200</td>
-                        <td>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch"
-                                    id="flexSwitchCheckChecked" checked>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="button-wrap d-flex">
-                                <button type="button" class="btn btn-primary d-flex align-items-center me-1"
-                                    style="height: 40px;">編輯</button>
-                                <button type="button" class="btn btn-secondary d-flex align-items-center"
-                                    style="height: 40px;">刪除</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- 資料二 -->
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>品酒中級課程1</td>
-                        <td>王大明</td>
-                        <td>2024/05/02 14:00-<br>2024/05/02 16:00</td>
-                        <th>A</th>
-                        <td>NT. 3800</td>
-                        <td>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch"
-                                    id="flexSwitchCheckChecked" checked>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="button-wrap d-flex">
-                                <button type="button" class="btn btn-primary d-flex align-items-center me-1"
-                                    style="height: 40px;">編輯</button>
-                                <button type="button" class="btn btn-secondary d-flex align-items-center"
-                                    style="height: 40px;">刪除</button>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- 資料一 -->
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>品酒初級課程1</td>
-                        <td>王大明</td>
-                        <td>2024/05/01 14:00-<br>2024/05/02 16:00</td>
-                        <th>A</th>
-                        <td>NT. 3200</td>
-                        <td>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch"
-                                    id="flexSwitchCheckChecked" checked>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="button-wrap d-flex">
-                                <button type="button" class="btn btn-primary d-flex align-items-center me-1"
-                                    style="height: 40px;">編輯</button>
-                                <button type="button" class="btn btn-secondary d-flex align-items-center"
-                                    style="height: 40px;">刪除</button>
+                                    style="height: 40px;" @click="confirmDelete(course.id)">
+                                    刪除
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -129,3 +65,37 @@
         </div>
     </div>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            courses: [
+                {
+                    id: 1,
+                    name: '品酒初級課程1',
+                    teacher: '王大明',
+                    time: '2024/05/01 14:00-2024/05/02 16:00',
+                    classroom: 'A',
+                    price: 3200,
+                    isActive: true
+                },
+                // 可以添加更多課程數據
+            ]
+        }
+    },
+    methods: {
+        confirmDelete(courseId) {
+            if (confirm(`確定要刪除課程編號 ${courseId} 嗎？`)) {
+                this.deleteCourse(courseId);
+            }
+        },
+        deleteCourse(courseId) {
+            // 在實際應用中，這裡通常會調用 API 來刪除數據
+            // 這裡我們只是從前端數組中移除該課程
+            this.courses = this.courses.filter(course => course.id !== courseId);
+            alert(`課程編號 ${courseId} 已被刪除`);
+        }
+    }
+}
+</script>
