@@ -9,11 +9,6 @@ const router = createRouter({
       name: 'home',
       component: MemberManage
     },
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   component: () => import('../views/AboutView.vue')
-    // },
     {
       path: '/login',
       name: 'login',
