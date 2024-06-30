@@ -4,8 +4,9 @@
       <label for="access" class="form-label fw-bolder">來源</label>
       <select class="form-select" aria-label="Default select example">
         <option selected>來源</option>
-        <option value="批發商">批發商</option>
-        <option value="一般會員">一般會員</option>
+        <option value="0">全部</option>
+        <option value="2">批發商</option>
+        <option value="1">一般會員</option>
       </select>
     </div>
     <div class="input-group z-0 w-auto h-25 align-self-end">
@@ -123,3 +124,18 @@
     </ul>
   </nav>
 </template>
+
+<script>
+export default {
+  data() {
+    return {}
+  },
+  methods: {
+    fetchOrderData(identity) {
+      fetch(`http://localhost/CID101_G2_php/back/orderManage.php?identity=${identity}`)
+        .then((res) => res.json())
+        .then((data) => {})
+    }
+  }
+}
+</script>
