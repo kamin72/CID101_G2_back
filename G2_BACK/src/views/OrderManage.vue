@@ -3,10 +3,24 @@
     <span class="fs-1 fw-bolder">詢價單管理</span>
     <div class="d-flex gap-3">
       <RouterLink to="/orderManage/orderquery">
-        <button type="button" class="btn btn-primary">詢價單查詢</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          :class="{ active: isActive }"
+          @click="toggleActive"
+        >
+          詢價單查詢
+        </button>
       </RouterLink>
       <RouterLink to="/orderManage/ordercount">
-        <button type="button" class="btn btn-primary">詢價單統計</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          :class="{ active: !isActive }"
+          @click="toggleActive"
+        >
+          詢價單統計
+        </button>
       </RouterLink>
     </div>
     <OrderQuery v-if="$route.path === '/orderManage/orderquery'" />
@@ -24,7 +38,14 @@ export default {
     OrderCount
   },
   data() {
-    return {}
+    return {
+      isActive: false
+    }
+  },
+  methods: {
+    toggleActive() {
+      this.isActive = !this.isActive
+    }
   }
 }
 </script>
