@@ -74,7 +74,11 @@ const router = createRouter({
           component: () => import('../components/ordermanage/OrderQuery.vue')
         }
       ]
-    }
+    },
+    {
+      path: '/discount',
+      component: () => import('../views/DiscountManage.vue')
+    },
   ]
 })
 

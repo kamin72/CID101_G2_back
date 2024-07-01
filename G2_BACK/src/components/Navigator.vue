@@ -38,7 +38,7 @@
         <router-link to="" active-class="active-link">
           <li>問答管理</li>
         </router-link>
-        <router-link to="" active-class="active-link">
+        <router-link to="/discount" active-class="active-link">
           <li>優惠券管理</li>
         </router-link>
       </ul>
