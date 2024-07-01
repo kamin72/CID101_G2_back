@@ -74,6 +74,14 @@ const router = createRouter({
       path: '/discount',
       component: () => import('../views/DiscountManage.vue')
     },
+    {
+      path: '/editOrder',
+      name: 'editOrder',
+      component: () => import('@/components/ordermanage/EditOrder.vue'),
+      props: (route) => ({
+        cartId: route.query.cartId
+      })
+    }
   ]
 })
 

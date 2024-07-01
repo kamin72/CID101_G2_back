@@ -21,7 +21,7 @@
       </select>
     </div>
     <div class="mt-5 d-flex gap-5" style="width: 100%">
-      <button type="button" class="btn btn-primary p-3 fs-4" style="width: 50%" @click="submitForm">
+      <button type="button" class="btn btn-primary p-2 fs-4" style="width: 50%" @click="submitForm">
         新增
       </button>
       <button type="button" class="btn btn-secondary fs-4" style="width: 50%" @click="clearForm">
