@@ -37,7 +37,7 @@
         <label for="backgroundImg" class="form-label fw-bolder">背景圖片</label>
         <button type="button" class="btn btn-primary btn-lg">上傳背景圖片</button>
       </div>
-      <div class="mt-5 mb-5 d-flex gap-5" style="width: 100%">
+      <div class="mb-3">
         <button type="button" class="btn btn-primary p-3 fs-4" style="width: 50%">儲存</button>
         <button type="button" class="btn btn-secondary fs-4" style="width: 50%">取消</button>
       </div>
