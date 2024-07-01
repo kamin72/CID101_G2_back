@@ -69,6 +69,14 @@ const router = createRouter({
           component: () => import('../components/ordermanage/OrderQuery.vue')
         }
       ]
+    },
+    {
+      path: '/editOrder',
+      name: 'editOrder',
+      component: () => import('@/components/ordermanage/EditOrder.vue'),
+      props: (route) => ({
+        cartId: route.query.cartId
+      })
     }
   ]
 })

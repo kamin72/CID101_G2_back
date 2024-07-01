@@ -2,11 +2,15 @@
   <div class="d-flex justify-content-between">
     <div class="mt-3 w-50">
       <label for="access" class="form-label fw-bolder">來源</label>
-      <select class="form-select" aria-label="Default select example">
-        <option selected>來源</option>
-        <option value="0">全部</option>
-        <option value="2">批發商</option>
-        <option value="1">一般會員</option>
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        @change="fetchOrderData($event)"
+      >
+        <option value="0" selected>全部</option>
+        <option v-for="item in identity" :key="item.value" :value="item.value">
+          {{ item.name }}
+        </option>
       </select>
     </div>
     <div class="input-group z-0 w-auto h-25 align-self-end">
@@ -15,13 +19,14 @@
         class="form-control"
         placeholder=""
         aria-label="Example text with two button addons"
+        v-model.trim="content"
       />
-      <button class="btn btn-outline-primary" type="button">搜尋</button>
+      <button class="btn btn-outline-primary" type="button" @click="searchList">搜尋</button>
     </div>
   </div>
   <table class="table mt-5">
     <thead>
-      <tr>
+      <tr class="table-primary">
         <th scope="col">詢價單編號</th>
         <th scope="col">姓名</th>
         <th scope="col">連絡電話</th>
@@ -31,74 +36,14 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>王大明</td>
-        <td>0912345678</td>
-        <td>123@email.com</td>
-        <td>未處理</td>
+      <tr v-for="item in searchData || orderData" :key="item.cart_id">
+        <th scope="row">{{ item.cart_id }}</th>
+        <td>{{ item.cart_name }}</td>
+        <td>{{ item.phone }}</td>
+        <td>{{ item.email }}</td>
+        <td>{{ getCartStatus(item.cart_status) }}</td>
         <td class="d-flex gap-2 justify-content-center">
-          <RouterLink to="/">
-            <button type="button" class="btn btn-primary">編輯</button>
-          </RouterLink>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">1</th>
-        <td>王大明</td>
-        <td>0912345678</td>
-        <td>123@email.com</td>
-        <td>處理中</td>
-        <td class="d-flex gap-2 justify-content-center">
-          <RouterLink to="/">
-            <button type="button" class="btn btn-primary">編輯</button>
-          </RouterLink>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">1</th>
-        <td>王大明</td>
-        <td>0912345678</td>
-        <td>123@email.com</td>
-        <td>已備貨</td>
-        <td class="d-flex gap-2 justify-content-center">
-          <RouterLink to="/">
-            <button type="button" class="btn btn-primary">編輯</button>
-          </RouterLink>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">1</th>
-        <td>王大明</td>
-        <td>0912345678</td>
-        <td>123@email.com</td>
-        <td>已取件</td>
-        <td class="d-flex gap-2 justify-content-center">
-          <RouterLink to="/">
-            <button type="button" class="btn btn-primary">編輯</button>
-          </RouterLink>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">1</th>
-        <td>王大明</td>
-        <td>0912345678</td>
-        <td>123@email.com</td>
-        <td>請求取消</td>
-        <td class="d-flex gap-2 justify-content-center">
-          <RouterLink to="/">
-            <button type="button" class="btn btn-primary">編輯</button>
-          </RouterLink>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">1</th>
-        <td>王大明</td>
-        <td>0912345678</td>
-        <td>123@email.com</td>
-        <td>已取消</td>
-        <td class="d-flex gap-2 justify-content-center">
-          <RouterLink to="/">
+          <RouterLink :to="{ path: '/editOrder', query: { cartId: item.cart_id } }">
             <button type="button" class="btn btn-primary">編輯</button>
           </RouterLink>
         </td>
@@ -128,14 +73,67 @@
 <script>
 export default {
   data() {
-    return {}
+    return {
+      orderData: [],
+      identity: [
+        {
+          value: 1,
+          name: '一般會員'
+        },
+        {
+          value: 2,
+          name: '批發商'
+        }
+      ],
+      content: '',
+      searchData: null
+    }
   },
   methods: {
-    fetchOrderData(identity) {
-      fetch(`http://localhost/CID101_G2_php/back/orderManage.php?identity=${identity}`)
+    fetchOrderData(event) {
+      const selectValue = event ? event.target.value : 0
+      fetch(
+        `http://localhost/CID101_G2_php/back/orderManage/orderManage.php?identity=${selectValue}`
+      )
         .then((res) => res.json())
-        .then((data) => {})
+        .then((data) => {
+          if (data.error) {
+            alert(data.msg)
+          } else {
+            this.orderData = data.order
+            this.searchData = data.order
+            // console.log(this.orderData)
+            localStorage.setItem('orderData', JSON.stringify(this.orderData))
+          }
+        })
+    },
+    getCartStatus(status) {
+      const statusMap = {
+        0: '未處理',
+        1: '處理中',
+        2: '已備貨',
+        3: '已取件',
+        4: '請求取消',
+        5: '已取消'
+      }
+      return statusMap[status] || '未知狀態'
+    },
+    searchList() {
+      if (this.content == '') {
+        return (this.searchData = this.orderData)
+      }
+      this.searchData = this.orderData.filter((data) => {
+        return (
+          data.cart_name.includes(this.content) ||
+          data.phone.includes(this.content) ||
+          data.email.includes(this.content)
+        )
+      })
     }
+  },
+  computed: {},
+  mounted() {
+    this.fetchOrderData()
   }
 }
 </script>
