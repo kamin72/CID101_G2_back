@@ -25,13 +25,17 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td scope="row" class="align-middle">01</td>
-          <td><img src="../assets/img/wine/Elegant-Red-Wine.png" class="rounded mx-auto d-block" alt="..."
-              style="max-width: 100px; max-height: 100px;"></td>
-          <td class="align-middle">典雅馥紅酒 2014</td>
-          <td class="align-middle">波爾多混釀</td>
-          <td class="align-middle">NT$ 7,500</td>
+        <tr v-for="(product) in products" :key="product.prod_id">
+          <!-- <td scope="row" class="align-middle">01</td> -->
+          <td scope="row" class="align-middle">{{ product?.prod_id }}</td>
+          <!-- <td><img src="../assets/img/wine/Elegant-Red-Wine.png" class="rounded mx-auto d-block" alt="..." style="max-width: 100px; max-height: 100px;"></td> -->
+          <td><img :src="parseServerImg(product?.prod_img)" class="rounded mx-auto d-block" alt="..." style="max-width: 100px; max-height: 100px;"></td>
+          <!-- <td class="align-middle">典雅馥紅酒 2014</td> -->
+          <td class="align-middle">{{ product?.prod_name }}</td> 
+          <!-- <td class="align-middle">波爾多混釀</td> -->
+          <td class="align-middle">{{ product?.prod_variety }}</td>
+          <!-- <td class="align-middle">NT$ 7,500</td> -->
+          <td class="align-middle">{{ product?.prod_price }}</td>
           <td class="align-middle">
             <div class="form-check form-switch col d-flex justify-content-center">
               <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
@@ -43,7 +47,7 @@
             </RouterLink>
           </td>
         </tr>
-        <tr>
+        <!-- <tr>
           <td scope="row" class="align-middle">02</td>
           <td><img src="../assets/img/wine/Elegant-Red-Wine.png" class="rounded mx-auto d-block" alt="..."
               style="max-width: 100px; max-height: 100px;"></td>
@@ -168,7 +172,7 @@
               <button type="button" class="btn btn-primary">編輯</button>
             </RouterLink>
           </td>
-        </tr>
+        </tr> -->
       </tbody>
     </table>
 
@@ -191,3 +195,35 @@
     </nav>
   </div>
 </template>
+
+<script>
+
+export default {
+  data() {
+    return {
+      //商品資訊
+      products: []
+    }
+  },
+  // computed: {
+  // },
+  methods: {
+    parseServerImg(file) {
+      return `${import.meta.env.VITE_FILE_URL}/${file}`
+    }
+  },
+  mounted() {
+   },
+   created() {
+    fetch('http://localhost/CID101_G2_php/front/product/product.php')
+          .then((response) => response.json())
+          .then((data) => {
+            this.products = data
+          })
+   }
+}
+
+</script>
+
+
+
