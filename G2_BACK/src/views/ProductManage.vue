@@ -25,17 +25,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(product) in products" :key="product.prod_id">
-          <!-- <td scope="row" class="align-middle">01</td> -->
+        <tr v-for="product in products['products']" :key="product.prod_id">
           <td scope="row" class="align-middle">{{ product?.prod_id }}</td>
-          <!-- <td><img src="../assets/img/wine/Elegant-Red-Wine.png" class="rounded mx-auto d-block" alt="..." style="max-width: 100px; max-height: 100px;"></td> -->
-          <td><img :src="parseServerImg(product?.prod_img)" class="rounded mx-auto d-block" alt="..." style="max-width: 100px; max-height: 100px;"></td>
-          <!-- <td class="align-middle">典雅馥紅酒 2014</td> -->
+          <td><img src="../assets/img/wine/Elegant-Red-Wine.png" class="rounded mx-auto d-block" alt="..." style="max-width: 100px; max-height: 100px;"></td>
+          <!-- <td><img :src="parseServerImg(product?.prod_img)" class="rounded mx-auto d-block" alt="..." style="max-width: 100px; max-height: 100px;"></td> -->
           <td class="align-middle">{{ product?.prod_name }}</td> 
-          <!-- <td class="align-middle">波爾多混釀</td> -->
           <td class="align-middle">{{ product?.prod_variety }}</td>
-          <!-- <td class="align-middle">NT$ 7,500</td> -->
-          <td class="align-middle">{{ product?.prod_price }}</td>
+          <td class="align-middle">NT$ {{ product?.prod_price }}</td>
           <td class="align-middle">
             <div class="form-check form-switch col d-flex justify-content-center">
               <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
@@ -47,132 +43,7 @@
             </RouterLink>
           </td>
         </tr>
-        <!-- <tr>
-          <td scope="row" class="align-middle">02</td>
-          <td><img src="../assets/img/wine/Elegant-Red-Wine.png" class="rounded mx-auto d-block" alt="..."
-              style="max-width: 100px; max-height: 100px;"></td>
-          <td class="align-middle">典雅馥紅酒 2013</td>
-          <td class="align-middle">波爾多混釀</td>
-          <td class="align-middle">NT$ 7,600</td>
-          <td class="align-middle">
-            <div class="form-check form-switch col d-flex justify-content-center">
-              <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-            </div>
-          </td>
-          <td class="align-middle">
-            <RouterLink to="/editProduct">
-              <button type="button" class="btn btn-primary">編輯</button>
-            </RouterLink>
-          </td>
-        </tr>
-        <tr>
-          <td scope="row" class="align-middle">03</td>
-          <td><img src="../assets/img/wine/Elegant-Red-Wine.png" class="rounded mx-auto d-block" alt="..."
-              style="max-width: 100px; max-height: 100px;"></td>
-          <td class="align-middle">典雅馥紅酒 2012</td>
-          <td class="align-middle">波爾多混釀</td>
-          <td class="align-middle">NT$ 8,000</td>
-          <td class="align-middle">
-            <div class="form-check form-switch col d-flex justify-content-center">
-              <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-            </div>
-          </td>
-          <td class="align-middle">
-            <RouterLink to="/editProduct">
-              <button type="button" class="btn btn-primary">編輯</button>
-            </RouterLink>
-          </td>
-        </tr>
-        <tr>
-          <td scope="row" class="align-middle">04</td>
-          <td><img src="../assets/img/wine/Elegant-Red-Wine.png" class="rounded mx-auto d-block" alt="..."
-              style="max-width: 100px; max-height: 100px;"></td>
-          <td class="align-middle">典雅馥紅酒 2009</td>
-          <td class="align-middle">波爾多混釀</td>
-          <td class="align-middle">NT$ 8,200</td>
-          <td class="align-middle">
-            <div class="form-check form-switch col d-flex justify-content-center">
-              <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-            </div>
-          </td>
-          <td class="align-middle">
-            <RouterLink to="/editProduct">
-              <button type="button" class="btn btn-primary">編輯</button>
-            </RouterLink>
-          </td>
-        </tr>
-        <tr>
-          <td scope="row" class="align-middle">05</td>
-          <td><img src="../assets/img/wine/Pearl-White-Wine.png" class="rounded mx-auto d-block" alt="..."
-              style="max-width: 100px; max-height: 100px;"></td>
-          <td class="align-middle">珍珠白酒 2020</td>
-          <td class="align-middle">波爾多混釀</td>
-          <td class="align-middle">NT$ 2,920</td>
-          <td class="align-middle">
-            <div class="form-check form-switch col d-flex justify-content-center">
-              <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-            </div>
-          </td>
-          <td class="align-middle">
-            <RouterLink to="/editProduct">
-              <button type="button" class="btn btn-primary">編輯</button>
-            </RouterLink>
-          </td>
-        </tr>
-        <tr>
-          <td scope="row" class="align-middle">06</td>
-          <td><img src="../assets/img/wine/Pearl-White-Wine.png" class="rounded mx-auto d-block" alt="..."
-              style="max-width: 100px; max-height: 100px;"></td>
-          <td class="align-middle">珍珠白酒 2019</td>
-          <td class="align-middle">波爾多混釀</td>
-          <td class="align-middle">NT$ 3,600</td>
-          <td class="align-middle">
-            <div class="form-check form-switch col d-flex justify-content-center">
-              <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-            </div>
-          </td>
-          <td class="align-middle">
-            <RouterLink to="/editProduct">
-              <button type="button" class="btn btn-primary">編輯</button>
-            </RouterLink>
-          </td>
-        </tr>
-        <tr>
-          <td scope="row" class="align-middle">07</td>
-          <td><img src="../assets/img/wine/Pearl-White-Wine.png" class="rounded mx-auto d-block" alt="..."
-              style="max-width: 100px; max-height: 100px;"></td>
-          <td class="align-middle">水晶白酒 2018</td>
-          <td class="align-middle">阿里戈蝶</td>
-          <td class="align-middle">NT$ 1,000</td>
-          <td class="align-middle">
-            <div class="form-check form-switch col d-flex justify-content-center">
-              <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-            </div>
-          </td>
-          <td class="align-middle">
-            <RouterLink to="/editProduct">
-              <button type="button" class="btn btn-primary">編輯</button>
-            </RouterLink>
-          </td>
-        </tr>
-        <tr>
-          <td scope="row" class="align-middle">08</td>
-          <td><img src="../assets/img/wine/Pearl-White-Wine.png" class="rounded mx-auto d-block" alt="..."
-              style="max-width: 100px; max-height: 100px;"></td>
-          <td class="align-middle">水晶白酒 2017</td>
-          <td class="align-middle">阿里戈蝶</td>
-          <td class="align-middle">NT$ 1,100</td>
-          <td class="align-middle">
-            <div class="form-check form-switch col d-flex justify-content-center">
-              <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
-            </div>
-          </td>
-          <td class="align-middle">
-            <RouterLink to="/editProduct">
-              <button type="button" class="btn btn-primary">編輯</button>
-            </RouterLink>
-          </td>
-        </tr> -->
+      
       </tbody>
     </table>
 
@@ -196,8 +67,8 @@
   </div>
 </template>
 
-<script>
 
+<script>
 export default {
   data() {
     return {
@@ -210,17 +81,24 @@ export default {
   methods: {
     parseServerImg(file) {
       return `${import.meta.env.VITE_FILE_URL}/${file}`
-    }
+    },
+    fetchData() {
+      fetch('http://localhost/CID101_G2_php/front/product.php')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Fetched data:', data); // 添加這行來檢查接收到的數據
+          this.products = data;
+        })
+    },
   },
   mounted() {
+    console.log('Component mounted');
+    this.fetchData();
    },
    created() {
-    fetch('http://localhost/CID101_G2_php/front/product/product.php')
-          .then((response) => response.json())
-          .then((data) => {
-            this.products = data
-          })
-   }
+    // 初始化資料
+    // this.fetchData();
+   },
 }
 
 </script>
