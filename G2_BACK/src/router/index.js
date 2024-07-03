@@ -41,7 +41,8 @@ const router = createRouter({
     {
       path: '/productManage',
       name: 'productManage',
-      component: () => import('../views/ProductManage.vue')
+      component: () => import('../views/ProductManage.vue'),
+      meta: { keepAlive: true }
     },
     {
       path: '/addProduct',
@@ -49,7 +50,7 @@ const router = createRouter({
       component: () => import('@/components/productManage/AddProduct.vue')
     },
     {
-      path: '/editProduct',
+      path: '/editProduct/:id',
       name: 'editProduct',
       component: () => import('@/components/productManage/EditProduct.vue')
     },

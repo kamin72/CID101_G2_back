@@ -1,18 +1,26 @@
 <template>
   <div class="container">
     <span class="fs-1 fw-bolder">商品管理</span>
-    <div class="d-flex gap-3 justify-content-end">
-      <div class="input-group z-0 col-6 w-auto">
-        <input type="text" class="form-control" placeholder="請輸入商品資訊"
-          aria-label="Example text with two button addons" />
-        <button class="btn btn-outline-primary" type="button">搜尋</button>
-      </div>
-      <RouterLink to="/addProduct">
-        <button type="button" class="btn btn-primary">新增</button>
-      </RouterLink>
-    </div>
 
-    <table class="table mt-5 text-center">
+    <div class="d-flex justify-content-end py-4">
+        <div style="width: 320px" class="input-group mb-3">
+          <input
+            style="height: 40px"
+            type="text"
+            class="form-control"
+            v-model="search"
+            placeholder="請輸入商品資訊"
+            aria-label="search-course-info"
+            aria-describedby="button-search"
+          />
+          <button class="btn btn-primary me-1" type="button" id="button-search">搜尋</button>
+        </div>
+        <RouterLink to="/addProduct">
+          <button type="button" class="btn btn-primary" style="height: 40px">新增</button>
+        </RouterLink>
+      </div>
+
+    <table class="table align-middle">
       <thead class="table-dark">
         <tr>
           <th scope="col">編號</th>
@@ -25,27 +33,49 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="product in products['products']" :key="product.prod_id">
-          <td scope="row" class="align-middle">{{ product?.prod_id }}</td>
-          <td><img src="../assets/img/wine/Elegant-Red-Wine.png" class="rounded mx-auto d-block" alt="..." style="max-width: 100px; max-height: 100px;"></td>
-          <!-- <td><img :src="parseServerImg(product?.prod_img)" class="rounded mx-auto d-block" alt="..." style="max-width: 100px; max-height: 100px;"></td> -->
-          <td class="align-middle">{{ product?.prod_name }}</td> 
-          <td class="align-middle">{{ product?.prod_variety }}</td>
-          <td class="align-middle">NT$ {{ product?.prod_price }}</td>
-          <td class="align-middle">
-            <div class="form-check form-switch col d-flex justify-content-center">
-              <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" />
+        <tr v-for="item in displayList" :key="item.prod_id">
+          <td scope="row">{{ item?.prod_id }}</td>
+          <td>
+            <img
+              :src="parseServerImg(item?.prod_img)"
+              class="rounded d-block"
+              alt="..."
+              style="max-width: 100px; max-height: 100px"
+            />
+          </td>
+          <!-- <td><img :src="parseServerImg(item?.prod_img)" class="rounded mx-auto d-block" alt="..." style="max-width: 100px; max-height: 100px;"></td> -->
+          <td>{{ item?.prod_name }}</td>
+          <td>{{ item?.prod_variety }}</td>
+          <td>NT$ {{ item?.prod_price }}</td>
+          <td>
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="flexSwitchCheckDefault"
+              />
             </div>
           </td>
-          <td class="align-middle">
-            <RouterLink to="/editProduct">
-              <button type="button" class="btn btn-primary">編輯</button>
-            </RouterLink>
+          <td>
+            <div class="button-wrap d-flex">
+              <RouterLink :to="'/editProduct/' + item?.prod_id">
+                <button type="button" class="btn btn-primary d-flex align-items-center me-1">
+                  編輯
+                </button>
+              </RouterLink>
+              <button type="button" class="btn btn-secondary d-flex align-items-center">
+                刪除
+              </button>
+            </div>
           </td>
         </tr>
-      
       </tbody>
     </table>
+
+    <!-- 引入 AddProductModal 组件 -->
+    <!-- <AddProduct :show="isAddModalVisible" @close="closeAddModal" @product-added="handleProductAdded" /> -->
+    <!-- <AddProduct v-if="AddUpdateForm" @close="AddUpdateForm = false" /> -->
 
     <nav aria-label="Page navigation example" class="d-flex justify-content-center">
       <ul class="pagination">
@@ -67,41 +97,48 @@
   </div>
 </template>
 
-
 <script>
 export default {
   data() {
     return {
-      //商品資訊
-      products: []
+      products: [],
+      search: ''
     }
   },
-  // computed: {
-  // },
+  computed: {
+    displayList() {
+      if (this.search === '') return this.products
+      return this.products.filter((item) => {
+        // 請寫出符合條件邏輯
+        const name = item.prod_name
+        const variety = item.prod_variety
+        return name.includes(this.search) || variety.includes(this.search)
+      })
+    }
+  },
   methods: {
+
     parseServerImg(file) {
-      return `${import.meta.env.VITE_FILE_URL}/${file}`
+      // return `${import.meta.env.VITE_FILE_URL}/${file}`
+      return new URL(`../assets/img/wine/${file}`, import.meta.url).href
     },
     fetchData() {
       fetch('http://localhost/CID101_G2_php/front/product.php')
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Fetched data:', data); // 添加這行來檢查接收到的數據
-          this.products = data;
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Fetched data:', data) // 添加這行來檢查接收到的數據
+          this.products = data.products
+          console.log('Fetched data:', this.products) // 添加這行來檢查接收到的數據
         })
-    },
+    }
   },
   mounted() {
-    console.log('Component mounted');
-    this.fetchData();
-   },
-   created() {
-    // 初始化資料
-    // this.fetchData();
-   },
+    this.fetchData()
+  },
+  
+  // 添加這個生命週期鉤子
+  activated() {
+    this.fetchData(); // 每次組件被激活時重新獲取數據
+  }
 }
-
 </script>
-
-
-
