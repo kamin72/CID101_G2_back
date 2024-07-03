@@ -36,7 +36,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="item in searchData || orderData" :key="item.cart_id">
+      <tr v-for="(item, index) in searchData || orderData" :key="index">
         <th scope="row">{{ item.cart_id }}</th>
         <td>{{ item.cart_name }}</td>
         <td>{{ item.phone }}</td>
@@ -75,6 +75,7 @@ export default {
   data() {
     return {
       orderData: [],
+      // orderItem: [],
       identity: [
         {
           value: 1,
@@ -98,6 +99,8 @@ export default {
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
+            alert(data.msg)
+          } else if (data.order == null) {
             alert(data.msg)
           } else {
             this.orderData = data.order

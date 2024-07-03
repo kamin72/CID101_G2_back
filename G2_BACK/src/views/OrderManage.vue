@@ -6,8 +6,8 @@
         <button
           type="button"
           class="btn btn-primary"
-          :class="{ active: isActive }"
-          @click="toggleActive"
+          :class="{ active: activeButton == 'query' }"
+          @click="setActiveButton('query')"
         >
           詢價單查詢
         </button>
@@ -16,14 +16,14 @@
         <button
           type="button"
           class="btn btn-primary"
-          :class="{ active: !isActive }"
-          @click="toggleActive"
+          :class="{ active: activeButton == 'count' }"
+          @click="setActiveButton('count')"
         >
           詢價單統計
         </button>
       </RouterLink>
     </div>
-    <OrderQuery v-if="$route.path === '/orderManage/orderquery'" />
+    <OrderQuery v-if="$route.path !== '/orderManage/ordercount'" />
     <OrderCount v-if="$route.path === '/orderManage/ordercount'" />
   </div>
 </template>
@@ -39,12 +39,19 @@ export default {
   },
   data() {
     return {
-      isActive: false
+      activeButton: ''
     }
   },
   methods: {
-    toggleActive() {
-      this.isActive = !this.isActive
+    setActiveButton(button) {
+      this.activeButton = button
+    }
+  },
+  created() {
+    if (this.$route.path === '/orderManage/ordercount') {
+      this.activeButton = 'count'
+    } else {
+      this.activeButton = 'query'
     }
   }
 }
