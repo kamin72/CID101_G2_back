@@ -15,6 +15,16 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue')
     },
     {
+      path: '/administratormanage',
+      name: 'administratormanage',
+      component: () => import('../views/AdministratorManage.vue')
+    }, 
+    {
+      path: '/membermanage',
+      name: 'membermanage',
+      component: () => import('../views/MemberManage.vue')
+    }, 
+    {
       path: '/addNew',
       component: () => import('@/components/membermange/AddNew.vue')
     },
