@@ -1,43 +1,48 @@
 <template>
-  <div class="d-flex justify-content-between">
-    <div class="mt-3 w-50">
+  <div class="d-flex justify-content-start">
+    <div class="mt-3 me-5 w-25">
       <label for="access" class="form-label fw-bolder">類別</label>
-      <select class="form-select" aria-label="Default select example">
-        <option selected>類別</option>
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        v-model="selectedCategory"
+        @change="getAllOrderitems"
+      >
+        <option value="0" selected>類別</option>
         <option value="紅酒">紅酒</option>
-        <option value="粉紅酒">粉紅酒</option>
-        <option value="加烈酒">加烈酒</option>
         <option value="白酒">白酒</option>
-        <option value="氣泡酒">氣泡酒</option>
       </select>
     </div>
-    <div class="mt-3 w-50">
+    <div class="mt-3 w-25">
       <label for="access" class="form-label fw-bolder">品種</label>
-      <select class="form-select" aria-label="Default select example">
-        <option selected>品種</option>
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        v-model="selectedVariety"
+        @change="getAllOrderitems"
+      >
+        <option value="0" selected>品種</option>
         <option value="波爾多混釀">波爾多混釀</option>
-        <option value="黑皮諾">黑皮諾</option>
-        <option value="帕洛米諾">帕洛米諾</option>
         <option value="阿里戈蝶">阿里戈蝶</option>
-        <option value="夏多內">夏多內</option>
       </select>
     </div>
-    <div class="mt-3 w-50">
+    <!-- <div class="mt-3 w-50">
       <label for="access" class="form-label fw-bolder">商品名稱</label>
-      <select class="form-select" aria-label="Default select example">
-        <option selected>商品名稱</option>
+      <select class="form-select" aria-label="Default select example" @change="getAllOrderitems">
+        <option value="0" selected>商品名稱</option>
         <option value="批發商">批發商</option>
         <option value="一般會員">一般會員</option>
       </select>
-    </div>
+    </div> -->
   </div>
-  <div class="d-flex justify-content-between mt-4">
+  <div class="d-flex justify-content-start mt-4">
     <div class="input-group z-0 w-auto h-25 align-self-end">
       <input
         type="date"
         class="form-control"
         placeholder=""
         aria-label="Example text with two button addons"
+        v-model="date1"
       />
       <span class="ms-3 me-3">~</span>
       <input
@@ -45,102 +50,44 @@
         class="form-control"
         placeholder=""
         aria-label="Example text with two button addons"
+        v-model="date2"
       />
-      <button class="btn btn-outline-primary" type="button">搜尋</button>
+      <button class="btn btn-outline-primary" type="button" @click="filterByDate">搜尋</button>
     </div>
-    <div class="mt-3 w-50">
+    <div class="mt-3 ms-5 w-25">
       <label for="access" class="form-label fw-bolder">來源</label>
-      <select class="form-select" aria-label="Default select example">
-        <option selected>來源</option>
-        <option value="批發商">批發商</option>
-        <option value="一般會員">一般會員</option>
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        v-model="selectedIdentity"
+        @change="getAllOrderitems"
+      >
+        <option value="0" selected>來源</option>
+        <option value="2">批發商</option>
+        <option value="1">一般會員</option>
       </select>
     </div>
   </div>
 
   <table class="table mt-5">
     <thead>
-      <tr>
-        <th scope="col">詢價單編號</th>
-        <th scope="col">姓名</th>
-        <th scope="col">連絡電話</th>
-        <th scope="col">EMAIL</th>
-        <th scope="col">狀態</th>
-        <th scope="col" style="text-align: center">操作</th>
+      <tr class="table-dark">
+        <th scope="col">類別</th>
+        <th scope="col">品種</th>
+        <th scope="col">商品名稱</th>
+        <th scope="col">來源</th>
+        <th scope="col">數量</th>
+        <th scope="col">金額</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>王大明</td>
-        <td>0912345678</td>
-        <td>123@email.com</td>
-        <td>未處理</td>
-        <td class="d-flex gap-2 justify-content-center">
-          <RouterLink to="/">
-            <button type="button" class="btn btn-primary">編輯</button>
-          </RouterLink>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">1</th>
-        <td>王大明</td>
-        <td>0912345678</td>
-        <td>123@email.com</td>
-        <td>處理中</td>
-        <td class="d-flex gap-2 justify-content-center">
-          <RouterLink to="/">
-            <button type="button" class="btn btn-primary">編輯</button>
-          </RouterLink>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">1</th>
-        <td>王大明</td>
-        <td>0912345678</td>
-        <td>123@email.com</td>
-        <td>已備貨</td>
-        <td class="d-flex gap-2 justify-content-center">
-          <RouterLink to="/">
-            <button type="button" class="btn btn-primary">編輯</button>
-          </RouterLink>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">1</th>
-        <td>王大明</td>
-        <td>0912345678</td>
-        <td>123@email.com</td>
-        <td>已取件</td>
-        <td class="d-flex gap-2 justify-content-center">
-          <RouterLink to="/">
-            <button type="button" class="btn btn-primary">編輯</button>
-          </RouterLink>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">1</th>
-        <td>王大明</td>
-        <td>0912345678</td>
-        <td>123@email.com</td>
-        <td>請求取消</td>
-        <td class="d-flex gap-2 justify-content-center">
-          <RouterLink to="/">
-            <button type="button" class="btn btn-primary">編輯</button>
-          </RouterLink>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">1</th>
-        <td>王大明</td>
-        <td>0912345678</td>
-        <td>123@email.com</td>
-        <td>已取消</td>
-        <td class="d-flex gap-2 justify-content-center">
-          <RouterLink to="/">
-            <button type="button" class="btn btn-primary">編輯</button>
-          </RouterLink>
-        </td>
+      <tr v-for="(item, index) in filterData" :key="index">
+        <td scope="row">{{ item.prod_category }}</td>
+        <td>{{ item.prod_variety }}</td>
+        <td>{{ item.prod_name }}</td>
+        <td>{{ switchIdentity(item.identity) }}</td>
+        <td>{{ item.build_date }}</td>
+        <td>$ {{ total(index) }}</td>
       </tr>
     </tbody>
   </table>
@@ -163,3 +110,86 @@
     </ul>
   </nav>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      AllOrderItem: [],
+      filterData: [],
+      items: {
+        category: {
+          1: '紅酒',
+          2: '白酒'
+        },
+        variety: {
+          1: '波爾多混釀',
+          2: '黑皮諾',
+          3: '帕洛米諾',
+          4: '阿里戈蝶',
+          5: '夏多內'
+        },
+        identity: {
+          1: '一般會員',
+          2: '批發商'
+        }
+      },
+      selectedCategory: '0',
+      selectedVariety: '0',
+      selectedIdentity: '0',
+      date1: '',
+      date2: ''
+    }
+  },
+  methods: {
+    getAllOrderitems() {
+      const params = {
+        category: this.selectedCategory,
+        variety: this.selectedVariety,
+        identity: this.selectedIdentity
+      }
+      fetch(`http://localhost/CID101_G2_php/back/orderManage/getAllOrderitem.php`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(params)
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error) {
+            alert(data.msg)
+          } else {
+            this.AllOrderItem = data.orderItemAll
+            this.filterData = data.orderItemAll
+            // console.log(this.AllOrderItem)
+          }
+        })
+    },
+    total(index) {
+      return this.AllOrderItem[index]?.price * this.AllOrderItem[index]?.amount
+    },
+    switchIdentity(index) {
+      const identity = {
+        1: '一般會員',
+        2: '批發商'
+      }
+      return identity[index]
+    },
+    filterByDate() {
+      if (this.date1 == '' && this.date2 == '') {
+        this.filterData = this.AllOrderItem
+        return
+      }
+
+      this.filterData = this.AllOrderItem.filter((data) => {
+        return data.build_date >= this.date1 && data.build_date <= this.date2
+      })
+      // console.log(this.filterData)
+    }
+  },
+  mounted() {
+    this.getAllOrderitems()
+  }
+}
+</script>

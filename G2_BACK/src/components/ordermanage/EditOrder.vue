@@ -59,7 +59,7 @@
           <th>折扣</th>
           <td></td>
           <td></td>
-          <td>- $ 0</td>
+          <td>- $ {{ memberOrderInfo.cart_discount }}</td>
         </tr>
         <tr>
           <th>應付金額</th>
@@ -93,15 +93,14 @@
       <p class="mb-0 w-25 fw-bolder">備貨完成通知</p>
       <button class="ms-5 btn btn-outline-primary" type="button">發送信件</button>
     </div>
-    <div class="mt-5 mb-5 d-flex gap-5 h-25" style="width: 100%">
-      <button type="button" class="btn btn-primary p-2 fs-4" style="width: 50%">儲存</button>
+    <div class="mt-5 mb-5 h-25 text-center" style="width: 100%">
       <router-link
         to="/orderManage/orderquery"
         type="button"
-        class="btn btn-secondary fs-4"
-        style="width: 50%"
+        class="btn btn-primary fs-4"
+        style="width: 30%"
       >
-        返回
+        儲存
       </router-link>
     </div>
   </div>
@@ -205,7 +204,7 @@ export default {
       return totalPrice
     },
     actualPaid() {
-      return this.total
+      return this.total - this.memberOrderInfo.cart_discount
     }
   },
   mounted() {

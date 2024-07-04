@@ -26,7 +26,7 @@
   </div>
   <table class="table mt-5">
     <thead>
-      <tr class="table-primary">
+      <tr class="table-dark">
         <th scope="col">詢價單編號</th>
         <th scope="col">姓名</th>
         <th scope="col">連絡電話</th>
@@ -36,7 +36,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(item, index) in searchData || orderData" :key="index">
+      <tr v-for="(item, index) in searchData" :key="index">
         <th scope="row">{{ item.cart_id }}</th>
         <td>{{ item.cart_name }}</td>
         <td>{{ item.phone }}</td>
@@ -127,6 +127,7 @@ export default {
       }
       this.searchData = this.orderData.filter((data) => {
         return (
+          data.cart_id == this.content ||
           data.cart_name.includes(this.content) ||
           data.phone.includes(this.content) ||
           data.email.includes(this.content)
