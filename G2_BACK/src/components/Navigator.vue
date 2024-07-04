@@ -17,7 +17,7 @@
 
     <nav>
       <ul>
-        <router-link to="/" active-class="active-link">
+        <router-link to="/administratormanage" active-class="active-link">
           <li>管理員管理</li>
         </router-link>
         <router-link to="" active-class="active-link">
@@ -26,7 +26,7 @@
         <router-link to="/courseManage" active-class="active-link">
           <li>課程管理</li>
         </router-link>
-        <router-link to="/login" active-class="active-link">
+        <router-link to="/membermanage" active-class="active-link">
           <li>會員管理</li>
         </router-link>
         <router-link to="/OrderManage" active-class="active-link">
