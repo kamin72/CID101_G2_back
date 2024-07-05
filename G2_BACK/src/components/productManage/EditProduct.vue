@@ -1,4 +1,11 @@
 <template>
+  <!-- 
+1.當您在 EditProduct 頁面修改數據並點擊保存按鈕時，數據會被發送到後端進行更新。
+2.更新成功後，頁面會自動跳轉到 ProductManage 頁面。
+3.當 ProductManage 頁面被重新激活時，它會自動重新獲取最新的商品數據。
+4.這樣，ProductManage 的商品列表就會顯示最新的的數據。
+ -->
+
   <div class="container">
     <div class="row py-5">
       <h1 class="fs-1 fw-bolder">編輯商品</h1>
@@ -80,7 +87,6 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -110,34 +116,50 @@ export default {
     }
   },
   methods: {
-
     async saveProduct() {
       try {
-       const response = await fetch('http://localhost/CID101_G2_php/front/product_update.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(this.detail)
-       });
+        let formData = new FormData()
+        formData.append('prod_id', this.detail.prod_id)
+        formData.append('prod_name', this.detail.prod_name)
+        formData.append('prod_ename', this.detail.prod_ename)
+        formData.append('prod_category', this.detail.prod_category)
+        formData.append('prod_variety', this.detail.prod_variety)
+        formData.append('prod_year', this.detail.prod_year)
+        formData.append('prod_price', this.detail.prod_price)
+        formData.append('prod_describe', this.detail.prod_describe)
 
-       const result = await response.json();
+        // 如果有新的圖片上傳，添加到 formData
+        if (this.detail.prod_img instanceof File) {
+          formData.append('prod_img', this.detail.prod_img)
+        }
+        if (this.detail.bg_img instanceof File) {
+          formData.append('bg_img', this.detail.bg_img)
+        }
 
-       if(result.error === false) {
-        // 更新成功
-        alert(result.mdg); // 顯示成功訊息
-        this.$router.push('/productManage')
-       } else {
-        // 更新失敗
-        alert('更新失敗:' + result.msg);
-       }
+        const response = await fetch('http://localhost/CID101_G2_php/front/product_update.php', {
+          body: formData,
+          method: 'POST'
+          // headers: {
+          //   'Content-Type': 'application/json'
+          // },
+          // body: JSON.stringify(this.detail)
+        })
+
+        const result = await response.json()
+
+        if (result.error === false) {
+          // 更新成功
+          alert(result.msg) // 顯示成功訊息
+          this.$router.push('/productManage')
+        } else {
+          // 更新失敗
+          alert('更新失敗:' + result.msg)
+        }
       } catch (error) {
-           console.error('Error', error);
-           alert('發生錯誤，請稍後再試');
+        // console.error('Error:', error)
+        alert('發生錯誤，請稍後再試')
       }
     },
-
-
 
     parseServerImg(file) {
       // return `${import.meta.env.VITE_FILE_URL}/${file}`
@@ -157,15 +179,15 @@ export default {
     },
 
     handleProductImgChange(event) {
-      const file = event.target.files[0]
-      if (file) {
-        this.productImgPreview = URL.createObjectURL(file)
+      this.detail.prod_img = event.target.files[0]
+      if (this.detail.prod_img) {
+        this.productImgPreview = URL.createObjectURL(this.detail.prod_img)
       }
     },
     handleBackgroundImgChange(event) {
-      const file = event.target.files[0]
-      if (file) {
-        this.backgroundImgPreview = URL.createObjectURL(file)
+      this.detail.bg_img = event.target.files[0]
+      if (this.detail.bg_img) {
+        this.backgroundImgPreview = URL.createObjectURL(this.detail.bg_img)
       }
     }
   },

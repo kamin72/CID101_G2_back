@@ -3,27 +3,27 @@
     <span class="fs-1 fw-bolder">商品管理</span>
 
     <div class="d-flex justify-content-end py-4">
-        <div style="width: 320px" class="input-group mb-3">
-          <input
-            style="height: 40px"
-            type="text"
-            class="form-control"
-            v-model="search"
-            placeholder="請輸入商品資訊"
-            aria-label="search-course-info"
-            aria-describedby="button-search"
-          />
-          <button class="btn btn-primary me-1" type="button" id="button-search">搜尋</button>
-        </div>
-        <RouterLink to="/addProduct">
-          <button type="button" class="btn btn-primary" style="height: 40px">新增</button>
-        </RouterLink>
+      <div style="width: 320px" class="input-group mb-3">
+        <input
+          style="height: 40px"
+          type="text"
+          class="form-control"
+          v-model="search"
+          placeholder="請輸入商品資訊"
+          aria-label="search-course-info"
+          aria-describedby="button-search"
+        />
+        <button class="btn btn-primary me-1" type="button" id="button-search">搜尋</button>
       </div>
+      <RouterLink to="/addProduct">
+        <button type="button" class="btn btn-primary" style="height: 40px">新增</button>
+      </RouterLink>
+    </div>
 
     <table class="table align-middle">
       <thead class="table-dark">
         <tr>
-          <th scope="col">編號</th>
+          <th scope="col">商品編號</th>
           <th scope="col">商品圖片</th>
           <th scope="col">商品名稱</th>
           <th scope="col">葡萄品種</th>
@@ -64,7 +64,7 @@
                   編輯
                 </button>
               </RouterLink>
-              <button type="button" class="btn btn-secondary d-flex align-items-center">
+              <button type="button" class="btn btn-secondary d-flex align-items-center" @click="deleteProduct(item.prod_id)">
                 刪除
               </button>
             </div>
@@ -130,15 +130,53 @@ export default {
           this.products = data.products
           console.log('Fetched data:', this.products) // 添加這行來檢查接收到的數據
         })
-    }
-  },
+    },
+
+    async deleteProduct(productId) {
+      //使用 confirm() 彈出一個確認對話框。如果用戶點擊"取消"，函數將立即返回，不執行刪除操作。
+      if(!confirm('確定要刪除這個商品嗎?')) {
+        return;
+      }
+
+      try {
+        // 發送刪除請求
+        // 使用 fetch API 發送GET請求到刪除API。URL中包含要刪除的商品ID。
+        const response = await fetch(`http://localhost/CID101_G2_php/front/product_delete.php?prod_id=${productId}`);
+        const result = await response.json();
+
+        if(result.error === false) {
+          // 排除已刪除的商品
+          this.products = this.products.filter(product => product.prod_id !== productId);
+
+        } else {
+          alert('刪除失敗:' + result.msg);
+         }
+
+        } catch (error) {
+          console.error('Error', error);
+          alert('發生錯誤，請稍後再試');
+        }
+      }
+    },
   mounted() {
     this.fetchData()
   },
-  
+
   // 添加這個生命週期鉤子
   activated() {
     this.fetchData(); // 每次組件被激活時重新獲取數據
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.fetchData();
+    })
+  },
+ watch: {
+  $route(to, from) {
+    if(to.name === 'ProductManage') {
+      this.fetchData();
+    }
   }
+ }
 }
 </script>
