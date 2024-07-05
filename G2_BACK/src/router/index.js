@@ -15,15 +15,28 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue')
     },
     {
-      path: '/administratormanage',
-      name: 'administratormanage',
+      path: '/administratorManage',
+      name: 'administratorManage',
       component: () => import('../views/AdministratorManage.vue')
-    }, 
+    },
+    {
+      path: '/addAdministrator',
+      name: 'addAdministrator',
+      component: () => import('../components/administratorManage/AddAdministrator.vue')
+    },
+    {
+      path: '/editAdministrator',
+      name: 'editAdministrator',
+      component: () => import('../components/administratorManage/EditAdministrator.vue'),
+      props: (route) => ({
+        index: route.query.index
+      })
+    },
     {
       path: '/membermanage',
       name: 'membermanage',
       component: () => import('../views/MemberManage.vue')
-    }, 
+    },
     {
       path: '/addNew',
       component: () => import('@/components/membermange/AddNew.vue')

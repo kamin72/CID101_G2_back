@@ -86,7 +86,7 @@
         <td>{{ item.prod_variety }}</td>
         <td>{{ item.prod_name }}</td>
         <td>{{ switchIdentity(item.identity) }}</td>
-        <td>{{ item.build_date }}</td>
+        <td>{{ item.amount }}</td>
         <td>$ {{ total(index) }}</td>
       </tr>
     </tbody>
