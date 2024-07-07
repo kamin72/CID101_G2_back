@@ -39,35 +39,56 @@
     </div>
     <div class="mb-3">
       <label for="name" class="form-label fw-bolder">姓名</label>
-      <input type="text" class="form-control" id="name" :value="adminData[index]?.admin_name" />
+      <!-- <input type="text" class="form-control" id="name" v-model="adminData[index].admin_name" /> -->
+      <input type="text" class="form-control" id="name" v-model="name" />
     </div>
     <div class="mb-3">
       <label for="account" class="form-label fw-bolder">帳號</label>
-      <input type="text" class="form-control" id="account" :value="adminData[index]?.admin_ac" />
+      <!-- <input type="text" class="form-control" id="account" v-model="adminData[index].admin_ac" /> -->
+      <input type="text" class="form-control" id="account" v-model="account" />
     </div>
     <div class="mb-3">
       <label for="password" class="form-label fw-bolder">密碼</label>
-      <input type="text" class="form-control" id="password" :value="adminData[index]?.admin_pw" />
+      <!-- <input type="text" class="form-control" id="password" v-model="adminData[index].admin_pw" /> -->
+      <input type="text" class="form-control" id="password" v-model="password" />
     </div>
     <div class="mb-3">
       <label for="access" class="form-label fw-bolder">權限</label>
-      <select class="form-select" aria-label="Default select example" placeholder="選擇權限">
-        <option selected>{{ switchIdentity(adminData[index]?.admin_access) }}</option>
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        placeholder="選擇權限"
+        v-model="access"
+      >
+        <option :value="access" selected>{{ switchIdentity(access) }}</option>
         <option value="1">超級管理員</option>
-        <option value="2">一般管理員</option>
+        <option value="0">一般管理員</option>
       </select>
     </div>
     <div class="mb-3">
-      <label for="access" class="form-label fw-bolder">狀態</label>
-      <select class="form-select" aria-label="Default select example" placeholder="選擇帳號狀態">
-        <option selected>{{ switchStatus(adminData[index]?.admin_status) }}</option>
+      <label for="status" class="form-label fw-bolder">狀態</label>
+      <select
+        class="form-select"
+        aria-label="Default select example"
+        placeholder="選擇帳號狀態"
+        v-model="status"
+      >
+        <option :value="status" selected>{{ switchStatus(status) }}</option>
         <option value="1">啟用</option>
-        <option value="2">停用</option>
+        <option value="0">停用</option>
       </select>
     </div>
     <div class="mt-5 mb-5 d-flex gap-5" style="width: 100%">
-      <button type="button" class="btn btn-primary fs-4" style="width: 50%">儲存</button>
-      <RouterLink type="button" class="btn btn-secondary fs-4" style="width: 50%">取消</RouterLink>
+      <button type="button" class="btn btn-primary fs-4" style="width: 50%" @click="updateData">
+        儲存
+      </button>
+      <RouterLink
+        to="/administratorManage"
+        type="button"
+        class="btn btn-secondary fs-4"
+        style="width: 50%"
+        >返回</RouterLink
+      >
     </div>
   </div>
 </template>
@@ -76,7 +97,13 @@
 export default {
   props: ['index'],
   data() {
-    return {}
+    return {
+      name: null,
+      password: null,
+      account: null,
+      access: null,
+      status: null
+    }
   },
   methods: {
     switchIdentity(index) {
@@ -92,6 +119,40 @@ export default {
         1: '啟用'
       }
       return statusMap[index]
+    },
+    updateData() {
+      const formData = {
+        name: this.name,
+        password: this.password,
+        account: this.account,
+        access: this.access,
+        status: this.status
+      }
+      const url = `http://localhost/CID101_G2_php/back/admin/updateAdminData.php?index=${this.index}`
+      const form = new URLSearchParams(formData)
+
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/x-www-form-urlencoded'
+        },
+        body: form
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (!data.error) {
+            alert(data.msg)
+          } else {
+            alert(data.msg)
+          }
+        })
+    },
+    assignData() {
+      this.name = this.adminData[this.index].admin_name
+      this.password = this.adminData[this.index].admin_pw
+      this.account = this.adminData[this.index].admin_ac
+      this.access = this.adminData[this.index].admin_access
+      this.status = this.adminData[this.index].admin_status
     }
   },
   computed: {
@@ -99,6 +160,8 @@ export default {
       return JSON.parse(localStorage.getItem('adminData'))
     }
   },
-  mounted() {}
+  mounted() {
+    this.assignData()
+  }
 }
 </script>

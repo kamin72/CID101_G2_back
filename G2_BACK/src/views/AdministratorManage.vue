@@ -8,8 +8,11 @@
           class="form-control"
           placeholder=""
           aria-label="Example text with two button addons"
+          v-model.trim="search"
         />
-        <button class="btn btn-outline-primary" type="button">搜尋</button>
+        <button class="btn btn-outline-primary" type="button" @click="searchDataResult">
+          搜尋
+        </button>
       </div>
       <RouterLink to="/addAdministrator">
         <button type="button" class="btn btn-primary">新增</button>
@@ -17,7 +20,7 @@
     </div>
 
     <table class="table mt-5">
-      <thead>
+      <thead class="table-dark">
         <tr>
           <th scope="col">管理員編號</th>
           <th scope="col">姓名</th>
@@ -28,7 +31,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in adminData" :key="index">
+        <tr v-for="(item, index) in searchData" :key="index">
           <td scope="row">{{ item.admin_no }}</td>
           <td>{{ item.admin_name }}</td>
           <td>{{ item.admin_ac }}</td>
@@ -80,6 +83,8 @@ export default {
     return {
       entries: [],
       adminData: [],
+      searchData: [],
+      search: '',
       switchState: true
     }
   },
@@ -109,6 +114,7 @@ export default {
             alert(data.msg)
           } else {
             this.adminData = data.adminData
+            this.searchData = data.adminData
             localStorage.setItem('adminData', JSON.stringify(this.adminData))
             // console.log(this.adminData)
           }
@@ -120,10 +126,34 @@ export default {
         1: '超級管理員'
       }
       return idMap[index]
+    },
+    searchDataResult() {
+      if (this.search == '') {
+        return (this.searchData = this.adminData)
+      }
+      this.searchData = this.adminData.filter((data) => {
+        return (
+          data.admin_no == this.search ||
+          data.admin_name.includes(this.search) ||
+          data.admin_ac.includes(this.search) ||
+          data.admin_access == this.identity
+        )
+      })
     }
   },
   mounted() {
     this.getAdminData()
+  },
+  computed: {
+    identity() {
+      if (this.search == '超級管理員' && this.search != '') {
+        return 1
+      } else if (this.search == '一般會員' && this.search != '') {
+        return 0
+      } else {
+        return this.search
+      }
+    }
   }
 }
 </script>
