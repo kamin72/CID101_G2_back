@@ -81,7 +81,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(item, index) in filterData" :key="index">
+      <tr v-for="(item, index) in paginatedQuiz" :key="index">
         <td scope="row">{{ item.prod_category }}</td>
         <td>{{ item.prod_variety }}</td>
         <td>{{ item.prod_name }}</td>
@@ -95,15 +95,33 @@
   <nav aria-label="Page navigation example" class="d-flex justify-content-center">
     <ul class="pagination">
       <li class="page-item">
-        <a class="page-link text-primary-emphasis" href="#" aria-label="Previous">
+        <a
+          class="page-link text-primary-emphasis"
+          aria-label="Previous"
+          @click="prevPage"
+          :disabled="currentPage === 0"
+          style="cursor: pointer"
+        >
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      <li class="page-item"><a class="page-link text-primary-emphasis" href="#">1</a></li>
-      <li class="page-item"><a class="page-link text-primary-emphasis" href="#">2</a></li>
-      <li class="page-item"><a class="page-link text-primary-emphasis" href="#">3</a></li>
+      <li
+        class="page-item"
+        v-for="page in totalPages"
+        :key="page"
+        @click="setPage(page)"
+        :class="{ active: currentPage === page }"
+      >
+        <a class="page-link text-primary-emphasis" href="#">{{ page }}</a>
+      </li>
       <li class="page-item">
-        <a class="page-link text-primary-emphasis" href="#" aria-label="Next">
+        <a
+          class="page-link text-primary-emphasis"
+          aria-label="Next"
+          @click="nextPage"
+          :disabled="currentPage === totalPages"
+          style="cursor: pointer"
+        >
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
@@ -115,6 +133,8 @@
 export default {
   data() {
     return {
+      currentPage: 1, // 當前頁碼
+      itemsPerPage: 10, // 每頁顯示的資料數量
       AllOrderItem: [],
       filterData: [],
       items: {
@@ -186,6 +206,32 @@ export default {
         return data.build_date >= this.date1 && data.build_date <= this.date2
       })
       // console.log(this.filterData)
+    },
+    setPage(page) {
+      this.currentPage = page
+    },
+    nextPage() {
+      if (this.currentPage >= 1 && this.currentPage < this.totalPages) {
+        this.currentPage++
+      } else {
+        return
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1 && this.currentPage != 1) {
+        this.currentPage--
+      } else {
+        return
+      }
+    }
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.AllOrderItem.length / this.itemsPerPage)
+    },
+    paginatedQuiz() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage
+      return this.filterData.slice(startIndex, startIndex + this.itemsPerPage)
     }
   },
   mounted() {

@@ -5,7 +5,7 @@
       <select
         class="form-select"
         aria-label="Default select example"
-        @change="fetchPageData($event)"
+        @change="fetchOrderData($event)"
       >
         <option value="0" selected>全部</option>
         <option v-for="item in identity" :key="item.value" :value="item.value">
@@ -36,7 +36,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="(item, index) in searchData" :key="index">
+      <tr v-for="(item, index) in paginatedQuiz" :key="index">
         <th scope="row">{{ item.cart_id }}</th>
         <td>{{ item.cart_name }}</td>
         <td>{{ item.phone }}</td>
@@ -57,15 +57,21 @@
         <a
           class="page-link text-primary-emphasis"
           aria-label="Previous"
-          href="#"
           @click="prevPage"
-          :disabled="currentPage === 1"
+          :disabled="currentPage == 1"
+          style="cursor: pointer"
         >
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      <li class="page-item" v-for="(i, index) in totalPages" :key="index">
-        <a class="page-link text-primary-emphasis">{{ i }}</a>
+      <li
+        class="page-item"
+        v-for="(page, index) in totalPages"
+        :key="index"
+        :class="{ active: currentPage === page }"
+        @click="setPage(page)"
+      >
+        <a href="#" class="page-link text-primary-emphasis">{{ page }}</a>
       </li>
       <!-- <li class="page-item"><a class="page-link text-primary-emphasis" href="#">2</a></li>
       <li class="page-item"><a class="page-link text-primary-emphasis" href="#">3</a></li> -->
@@ -73,9 +79,9 @@
         <a
           class="page-link text-primary-emphasis"
           aria-label="Next"
-          href="#"
           @click="nextPage"
-          :disabled="currentPage === totalPages"
+          :disabled="currentPage == totalPages"
+          style="cursor: pointer"
         >
           <span aria-hidden="true">&raquo;</span>
         </a>
@@ -90,10 +96,8 @@ export default {
     return {
       i: 0,
       orderData: [],
-      items: [],
-      currentPage: 1,
-      itemsPerPage: 10,
-      totalItems: 0,
+      currentPage: 1, // 當前頁碼
+      itemsPerPage: 10, // 每頁顯示的資料數量
       identity: [
         {
           value: 1,
@@ -105,29 +109,29 @@ export default {
         }
       ],
       content: '',
-      searchData: null
+      searchData: []
     }
   },
   methods: {
-    // fetchOrderData(event) {
-    //   const selectValue = event ? event.target.value : 0
-    //   fetch(
-    //     `http://localhost/CID101_G2_php/back/orderManage/orderManage.php?identity=${selectValue}`
-    //   )
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       if (data.error) {
-    //         alert(data.msg)
-    //       } else if (data.order == null) {
-    //         alert(data.msg)
-    //       } else {
-    //         this.orderData = data.order
-    //         this.searchData = data.order
-    //         // console.log(this.orderData)
-    //         localStorage.setItem('orderData', JSON.stringify(this.orderData))
-    //       }
-    //     })
-    // },
+    fetchOrderData(event) {
+      const selectValue = event ? event.target.value : 0
+      fetch(
+        `http://localhost/CID101_G2_php/back/orderManage/orderManage.php?identity=${selectValue}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error) {
+            alert(data.msg)
+          } else if (data.order == null) {
+            alert(data.msg)
+          } else {
+            this.orderData = data.order
+            this.searchData = data.order
+            // console.log(this.orderData)
+            localStorage.setItem('orderData', JSON.stringify(this.orderData))
+          }
+        })
+    },
     getCartStatus(status) {
       const statusMap = {
         0: '未處理',
@@ -141,9 +145,9 @@ export default {
     },
     searchList() {
       if (this.content == '') {
-        return (this.searchData = this.items)
+        return (this.searchData = this.orderData)
       }
-      this.searchData = this.items.filter((data) => {
+      this.searchData = this.orderData.filter((data) => {
         return (
           data.cart_id == this.content ||
           data.cart_name.includes(this.content) ||
@@ -152,43 +156,36 @@ export default {
         )
       })
     },
-    fetchPageData(event) {
-      const selectValue = event ? event.target.value : 0
-
-      fetch(
-        `http://localhost/CID101_G2_php/back/orderManage/page.php?page=${this.currentPage}&itemsPerPage=${this.itemsPerPage}&identity=${selectValue}`
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          this.searchData = data.items
-          this.items = data.items
-          this.totalItems = data.totalItems
-          this.currentPage = data.currentPage
-          // console.log(this.currentPage)
-          // console.log(this.items)
-        })
+    setPage(page) {
+      this.currentPage = page
     },
     nextPage() {
-      if (this.currentPage < this.totalPages) {
+      if (this.currentPage >= 1 && this.currentPage < this.totalPages) {
         this.currentPage++
-        this.fetchPageData()
+      } else {
+        return
       }
     },
     prevPage() {
-      if (this.currentPage > 1) {
+      if (this.currentPage > 1 && this.currentPage != 1) {
         this.currentPage--
-        this.fetchPageData()
+      } else {
+        return
       }
     }
   },
   computed: {
     totalPages() {
-      return Math.ceil(this.totalItems / this.itemsPerPage)
+      return Math.ceil(this.orderData.length / this.itemsPerPage)
+    },
+    paginatedQuiz() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage
+      return this.searchData.slice(startIndex, startIndex + this.itemsPerPage)
     }
   },
   mounted() {
-    // this.fetchOrderData()
-    this.fetchPageData()
+    this.fetchOrderData()
+    // console.log(this.totalPages)
   }
 }
 </script>
