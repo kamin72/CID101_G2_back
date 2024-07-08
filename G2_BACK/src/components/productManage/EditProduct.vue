@@ -44,7 +44,12 @@
       </div>
       <div class="mb-3">
         <label for="productImg" class="form-label fw-bolder">商品圖片</label>
-        <input type="file" class="form-control" id="productImg" @change="handleProductImgChange" />
+        <input 
+          type="file" 
+          class="form-control" 
+          id="productImg" 
+          @change="handleProductImgChange" 
+        />
 
         <img
           v-if="productImgPreview || productImg"
@@ -129,27 +134,27 @@ export default {
         formData.append('prod_describe', this.detail.prod_describe)
 
         // 如果有新的圖片上傳，添加到 formData
-        if (this.detail.prod_img instanceof File) {
+        if (this.detail.prod_img instanceof Blob) {
           formData.append('prod_img', this.detail.prod_img)
-        }
-        if (this.detail.bg_img instanceof File) {
-          formData.append('bg_img', this.detail.bg_img)
+        } else {
+          formData.append('prod_img', this.detail.prod_img); // 保留原始圖片
         }
 
-        const response = await fetch('http://localhost/CID101_G2_php/front/product_update.php', {
+        if (this.detail.bg_img instanceof Blob) {
+          formData.append('bg_img', this.detail.bg_img)
+        } else {
+          formData.append('bg_img', this.detail.bg_img); // 保留原始圖片
+        }
+
+        const response = await fetch('http://localhost/CID101_G2_php/back/productManage/product_update.php', {
           body: formData,
           method: 'POST'
-          // headers: {
-          //   'Content-Type': 'application/json'
-          // },
-          // body: JSON.stringify(this.detail)
         })
 
         const result = await response.json()
-
-        if (result.error === false) {
+        if (!result.error) {
           // 更新成功
-          alert(result.msg) // 顯示成功訊息
+          alert('商品更新成功') 
           this.$router.push('/productManage')
         } else {
           // 更新失敗
@@ -157,7 +162,7 @@ export default {
         }
       } catch (error) {
         // console.error('Error:', error)
-        alert('發生錯誤，請稍後再試')
+        // alert('發生錯誤，請稍後再試')
       }
     },
 

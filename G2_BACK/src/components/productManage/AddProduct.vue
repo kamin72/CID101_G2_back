@@ -33,7 +33,12 @@
         </div>
         <div class="mb-3">
           <label for="describe" class="form-label fw-bolder">商品描述</label>
-          <textarea class="form-control" id="describe" rows="4" v-model="formData.prod_describe"></textarea>
+          <textarea
+            class="form-control"
+            id="describe"
+            rows="4"
+            v-model="formData.prod_describe"
+          ></textarea>
         </div>
         <div class="mb-3">
           <label for="productImg" class="form-label fw-bolder">商品圖片</label>
@@ -102,38 +107,51 @@ export default {
   methods: {
     async submitForm() {
       try {
-        const response = await fetch('http://localhost/CID101_G2_php/front/product_add.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(this.formData)
+        let formData = new FormData()
+        formData.append('prod_id', this.formData.prod_id)
+        formData.append('prod_name', this.formData.prod_name)
+        formData.append('prod_ename', this.formData.prod_ename)
+        formData.append('prod_category', this.formData.prod_category)
+        formData.append('prod_variety', this.formData.prod_variety)
+        formData.append('prod_year', this.formData.prod_year)
+        formData.append('prod_price', this.formData.prod_price)
+        formData.append('prod_describe', this.formData.prod_describe)
+
+        // 如果有新的圖片上傳，添加到 formData
+        if (this.formData.prod_img instanceof Blob) {
+          formData.append('prod_img', this.formData.prod_img)
+        }
+        if (this.formData.bg_img instanceof Blob) {
+          formData.append('bg_img', this.formData.bg_img)
+        }
+
+        const response = await fetch('http://localhost/CID101_G2_php/back/productManage/product_add.php', {
+          body: formData,
+          method: 'POST'
         })
 
         const result = await response.json()
         if (!result.error) {
           alert('商品新增成功')
-          this.$router.pust('/ProductManage')
+          this.$router.push('/ProductManage')
         } else {
           alert('商品新增失敗 :' + result.msg)
         }
       } catch (error) {
-        console.error('Error:', error)
-        alert('發生錯誤，請稍後再試')
+        // console.error('Error:', error)
+        // alert('發生錯誤，請稍後再試')
       }
     },
     handleProductImgChange(event) {
-      const file = event.target.files[0]
-      if (file) {
-        this.productImgPreview = URL.createObjectURL(file)
-        this.formData.prod_img = file.name // 假設我們只儲存檔案名稱
+      this.formData.prod_img = event.target.files[0]
+      if (this.formData.prod_img) {
+        this.productImgPreview = URL.createObjectURL(this.formData.prod_img)
       }
     },
     handleBackgroundImgChange(event) {
-      const file = event.target.files[0]
-      if (file) {
-        this.backgroundImgPreview = URL.createObjectURL(file)
-        this.formData.bg_img = file.name // 假設我們只儲存檔案名稱
+      this.formData.bg_img = event.target.files[0]
+      if (this.formData.bg_img) {
+        this.backgroundImgPreview = URL.createObjectURL(this.formData.bg_img)
       }
     }
   }
