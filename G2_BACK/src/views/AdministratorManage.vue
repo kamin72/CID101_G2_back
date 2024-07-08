@@ -43,7 +43,8 @@
                 type="checkbox"
                 role="switch"
                 id="flexSwitchCheckDefault"
-                v-model="switchState"
+                :checked="item.admin_status"
+                @change="switchStatus(item)"
               />
             </div>
           </td>
@@ -85,7 +86,7 @@ export default {
       adminData: [],
       searchData: [],
       search: '',
-      switchState: true
+      switchState: null
     }
   },
   created() {
@@ -139,6 +140,29 @@ export default {
           data.admin_access == this.identity
         )
       })
+    },
+    switchStatus(item) {
+      let newStatus
+      switch (item.admin_status) {
+        case 0:
+          newStatus = 1 // 預設啟用
+          break
+        case 1:
+          newStatus = 0 // 帳號未啟用
+          break
+        default:
+          newStatus = item.admin_status // 默认保持不变
+          break
+      }
+      item.admin_status = newStatus
+
+      fetch(
+        `http://localhost/CID101_G2_php/back/admin/updateStatus.php?status=${newStatus}&admin_no=${item.admin_no}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          alert(data.msg)
+        })
     }
   },
   mounted() {
