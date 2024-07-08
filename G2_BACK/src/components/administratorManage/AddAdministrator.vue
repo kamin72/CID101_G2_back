@@ -21,13 +21,8 @@
       </select>
     </div>
     <div class="mt-5 d-flex gap-5" style="width: 100%">
-      <button
-        to="/administratorManage"
-        type="button"
-        class="btn btn-primary p-2 fs-4"
-        style="width: 50%"
-        @click="submitForm"
-      >
+      <button to="/administratorManage" type="button" class="btn btn-primary p-2 fs-4" style="width: 50%"
+        @click="submitForm">
         新增
       </button>
       <button type="button" class="btn btn-secondary fs-4" style="width: 50%" @click="clearForm">
@@ -55,7 +50,6 @@ export default {
         password: this.password,
         access: this.access
       }
-
       const form = new URLSearchParams(formData)
       const url = 'http://localhost/CID101_G2_php/back/admin/creatAdmin.php'
       fetch(url, {
@@ -76,7 +70,6 @@ export default {
           }
         })
     },
-
     clearForm() {
       this.name = ''
       this.account = ''
@@ -84,5 +77,6 @@ export default {
       this.access = ''
     }
   }
+
 }
 </script>
