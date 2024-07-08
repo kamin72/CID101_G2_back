@@ -179,7 +179,7 @@ export default {
             }
         },
         deleteNews(item) {
-            fetch(`http://localhost/CID101_G2/CID101_G2_php/back/news_delete.php?news_id=${item.news_id}`, {
+            fetch(`http://localhost/CID101_G2/CID101_G2_php/back/newsManage/news_delete.php?news_id=${item.news_id}`, {
             method: 'GET'
             })
             .then(response => response.json())
@@ -198,7 +198,7 @@ export default {
         },
         //抓取資料庫資料
         fetchNewsData() {
-            fetch('http://localhost/CID101_G2/CID101_G2_php/back/news_read.php')
+            fetch('http://localhost/CID101_G2/CID101_G2_php/back/newsManage/news_read.php')
             .then((res) => res.json())
             .then((data) => {
                 if (data.error) {
@@ -242,9 +242,9 @@ export default {
         },
         //新增or修改
         addUpdateForm() {
-            let apiUrl = 'http://localhost/CID101_G2/CID101_G2_php/back/news_add.php';
+            let apiUrl = 'http://localhost/CID101_G2/CID101_G2_php/back/newsManage/news_add.php';
             if (this.isEditing) {
-                apiUrl = 'http://localhost/CID101_G2/CID101_G2_php/back/news_update.php';
+                apiUrl = 'http://localhost/CID101_G2/CID101_G2_php/back/newsManage/news_update.php';
             }
             if (!(this.isEditing) && this.newsForm.news_img === "") {
                 alert("没選圖片");

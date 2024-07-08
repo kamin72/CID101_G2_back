@@ -35,7 +35,7 @@
         <router-link to="/productManage" active-class="active-link">
           <li>商品管理</li>
         </router-link>
-        <router-link to="" active-class="active-link">
+        <router-link to="/quiz" active-class="active-link">
           <li>問答管理</li>
         </router-link>
         <router-link to="/discount" active-class="active-link">

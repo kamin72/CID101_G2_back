@@ -55,7 +55,7 @@
             <div class="card-header">
                 <legend>{{ isEditing ? '修改優惠券' : '新增優惠券' }}</legend>
             </div>
-                <form @submit="addUpdateDiscount" id="addDiscountform">
+                <form @submit.prevent="addUpdateDiscount" id="addDiscountform">
                     <div class="mb-3">
                         <label for="discountName" class="form-label">優惠券名稱</label>
                         <input type="text" class="form-control" id="disconutName" v-model="newDiscount.dis_name">
@@ -124,7 +124,7 @@ export default {
             }
         },
         deleteDiscount(item) {
-            fetch(`http://localhost/CID101_G2/CID101_G2_php/back/discountType_delete.php?dis_serial=${item.dis_serial}`, {
+            fetch(`http://localhost/CID101_G2/CID101_G2_php/back/discountManage/discountType_delete.php?dis_serial=${item.dis_serial}`, {
             method: 'GET'
             })
             .then(response => response.json())
@@ -143,7 +143,7 @@ export default {
         },
         //抓取資料庫資料
         fetchDiscountData() {
-            fetch('http://localhost/CID101_G2/CID101_G2_php/back/discountType_read.php')
+            fetch('http://localhost/CID101_G2/CID101_G2_php/back/discountManage/discountType_read.php')
             .then((res) => res.json())
             .then((data) => {
                 if (data.error) {
@@ -185,9 +185,9 @@ export default {
         },
         //新增or修改優惠券
         addUpdateDiscount() {
-        let apiUrl = 'http://localhost/CID101_G2/CID101_G2_php/back/discountType_add.php';
+        let apiUrl = 'http://localhost/CID101_G2/CID101_G2_php/back/discountManage/discountType_add.php';
         if (this.isEditing) {
-            apiUrl = 'http://localhost/CID101_G2/CID101_G2_php/back/discountType_update.php';
+            apiUrl = 'http://localhost/CID101_G2/CID101_G2_php/back/discountManage/discountType_update.php';
         }
 
         let disData = {
@@ -207,6 +207,7 @@ export default {
         .then(response => response.json())
         .then(result => {
             if (!result.error) {
+            alert(this.isEditing ? '優惠券修改成功' : '優惠券新增成功');
             this.showAddUpdateForm = false;
             this.isEditing = false; //重置編輯狀態
             this.newDiscount = {
@@ -215,7 +216,7 @@ export default {
                 dis_set_date: '',
                 dis_serial: ''
             };
-            alert(this.isEditing ? '優惠券修改成功' : '優惠券新增成功');
+            this.fetchDiscountData();
             } else {
             alert('操作失敗: ' + result.msg);
             }
