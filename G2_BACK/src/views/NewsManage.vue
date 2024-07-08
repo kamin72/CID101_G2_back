@@ -28,11 +28,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item, index) in paginatedNews" :key="item.news_id" style="width: 200px;height: 10px; ">
+                    <tr v-for="(item, index) in paginatedNews" :key="item.news_id">
                         <th scope="row">{{ item.news_id }}</th>
                         <td style="width: 150px;"><img :src="'../../../../image/news/' +item.news_img" alt="Image Preview" >{{ item.news_img }}</td>
                         <td style="width: 150px;">{{ item.news_title }}</td>
-                        <td style="width: 200px;">{{ item.news_content }}</td>
+                        <td>
+                            <div class="text-nowrap" style="width: 10rem; text-overflow: ellipsis; overflow:hidden">
+                                {{ item.news_content }}
+                            </div>
+                        </td>
                         <td>{{ item.news_date }}</td>
                         <td>
                             <div class="form-check form-switch">
@@ -320,7 +324,7 @@ export default {
             newsData.append('news_content', item.news_content);
             newsData.append('news_date', item.news_date);
 
-            fetch('http://localhost/CID101_G2/CID101_G2_php/back/news_update.php', {
+            fetch('http://localhost/CID101_G2/CID101_G2_php/back/newsManage/news_update.php', {
                 method: 'POST',
                 body: newsData
             })
