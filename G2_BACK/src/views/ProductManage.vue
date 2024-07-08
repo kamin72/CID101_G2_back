@@ -54,6 +54,8 @@
                 type="checkbox"
                 role="switch"
                 id="flexSwitchCheckDefault"
+                :checked = "item.prod_state == 1"
+                @change = "ProductState(item, $event)"
               />
             </div>
           </td>
@@ -122,13 +124,42 @@ export default {
       return new URL(`../assets/img/wine/${file}`, import.meta.url).href
     },
     fetchData() {
-      fetch('http://localhost/CID101_G2_php/front/product.php')
+      fetch('http://localhost/CID101_G2_php/back/productManage/product_read.php')
         .then((response) => response.json())
         .then((data) => {
           // console.log('Fetched data:', data) // 添加這行來檢查接收到的數據
           this.products = data.products
           // console.log('Fetched data:', this.products) // 添加這行來檢查接收到的數據
         })
+    },
+    async ProductState(product, event) {
+      try {
+         const response = await fetch('http://localhost/CID101_G2_php/back/productManage/product_state.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            prod_id: product.prod_id,
+            prod_state: product.prod_state == 1 ? 0 : 1
+          }),
+         })
+         const result = await response.json();
+         if(!result.error) {
+          product.prod_state = product.prod_state == 1 ? 0 : 1;
+
+        } else {
+          alert('更新失敗:' + result.msg);
+          // 恢復 checkbox 狀態
+          event.target.checked = !event.target.checked;
+         }
+
+      } catch (error) {
+        // console.error('Error:', error);
+        // alert('發生錯誤，請稍後再試');
+        // 恢復 checkbox 狀態
+        // event.target.checked = !event.target.checked;
+      }
     },
 
     async deleteProduct(productId) {
