@@ -84,7 +84,7 @@ export default {
     //   return new URL(`../assets/img/wine/${file}`, import.meta.url).href
     // },
     fetchData() {
-      fetch('http://localhost/CID101_G2_php/front/member.php')
+      fetch('http://localhost/CID101_G2_php/back/orderManage/memberManage.php')
       .then((response) => response.json())
       .then((data) => {
          // 添加這行來檢查接收到的數據
