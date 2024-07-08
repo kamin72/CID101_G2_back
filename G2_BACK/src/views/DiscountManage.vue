@@ -124,7 +124,7 @@ export default {
             }
         },
         deleteDiscount(item) {
-            fetch(`http://localhost/CID101_G2_php/front/discountType_delete.php?dis_serial=${item.dis_serial}`, {
+            fetch(`http://localhost/CID101_G2/CID101_G2_php/back/discountType_delete.php?dis_serial=${item.dis_serial}`, {
             method: 'GET'
             })
             .then(response => response.json())
@@ -143,7 +143,7 @@ export default {
         },
         //抓取資料庫資料
         fetchDiscountData() {
-            fetch('http://localhost/CID101_G2_php/front/discountType_read.php')
+            fetch('http://localhost/CID101_G2/CID101_G2_php/back/discountType_read.php')
             .then((res) => res.json())
             .then((data) => {
                 if (data.error) {
@@ -185,9 +185,9 @@ export default {
         },
         //新增or修改優惠券
         addUpdateDiscount() {
-        let apiUrl = 'http://localhost/CID101_G2_php/front/discountType_add.php';
+        let apiUrl = 'http://localhost/CID101_G2/CID101_G2_php/back/discountType_add.php';
         if (this.isEditing) {
-            apiUrl = 'http://localhost/CID101_G2_php/front/discountType_update.php';
+            apiUrl = 'http://localhost/CID101_G2/CID101_G2_php/back/discountType_update.php';
         }
 
         let disData = {

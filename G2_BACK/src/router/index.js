@@ -105,6 +105,11 @@ const router = createRouter({
       props: (route) => ({
         cartId: route.query.cartId
       })
+    },
+    {
+      path: '/news',
+      name: 'news',
+      component: () => import('../views/NewsManage.vue')
     }
   ]
 })

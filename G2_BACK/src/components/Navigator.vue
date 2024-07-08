@@ -20,7 +20,7 @@
         <router-link to="/administratormanage" active-class="active-link">
           <li>管理員管理</li>
         </router-link>
-        <router-link to="" active-class="active-link">
+        <router-link to="/news" active-class="active-link">
           <li>最新消息管理</li>
         </router-link>
         <router-link to="/courseManage" active-class="active-link">
