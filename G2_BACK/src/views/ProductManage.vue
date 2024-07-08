@@ -64,7 +64,11 @@
                   編輯
                 </button>
               </RouterLink>
-              <button type="button" class="btn btn-secondary d-flex align-items-center" @click="deleteProduct(item.prod_id)">
+              <button
+                type="button"
+                class="btn btn-secondary d-flex align-items-center"
+                @click="deleteProduct(item.prod_id)"
+              >
                 刪除
               </button>
             </div>
@@ -113,7 +117,6 @@ export default {
     }
   },
   methods: {
-
     parseServerImg(file) {
       // return `${import.meta.env.VITE_FILE_URL}/${file}`
       return new URL(`../assets/img/wine/${file}`, import.meta.url).href
@@ -122,57 +125,57 @@ export default {
       fetch('http://localhost/CID101_G2_php/front/product.php')
         .then((response) => response.json())
         .then((data) => {
-          console.log('Fetched data:', data) // 添加這行來檢查接收到的數據
+          // console.log('Fetched data:', data) // 添加這行來檢查接收到的數據
           this.products = data.products
-          console.log('Fetched data:', this.products) // 添加這行來檢查接收到的數據
+          // console.log('Fetched data:', this.products) // 添加這行來檢查接收到的數據
         })
     },
 
     async deleteProduct(productId) {
       //使用 confirm() 彈出一個確認對話框。如果用戶點擊"取消"，函數將立即返回，不執行刪除操作。
-      if(!confirm('確定要刪除這個商品嗎?')) {
-        return;
+      if (!confirm('確定要刪除這個商品嗎?')) {
+        return
       }
 
       try {
         // 發送刪除請求
         // 使用 fetch API 發送GET請求到刪除API。URL中包含要刪除的商品ID。
-        const response = await fetch(`http://localhost/CID101_G2_php/back/productManage/product_delete.php?prod_id=${productId}`);
-        const result = await response.json();
+        const response = await fetch(
+          `http://localhost/CID101_G2_php/back/productManage/product_delete.php?prod_id=${productId}`
+        )
+        const result = await response.json()
 
-        if(!result.error) {
+        if (!result.error) {
           // 排除已刪除的商品
-          this.products = this.products.filter(product => product.prod_id !== productId);
-
+          this.products = this.products.filter((product) => product.prod_id !== productId)
         } else {
-          alert('刪除失敗:' + result.msg);
-         }
-
-        } catch (error) {
-          console.error('Error', error);
-          alert('發生錯誤，請稍後再試');
+          alert('刪除失敗:' + result.msg)
         }
+      } catch (error) {
+        console.error('Error', error)
+        alert('發生錯誤，請稍後再試')
       }
-    },
+    }
+  },
   mounted() {
     this.fetchData()
   },
 
   // 添加這個生命週期鉤子
   activated() {
-    this.fetchData(); // 每次組件被激活時重新獲取數據
+    this.fetchData() // 每次組件被激活時重新獲取數據
   },
   beforeRouteEnter(to, from, next) {
-    next(vm => {
-      vm.fetchData();
+    next((vm) => {
+      vm.fetchData()
     })
   },
- watch: {
-  $route(to, from) {
-    if(to.name === 'ProductManage') {
-      this.fetchData();
+  watch: {
+    $route(to, from) {
+      if (to.name === 'ProductManage') {
+        this.fetchData()
+      }
     }
   }
- }
 }
 </script>
