@@ -5,7 +5,7 @@
       <select
         class="form-select"
         aria-label="Default select example"
-        @change="fetchOrderData($event)"
+        @change="fetchPageData($event)"
       >
         <option value="0" selected>全部</option>
         <option v-for="item in identity" :key="item.value" :value="item.value">
@@ -54,15 +54,29 @@
   <nav aria-label="Page navigation example" class="d-flex justify-content-center">
     <ul class="pagination">
       <li class="page-item">
-        <a class="page-link text-primary-emphasis" href="#" aria-label="Previous">
+        <a
+          class="page-link text-primary-emphasis"
+          aria-label="Previous"
+          href="#"
+          @click="prevPage"
+          :disabled="currentPage === 1"
+        >
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-      <li class="page-item"><a class="page-link text-primary-emphasis" href="#">1</a></li>
-      <li class="page-item"><a class="page-link text-primary-emphasis" href="#">2</a></li>
-      <li class="page-item"><a class="page-link text-primary-emphasis" href="#">3</a></li>
+      <li class="page-item" v-for="(i, index) in totalPages" :key="index">
+        <a class="page-link text-primary-emphasis">{{ i }}</a>
+      </li>
+      <!-- <li class="page-item"><a class="page-link text-primary-emphasis" href="#">2</a></li>
+      <li class="page-item"><a class="page-link text-primary-emphasis" href="#">3</a></li> -->
       <li class="page-item">
-        <a class="page-link text-primary-emphasis" href="#" aria-label="Next">
+        <a
+          class="page-link text-primary-emphasis"
+          aria-label="Next"
+          href="#"
+          @click="nextPage"
+          :disabled="currentPage === totalPages"
+        >
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
@@ -74,8 +88,12 @@
 export default {
   data() {
     return {
+      i: 0,
       orderData: [],
-      // orderItem: [],
+      items: [],
+      currentPage: 1,
+      itemsPerPage: 10,
+      totalItems: 0,
       identity: [
         {
           value: 1,
@@ -91,25 +109,25 @@ export default {
     }
   },
   methods: {
-    fetchOrderData(event) {
-      const selectValue = event ? event.target.value : 0
-      fetch(
-        `http://localhost/CID101_G2_php/back/orderManage/orderManage.php?identity=${selectValue}`
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.error) {
-            alert(data.msg)
-          } else if (data.order == null) {
-            alert(data.msg)
-          } else {
-            this.orderData = data.order
-            this.searchData = data.order
-            // console.log(this.orderData)
-            localStorage.setItem('orderData', JSON.stringify(this.orderData))
-          }
-        })
-    },
+    // fetchOrderData(event) {
+    //   const selectValue = event ? event.target.value : 0
+    //   fetch(
+    //     `http://localhost/CID101_G2_php/back/orderManage/orderManage.php?identity=${selectValue}`
+    //   )
+    //     .then((res) => res.json())
+    //     .then((data) => {
+    //       if (data.error) {
+    //         alert(data.msg)
+    //       } else if (data.order == null) {
+    //         alert(data.msg)
+    //       } else {
+    //         this.orderData = data.order
+    //         this.searchData = data.order
+    //         // console.log(this.orderData)
+    //         localStorage.setItem('orderData', JSON.stringify(this.orderData))
+    //       }
+    //     })
+    // },
     getCartStatus(status) {
       const statusMap = {
         0: '未處理',
@@ -123,9 +141,9 @@ export default {
     },
     searchList() {
       if (this.content == '') {
-        return (this.searchData = this.orderData)
+        return (this.searchData = this.items)
       }
-      this.searchData = this.orderData.filter((data) => {
+      this.searchData = this.items.filter((data) => {
         return (
           data.cart_id == this.content ||
           data.cart_name.includes(this.content) ||
@@ -133,11 +151,44 @@ export default {
           data.email.includes(this.content)
         )
       })
+    },
+    fetchPageData(event) {
+      const selectValue = event ? event.target.value : 0
+
+      fetch(
+        `http://localhost/CID101_G2_php/back/orderManage/page.php?page=${this.currentPage}&itemsPerPage=${this.itemsPerPage}&identity=${selectValue}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          this.searchData = data.items
+          this.items = data.items
+          this.totalItems = data.totalItems
+          this.currentPage = data.currentPage
+          // console.log(this.currentPage)
+          // console.log(this.items)
+        })
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++
+        this.fetchPageData()
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--
+        this.fetchPageData()
+      }
     }
   },
-  computed: {},
+  computed: {
+    totalPages() {
+      return Math.ceil(this.totalItems / this.itemsPerPage)
+    }
+  },
   mounted() {
-    this.fetchOrderData()
+    // this.fetchOrderData()
+    this.fetchPageData()
   }
 }
 </script>

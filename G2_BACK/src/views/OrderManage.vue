@@ -6,7 +6,7 @@
         <button
           type="button"
           class="btn btn-primary"
-          :class="{ active: activeButton == 'query' }"
+          :class="{ 'btn-secondary': activeButton != 'query' }"
           @click="setActiveButton('query')"
         >
           詢價單查詢
@@ -16,7 +16,7 @@
         <button
           type="button"
           class="btn btn-primary"
-          :class="{ active: activeButton == 'count' }"
+          :class="{ 'btn-secondary': activeButton != 'count' }"
           @click="setActiveButton('count')"
         >
           詢價單統計

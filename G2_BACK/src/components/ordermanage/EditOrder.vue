@@ -183,8 +183,10 @@ export default {
           if (data.error) {
             alert(data.msg)
           } else {
-            alert(data.msg)
-            this.$router.push('/orderManage/orderquery')
+            if (confirm('確定要取消此訂單嗎？')) {
+              alert(data.msg)
+              this.$router.push('/orderManage/orderquery')
+            }
           }
         })
     },
