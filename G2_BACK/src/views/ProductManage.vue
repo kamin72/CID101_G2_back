@@ -73,10 +73,6 @@
       </tbody>
     </table>
 
-    <!-- 引入 AddProductModal 组件 -->
-    <!-- <AddProduct :show="isAddModalVisible" @close="closeAddModal" @product-added="handleProductAdded" /> -->
-    <!-- <AddProduct v-if="AddUpdateForm" @close="AddUpdateForm = false" /> -->
-
     <nav aria-label="Page navigation example" class="d-flex justify-content-center">
       <ul class="pagination">
         <li class="page-item">
@@ -141,10 +137,10 @@ export default {
       try {
         // 發送刪除請求
         // 使用 fetch API 發送GET請求到刪除API。URL中包含要刪除的商品ID。
-        const response = await fetch(`http://localhost/CID101_G2_php/front/product_delete.php?prod_id=${productId}`);
+        const response = await fetch(`http://localhost/CID101_G2_php/back/productManage/product_delete.php?prod_id=${productId}`);
         const result = await response.json();
 
-        if(result.error === false) {
+        if(!result.error) {
           // 排除已刪除的商品
           this.products = this.products.filter(product => product.prod_id !== productId);
 
