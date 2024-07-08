@@ -74,6 +74,10 @@ const router = createRouter({
       path: '/discount',
       component: () => import('../views/DiscountManage.vue')
     },
+    {
+      path: '/news',
+      component: () => import('../views/NewsManage.vue')
+    },
   ]
 })
 
