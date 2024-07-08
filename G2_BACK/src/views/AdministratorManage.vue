@@ -150,9 +150,6 @@ export default {
         case 1:
           newStatus = 0 // 帳號未啟用
           break
-        default:
-          newStatus = item.admin_status // 默认保持不变
-          break
       }
       item.admin_status = newStatus
 
