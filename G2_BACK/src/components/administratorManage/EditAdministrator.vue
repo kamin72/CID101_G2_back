@@ -142,6 +142,7 @@ export default {
         .then((data) => {
           if (!data.error) {
             alert(data.msg)
+            this.$router.push('/administratorManage')
           } else {
             alert(data.msg)
           }
