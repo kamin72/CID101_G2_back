@@ -151,7 +151,7 @@ export default {
             }
         },
         deleteQuiz(item) {
-            fetch(`http://localhost/CID101_G2/CID101_G2_php/back/quizManage/question_delete.php?q_no=${item.q_no}`, {
+            fetch(`${import.meta.env.VITE_API_URL}/quizManage/question_delete.php?q_no=${item.q_no}`, {
             method: 'GET'
             })
             .then(response => response.json())
@@ -170,7 +170,7 @@ export default {
         },
         //抓取資料庫資料
         fetchQuizData() {
-            fetch('http://localhost/CID101_G2/CID101_G2_php/back/quizManage/question_read.php')
+            fetch(`${import.meta.env.VITE_API_URL}/quizManage/question_read.php`)
             .then((res) => res.json())
             .then((data) => {
                 if (data.error) {
@@ -200,9 +200,9 @@ export default {
         },
         //新增or修改
         addUpdateQuiz() {
-        let apiUrl = 'http://localhost/CID101_G2/CID101_G2_php/back/quizManage/question_add.php';
+        let apiUrl = `${import.meta.env.VITE_API_URL}/quizManage/question_add.php`;
         if (this.isEditing) {
-            apiUrl = 'http://localhost/CID101_G2/CID101_G2_php/back/quizManage/question_update.php';
+            apiUrl = `${import.meta.env.VITE_API_URL}/quizManage/question_update.php`;
         }
 
         let quizData = {

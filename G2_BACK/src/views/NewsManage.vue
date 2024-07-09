@@ -58,11 +58,11 @@
                   type="checkbox"
                   role="switch"
                   id="flexSwitchCheckChecked"
-                  :checked="item.news_active === 1"
+                  :checked="item.news_state === 1"
                   @change="toggleActive(item)"
                 />
                 <label class="form-check-label" for="flexSwitchCheckChecked">{{
-                  item.news_active === 1 ? '上架' : '下架'
+                  item.news_state === 1 ? '上架' : '下架'
                 }}</label>
               </div>
             </td>
@@ -221,7 +221,7 @@ export default {
         news_title: '',
         news_content: '',
         news_date: '',
-        news_active: 0, //0預設下架 1上架 2手動下架
+        news_state: 0, //0預設下架 1上架 2手動下架
         news_id: ''
       },
       previewImage: '', //預覽上傳圖片
@@ -279,7 +279,7 @@ export default {
     },
     deleteNews(item) {
       fetch(
-        `http://localhost/CID101_G2/CID101_G2_php/back/newsManage/news_delete.php?news_id=${item.news_id}`,
+        `${import.meta.env.VITE_API_URL}/newsManage/news_delete.php?news_id=${item.news_id}`,
         {
           method: 'GET'
         }
@@ -300,7 +300,7 @@ export default {
     },
     //抓取資料庫資料
     fetchNewsData() {
-      fetch('http://localhost/CID101_G2/CID101_G2_php/back/newsManage/news_read.php')
+      fetch(`${import.meta.env.VITE_API_URL}/newsManage/news_read.php`)
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
@@ -344,9 +344,9 @@ export default {
     },
     //新增or修改
     addUpdateForm() {
-      let apiUrl = 'http://localhost/CID101_G2/CID101_G2_php/back/newsManage/news_add.php'
+      let apiUrl = `${import.meta.env.VITE_API_URL}/newsManage/news_add.php`
       if (this.isEditing) {
-        apiUrl = 'http://localhost/CID101_G2/CID101_G2_php/back/newsManage/news_update.php'
+        apiUrl = `${import.meta.env.VITE_API_URL}/newsManage/news_update.php`
       }
       if (!this.isEditing && this.newsForm.news_img === '') {
         alert('没選圖片')
@@ -354,7 +354,7 @@ export default {
       }
       if (this.newsForm.news_date == '') {
         this.setDefaultTime()
-        this.newsForm.news_active = 1
+        this.newsForm.news_state = 1
       }
 
       let newsData = new FormData()
@@ -366,7 +366,7 @@ export default {
       newsData.append('news_title', this.newsForm.news_title)
       newsData.append('news_content', this.newsForm.news_content)
       newsData.append('news_date', this.newsForm.news_date)
-      newsData.append('news_active', this.newsForm.news_active)
+      newsData.append('news_state', this.newsForm.news_state)
       newsData.append('news_id', this.newsForm.news_id)
 
       fetch(apiUrl, {
@@ -384,7 +384,7 @@ export default {
               news_title: '',
               news_content: '',
               news_date: '',
-              news_active: '',
+              news_state: '',
               news_id: ''
             }
             this.fetchNewsData()
@@ -399,7 +399,7 @@ export default {
     },
     toggleActive(item) {
       let newStatus
-      switch (item.news_active) {
+      switch (item.news_state) {
         case 0:
           newStatus = 1 // 預設下架改成上架
           break
@@ -410,19 +410,19 @@ export default {
           newStatus = 1 // 手動下架變上架
           break
         default:
-          newStatus = item.news_active // 默认保持不变
+          newStatus = item.news_state // 默认保持不变
           break
       }
-      item.news_active = newStatus
+      item.news_state = newStatus
       let newsData = new FormData()
       newsData.append('news_id', item.news_id)
-      newsData.append('news_active', item.news_active)
+      newsData.append('news_state', item.news_state)
       newsData.append('original', item.news_img)
       newsData.append('news_title', item.news_title)
       newsData.append('news_content', item.news_content)
       newsData.append('news_date', item.news_date)
 
-      fetch('http://localhost/CID101_G2/CID101_G2_php/back/newsManage/news_update.php', {
+      fetch(`${import.meta.env.VITE_API_URL}/newsManage/news_update.php`, {
         method: 'POST',
         body: newsData
       })
@@ -444,7 +444,7 @@ export default {
       const now = new Date()
       this.news.forEach((item) => {
         const newsDate = new Date(item.news_date)
-        if (newsDate <= now && item.news_active === 0) {
+        if (newsDate <= now && item.news_state === 0) {
           this.toggleActive(item)
         }
       })
