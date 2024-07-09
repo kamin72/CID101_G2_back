@@ -15,47 +15,50 @@
               aria-label="search-course-info" aria-describedby="button-search" />
             <button class="btn btn-primary me-1" type="button" id="button-search">搜尋</button>
           </div>
-          <RouterLink to="/addCourse">
+          <RouterLink to="/addCoursePage">
             <button type="button" class="btn btn-primary" style="height: 40px;">新增</button>
           </RouterLink>
         </div>
       </div>
-      <table class="table align-middle">
+      <table class="table align-middle course-table">
         <thead class="table-dark">
           <tr>
-            <th scope="col">課程編號</th>
-            <th scope="col">課程名稱</th>
-            <th scope="col">老師</th>
-            <th scope="col">上課時間</th>
-            <th scope="col">上課教室</th>
-            <th scope="col">課程價格</th>
-            <th scope="col">上架狀態</th>
-            <th scope="col">操作</th>
+            <th class="fs-6" scope="col">課程編號</th>
+            <th class="fs-6" scope="col">課程名稱</th>
+            <th class="fs-6" scope="col">老師</th>
+            <th class="fs-6" scope="col">上課時間</th>
+            <th class="fs-6" scope="col">上課教室</th>
+            <th class="fs-6" scope="col">課程價格</th>
+            <th class="fs-6" scope="col">折扣</th>
+            <th class="fs-6" scope="col">上架狀態</th>
+            <th class="fs-6" scope="col">操作</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="course in courses" :key="course.id">
-            <th scope="row">{{ course.id }}</th>
-            <td>{{ course.name }}</td>
-            <td>{{ course.teacher }}</td>
-            <td>{{ course.time }}</td>
-            <th>{{ course.classroom }}</th>
-            <td>NT. {{ course.price }}</td>
-            <td>
+          <tr v-for="course in courses" :key="course.course_id">
+            <th scope="row" class="fs-6 nowrap">{{ course.course_id }}</th>
+            <td class="fs-6 nowrap">{{ course.course_name }}</td>
+            <td class="fs-6 nowrap">{{ course.course_teacher }}</td>
+            <td class="fs-6">{{ formatDateTime(course.course_startTime) }} -<br> {{
+              formatDateTime(course.course_endTime) }}</td>
+            <td class="fs-6 nowrap">{{ course.course_room }}</td>
+            <td class="fs-6 nowrap">NT$ {{ course.course_price }}</td>
+            <td class="fs-6 nowrap">{{ course.course_discount || '無' }}</td>
+            <td class="fs-6 nowrap">
               <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" role="switch" :id="'flexSwitchCheck' + course.id"
-                  v-model="course.isActive">
+                <input class="form-check-input" type="checkbox" role="switch" :id="'flexSwitchCheck' + course.course_id"
+                  :checked="course.course_status === 'active'" @change="toggleCourseStatus(course.course_id)">
               </div>
             </td>
-            <td>
+            <td class="fs-6 nowrap">
               <div class="button-wrap d-flex">
-                <RouterLink :to="'/addCourse/' + course.id">
-                  <button type="button" class="btn btn-primary d-flex align-items-center me-1" style="height: 40px;">
+                <RouterLink :to="{ name: 'editCoursePage', params: { id: course.course_id } }">
+                  <button type="button" class="btn btn-primary btn-sm d-flex align-items-center me-1">
                     編輯
                   </button>
                 </RouterLink>
-                <button type="button" class="btn btn-secondary d-flex align-items-center" style="height: 40px;"
-                  @click="confirmDelete(course.id)">
+                <button type="button" class="btn btn-danger btn-sm d-flex align-items-center"
+                  @click="confirmDelete(course.course_id)">
                   刪除
                 </button>
               </div>
@@ -64,92 +67,184 @@
         </tbody>
       </table>
     </div>
-    <div class="right-wrap d-flex">
-      <div style="width: 320px" class="input-group mb-3">
-        <input style="height: 40px" type="text" class="form-control" placeholder="請輸入課程內容資訊"
-          aria-label="search-course-info" aria-describedby="button-search" />
-        <button class="btn btn-primary me-1" type="button" id="button-search">搜尋</button>
-      </div>
-      <RouterLink to="/addCourse">
-        <button type="button" class="btn btn-primary" style="height: 40px">新增</button>
-      </RouterLink>
-    </div>
   </div>
-  <table class="table align-middle">
-    <thead class="table-dark">
-      <tr>
-        <th scope="col">課程編號</th>
-        <th scope="col">課程名稱</th>
-        <th scope="col">老師</th>
-        <th scope="col">上課時間</th>
-        <th scope="col">上課教室</th>
-        <th scope="col">課程價格</th>
-        <th scope="col">上架狀態</th>
-        <th scope="col">操作</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="course in courses" :key="course.id">
-        <th scope="row">{{ course.id }}</th>
-        <td>{{ course.name }}</td>
-        <td>{{ course.teacher }}</td>
-        <td>{{ course.time }}</td>
-        <th>{{ course.classroom }}</th>
-        <td>NT. {{ course.price }}</td>
-        <td>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" :id="'flexSwitchCheck' + course.id"
-              v-model="course.isActive" />
-          </div>
-        </td>
-        <td>
-          <div class="button-wrap d-flex">
-            <RouterLink :to="'/addCourse/' + course.id">
-              <button type="button" class="btn btn-primary d-flex align-items-center me-1" style="height: 40px">
-                編輯
-              </button>
-            </RouterLink>
-            <button type="button" class="btn btn-secondary d-flex align-items-center" style="height: 40px"
-              @click="confirmDelete(course.id)">
-              刪除
-            </button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      courses: [
-        {
-          id: 1,
-          name: '品酒初級課程1',
-          teacher: '王大明',
-          time: '2024/05/01 14:00-2024/05/02 16:00',
-          classroom: 'A',
-          price: 3200,
-          isActive: true
-        }
-        // 可以添加更多課程數據
-      ]
+      courses: []
     }
   },
+
   methods: {
+    fetchCourses() {
+      const xhr = new XMLHttpRequest();
+      const url = `${import.meta.env.VITE_API_URL}/courseManage/getCourses.php`;
+      xhr.open('GET', url, true);
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          try {
+            const response = JSON.parse(xhr.responseText);
+            if (response.error) {
+              console.error('Error fetching courses:', response.message);
+            } else {
+              this.courses = response.courses;
+            }
+          } catch (e) {
+            console.error('Error parsing JSON:', e);
+          }
+        } else {
+          console.error('HTTP error', xhr.status, xhr.statusText);
+        }
+      };
+      xhr.onerror = () => {
+        console.error('Network error');
+      };
+      xhr.send();
+    },
+
+    formatDateTime(dateTimeString) {
+      const date = new Date(dateTimeString);
+      return date.toLocaleString('zh-TW');
+    },
+
+    toggleCourseStatus(courseId) {
+      // 這裡添加切換課程狀態的邏輯
+      console.log(`切換課程 ${courseId} 的狀態`);
+    },
+
     confirmDelete(courseId) {
       if (confirm(`確定要刪除課程編號 ${courseId} 嗎？`)) {
-        this.deleteCourse(courseId)
+        this.deleteCourse(courseId);
       }
     },
+
     deleteCourse(courseId) {
-      // 在實際應用中，這裡通常會調用 API 來刪除數據
-      // 這裡我們只是從前端數組中移除該課程
-      this.courses = this.courses.filter((course) => course.id !== courseId)
-      alert(`課程編號 ${courseId} 已被刪除`)
+      // 這裡添加刪除課程的邏輯
+      console.log(`刪除課程 ${courseId}`);
+    },
+
+    deleteCourse(courseId) {
+      const xhr = new XMLHttpRequest();
+      const url = `${import.meta.env.VITE_API_URL}/courseManage/deleteCourse.php`;
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          try {
+            const response = JSON.parse(xhr.responseText);
+            if (response.success) {
+              alert('課程刪除成功！');
+              this.fetchCourses(); // 重新獲取課程列表
+            } else {
+              alert('課程刪除失敗：' + response.message);
+            }
+          } catch (e) {
+            console.error('Error parsing JSON:', e);
+            alert('發生錯誤，請稍後再試。');
+          }
+        } else {
+          console.error('HTTP error', xhr.status, xhr.statusText);
+          alert('發生錯誤，請稍後再試。');
+        }
+      };
+
+      xhr.onerror = () => {
+        console.error('Network error');
+        alert('網絡錯誤，請檢查您的連接。');
+      };
+
+      xhr.send(JSON.stringify({ course_id: courseId }));
+    },
+
+    toggleCourseStatus(courseId, currentStatus) {
+      const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+      const xhr = new XMLHttpRequest();
+      const url = `${import.meta.env.VITE_API_URL}/courseManage/updateCourseStatus.php`;
+      xhr.open('POST', url, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          try {
+            const response = JSON.parse(xhr.responseText);
+            if (response.success) {
+              // 更新本地狀態
+              const course = this.courses.find(c => c.course_id === courseId);
+              if (course) {
+                course.course_status = newStatus;
+              }
+            } else {
+              alert('更新課程狀態失敗：' + response.message);
+            }
+          } catch (e) {
+            console.error('Error parsing JSON:', e);
+            alert('發生錯誤，請稍後再試。');
+          }
+        } else {
+          console.error('HTTP error', xhr.status, xhr.statusText);
+          alert('發生錯誤，請稍後再試。');
+        }
+      };
+
+      xhr.onerror = () => {
+        console.error('Network error');
+        alert('網絡錯誤，請檢查您的連接。');
+      };
+
+      xhr.send(JSON.stringify({ course_id: courseId, course_status: newStatus }));
     }
+  },
+
+  mounted() {
+    this.fetchCourses();
   }
 }
 </script>
+
+<style scoped>
+.course-table {
+  font-size: 0.85rem;
+}
+
+.course-table th,
+.course-table td {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.small-text {
+  font-size: 0.85rem;
+}
+
+.nowrap {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-sm {
+  padding: 0.38rem 0.8rem;
+  font-size: 0.85rem;
+}
+
+.date-time {
+  white-space: nowrap;
+  line-height: 1.2;
+}
+
+td:nth-child(4) {
+  white-space: normal;
+}
+
+/* 為了確保開關和按鈕在單元格中居中 */
+.form-check.form-switch,
+.button-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

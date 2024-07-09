@@ -49,14 +49,17 @@ const router = createRouter({
     {
       path: '/courseManage',
       name: 'courseManage',
-      component: () => import('@/views/CourseManage.vue'),
-      children: [
-        {
-          path: 'addCoursePage',
-          name: 'addCoursePage',
-          component: () => import('../views/AddCoursePage.vue')
-        }
-      ]
+      component: () => import('@/views/CourseManage.vue')
+    },
+    {
+      path: '/addCoursePage',
+      name: 'addCoursePage',
+      component: () => import('../views/AddCoursePage.vue')
+    },
+    {
+      path: '/editCoursePage/:id',
+      name: 'editCoursePage',
+      component: () => import('../views/EditCoursePage.vue')
     },
     {
       path: '/courseOrderManage',
