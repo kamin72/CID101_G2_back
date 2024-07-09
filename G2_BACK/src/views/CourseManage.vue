@@ -4,8 +4,10 @@
             <h1>課程管理</h1>
             <div class="button-wrap d-flex justify-content-between py-4">
                 <div class="left-wrap d-flex justify-content-between">
-                    <button type="button" class="btn btn-primary me-1" style="height: 40px;">課程內容管理</button>
-                    <button type="button" class="btn btn-secondary" style="height: 40px;">課程訂單管理</button>
+                    <button type="button" class="btn btn-secondary me-1" style="height: 40px;">課程內容管理</button>
+                    <RouterLink to="/courseOrderManage">
+                        <button type="button" class="btn btn-primary" style="height: 40px;">課程訂單管理</button>
+                    </RouterLink>
                 </div>
                 <div class="right-wrap d-flex">
                     <div style="width: 320px;" class="input-group mb-3">

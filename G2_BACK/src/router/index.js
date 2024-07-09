@@ -49,17 +49,24 @@ const router = createRouter({
     {
       path: '/courseManage',
       name: 'courseManage',
-      component: () => import('../views/CourseManage.vue')
-    },
-    {
-      path: '/addCourse',
-      name: 'addCourse',
-      component: () => import('@/components/courseManage/AddCourse.vue')
+      component: () => import('@/views/CourseManage.vue'),
+      children: [
+        {
+          path: 'addCoursePage',
+          name: 'addCoursePage',
+          component: () => import('../views/AddCoursePage.vue')
+        }
+      ]
     },
     {
       path: '/courseOrderManage',
       name: 'courseOrderManage',
       component: () => import('../views/CourseOrderManage.vue')
+    },
+    {
+      path: '/courseOrderManagePage',
+      name: 'courseOrderManagePage',
+      component: () => import('../views/CourseOrderManagePage.vue')
     },
     {
       path: '/productManage',
