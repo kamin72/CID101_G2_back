@@ -69,7 +69,7 @@ export default {
     methods: {
         fetchOrders(search = '') {
             const xhr = new XMLHttpRequest();
-            const url = `http://localhost/CID101_G2_php/back/courseOrderManage/getCourseOrder.php${search ? `?search=${encodeURIComponent(search)}` : ''}`;
+            const url = `${import.meta.env.VITE_API_URL}/courseOrderManage/getCourseOrder.php${search ? `?search=${encodeURIComponent(search)}` : ''}`;
             xhr.open('GET', url, true);
             xhr.onload = () => {
                 if (xhr.status === 200) {

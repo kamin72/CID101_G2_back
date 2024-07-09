@@ -66,7 +66,7 @@ export default {
                 this.isEditing = true;
                 // 發送 AJAX 請求獲取訂單數據
                 const xhr = new XMLHttpRequest();
-                const url = `http://localhost/CID101_G2_php/back/courseOrderManage/getCourseOrder.php?book_id=${id}`;
+                const url = `${import.meta.env.VITE_API_URL}/courseOrderManage/getCourseOrder.php?book_id=${id}`;
                 xhr.open('GET', url, true);
                 xhr.onload = () => {
                     if (xhr.status === 200) {
