@@ -1,44 +1,59 @@
 <template>
-    <div class="container">
+    <div style="width: 100%;" class="container">
         <div class="row py-5">
-            <h1 class="mb-4">課程訂單管理</h1>
-
-            <div class="order-list">
-                <div v-for="order in orders" :key="order.id" class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">訂單編號: {{ order.id }}</h5>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p><strong>訂單日期:</strong> {{ order.date }}</p>
-                                <p><strong>課程名稱:</strong> {{ order.courseName }}</p>
-                                <p><strong>課程價格:</strong> NT. {{ order.coursePrice }}</p>
-                                <p><strong>結帳金額:</strong> NT. {{ order.totalAmount }}</p>
-                                <p><strong>訂單狀態:</strong> {{ order.orderStatus }}</p>
-                                <p><strong>交易狀態:</strong> {{ order.transactionStatus }}</p>
-                                <p><strong>報名人數:</strong> {{ order.participants }}</p>
-                            </div>
-                            <div class="col-md-6">
-                                <p><strong>訂購人:</strong> {{ order.customerName }}</p>
-                                <p><strong>Email:</strong> {{ order.email }}</p>
-                                <p><strong>電話號碼:</strong> {{ order.phone }}</p>
-                                <p><strong>其他需求:</strong> {{ order.specialRequirements }}</p>
-                            </div>
-                        </div>
-                        <div class="mt-3">
-                            <label :for="'adminNotes-' + order.id" class="form-label"><strong>管理員備註:</strong></label>
-                            <textarea v-model="order.adminNotes" class="form-control" :id="'adminNotes-' + order.id"
-                                rows="3" placeholder="輸入管理員備註"></textarea>
-                        </div>
-                        <div class="mt-3 d-flex justify-content-between">
-                            <button @click="cancelOrder(order.id)" class="btn btn-danger">取消訂單</button>
-                            <div>
-                                <button @click="saveChanges(order)" class="btn btn-primary me-2">儲存</button>
-                                <button @click="discardChanges(order)" class="btn btn-secondary">取消</button>
-                            </div>
-                        </div>
+            <h1>課程管理</h1>
+            <div class="button-wrap d-flex justify-content-between py-4">
+                <div class="left-wrap d-flex justify-content-between">
+                    <RouterLink to="/courseManage">
+                        <button type="button" class="btn btn-primary me-1" style="height: 40px;">課程內容管理</button>
+                    </RouterLink>
+                    <button type="button" class="btn btn-secondary" style="height: 40px;">課程訂單管理</button>
+                </div>
+                <div class="right-wrap d-flex">
+                    <div style="width: 320px;" class="input-group mb-3">
+                        <input style="height: 40px;" type="text" class="form-control" placeholder="請輸入課程內容資訊"
+                            aria-label="search-course-info" aria-describedby="button-search" v-model="searchTerm" />
+                        <button class="btn btn-primary" type="button" id="button-search"
+                            @click="searchOrders">搜尋</button>
                     </div>
                 </div>
             </div>
+            <table class="table align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">訂單編號</th>
+                        <th scope="col">訂單日期</th>
+                        <th scope="col">課程名稱</th>
+                        <th scope="col">訂購人</th>
+                        <th scope="col">人數</th>
+                        <th scope="col">應付金額</th>
+                        <th scope="col">實付金額</th>
+                        <th scope="col">訂單狀態</th>
+                        <th scope="col">交易狀態</th>
+                        <th scope="col">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="order in orders" :key="order.book_id">
+                        <th scope="row">{{ order.book_id }}</th>
+                        <td>{{ formatDate(order.book_date) }}</td>
+                        <td>{{ order.book_course_name }}</td>
+                        <td>{{ order.name }}</td>
+                        <td>{{ order.book_amount }}</td>
+                        <td>NT$ {{ order.book_payable_amount }}</td>
+                        <td>NT$ {{ order.book_paid_amount }}</td>
+                        <td>{{ order.book_order_status }}</td>
+                        <td>{{ order.book_trading_status }}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary d-flex align-items-center"
+                                style="height: 40px;" @click="editOrder(order.book_id)">
+                                <i class="material-symbols-outlined me-1">edit_square</i>
+                                編輯
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </template>
@@ -47,71 +62,61 @@
 export default {
     data() {
         return {
-            orders: [
-                {
-                    id: "ORD001",
-                    date: "2024-05-01",
-                    courseName: "品酒初級課程1",
-                    coursePrice: 3200,
-                    totalAmount: 3200,
-                    orderStatus: "已確認",
-                    transactionStatus: "已付款",
-                    participants: 1,
-                    customerName: "張三",
-                    email: "zhangsan@example.com",
-                    phone: "0912345678",
-                    specialRequirements: "無",
-                    adminNotes: ""
-                },
-                // 可以添加更多訂單數據
-            ],
-            originalOrders: []
-        };
-    },
-    created() {
-        this.originalOrders = JSON.parse(JSON.stringify(this.orders));
+            orders: [],
+            searchTerm: ''
+        }
     },
     methods: {
-        cancelOrder(orderId) {
-            if (confirm(`確定要取消訂單 ${orderId} 嗎？`)) {
-                console.log(`正在取消訂單 ${orderId}`);
-                // 這裡添加取消訂單的邏輯
-            }
-        },
-        saveChanges(order) {
-            console.log(`正在儲存訂單 ${order.id} 的更改`);
-            // 這裡添加儲存更改的邏輯
-            const index = this.originalOrders.findIndex(o => o.id === order.id);
-            if (index !== -1) {
-                this.originalOrders[index] = JSON.parse(JSON.stringify(order));
-            }
-        },
-        discardChanges(order) {
-            if (confirm('確定要放棄更改嗎？')) {
-                const originalOrder = this.originalOrders.find(o => o.id === order.id);
-                if (originalOrder) {
-                    Object.assign(order, JSON.parse(JSON.stringify(originalOrder)));
+        fetchOrders(search = '') {
+            const xhr = new XMLHttpRequest();
+            const url = `http://localhost/CID101_G2_php/back/courseOrderManage/getCourseOrder.php${search ? `?search=${encodeURIComponent(search)}` : ''}`;
+            xhr.open('GET', url, true);
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.error) {
+                            console.error('Error fetching orders:', response.msg);
+                        } else {
+                            this.orders = response.orderItem || [];
+                        }
+                    } catch (e) {
+                        console.error('Error parsing JSON:', e);
+                    }
+                } else {
+                    console.error('HTTP error', xhr.status, xhr.statusText);
                 }
+            };
+            xhr.onerror = () => {
+                console.error('Network error');
+            };
+            xhr.send();
+        },
+        editOrder(orderId) {
+            console.log(`編輯訂單 ${orderId}`);
+            const order = this.orders.find(o => o.book_id === orderId);
+            if (order) {
+                this.$router.push({
+                    name: 'courseOrderManagePage',
+                    query: {
+                        id: orderId,
+                        orderData: JSON.stringify(order)  // 將整個訂單對象傳遞
+                    }
+                });
+            } else {
+                console.error(`未找到 ID 為 ${orderId} 的訂單`);
             }
-        }
-    }
-};
+        },
+        formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('zh-TW');
+        },
+        searchOrders() {
+            this.fetchOrders(this.searchTerm);
+        },
+    },
+    mounted() {
+        this.fetchOrders();
+    },
+}
 </script>
-
-<style scoped>
-.card {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.card-title {
-    color: #007bff;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-h1 {
-    color: #333;
-    padding-bottom: 10px;
-}
-</style>

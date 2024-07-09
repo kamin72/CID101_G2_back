@@ -43,7 +43,8 @@
                 type="checkbox"
                 role="switch"
                 id="flexSwitchCheckDefault"
-                v-model="switchState"
+                :checked="item.admin_status"
+                @change="switchStatus(item)"
               />
             </div>
           </td>
@@ -102,9 +103,13 @@ export default {
       adminData: [],
       searchData: [],
       search: '',
+<<<<<<< HEAD
       switchState: true,
       currentPage: 1, // 當前頁碼
       itemsPerPage: 10 // 每頁顯示的資料數量
+=======
+      switchState: null
+>>>>>>> ed66c6b79e5b11b5b320a6dbfbcb67bf7b17bdf5
     }
   },
   created() {},
@@ -170,6 +175,25 @@ export default {
       } else {
         return
       }
+    switchStatus(item) {
+      let newStatus
+      switch (item.admin_status) {
+        case 0:
+          newStatus = 1 // 預設啟用
+          break
+        case 1:
+          newStatus = 0 // 帳號未啟用
+          break
+      }
+      item.admin_status = newStatus
+
+      fetch(
+        `http://localhost/CID101_G2_php/back/admin/updateStatus.php?status=${newStatus}&admin_no=${item.admin_no}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          alert(data.msg)
+        })
     }
   },
   mounted() {
