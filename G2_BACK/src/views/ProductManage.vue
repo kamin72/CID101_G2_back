@@ -54,12 +54,12 @@
                 type="checkbox"
                 role="switch"
                 id="flexSwitchCheckDefault"
-                :checked = "item.prod_state == 1"
-                @change = "ProductState(item, $event)"
+                :checked="item.prod_state == 1"
+                @change="ProductState(item, $event)"
               />
               <label class="form-check-label" for="flexSwitchCheckChecked">{{
-                  item.prod_state === 1 ? '上架' : '下架'
-                }}</label>
+                item.prod_state === 1 ? '上架' : '下架'
+              }}</label>
             </div>
           </td>
           <td>
@@ -81,7 +81,6 @@
         </tr>
       </tbody>
     </table>
-    <button class="w-100 h-40" @click="help">拯救東哥</button>
     <nav aria-label="Page navigation example" class="d-flex justify-content-center">
       <ul class="pagination">
         <li class="page-item">
@@ -137,26 +136,27 @@ export default {
     },
     async ProductState(product, event) {
       try {
-         const response = await fetch('http://localhost/CID101_G2/CID101_G2_php/back/productManage/product_state.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            prod_id: product.prod_id,
-            prod_state: product.prod_state == 1 ? 0 : 1
-          }),
-         })
-         const result = await response.json();
-         if(!result.error) {
-          product.prod_state = product.prod_state == 1 ? 0 : 1;
-
+        const response = await fetch(
+          'http://localhost/CID101_G2/CID101_G2_php/back/productManage/product_state.php',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              prod_id: product.prod_id,
+              prod_state: product.prod_state == 1 ? 0 : 1
+            })
+          }
+        )
+        const result = await response.json()
+        if (!result.error) {
+          product.prod_state = product.prod_state == 1 ? 0 : 1
         } else {
-          alert('更新失敗:' + result.msg);
+          alert('更新失敗:' + result.msg)
           // 恢復 checkbox 狀態
-          event.target.checked = !event.target.checked;
-         }
-
+          event.target.checked = !event.target.checked
+        }
       } catch (error) {
         // console.error('Error:', error);
         // alert('發生錯誤，請稍後再試');
@@ -190,9 +190,6 @@ export default {
         alert('發生錯誤，請稍後再試')
       }
     },
-    async help(){
-      feteh(``)
-    }
   },
   mounted() {
     this.fetchData()
