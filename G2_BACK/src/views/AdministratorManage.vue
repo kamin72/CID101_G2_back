@@ -31,7 +31,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in searchData" :key="index">
+        <tr v-for="(item, index) in paginatedQuiz" :key="index">
           <td scope="row">{{ item.admin_no }}</td>
           <td>{{ item.admin_name }}</td>
           <td>{{ item.admin_ac }}</td>
@@ -60,15 +60,33 @@
     <nav aria-label="Page navigation example" class="d-flex justify-content-center">
       <ul class="pagination">
         <li class="page-item">
-          <a class="page-link text-primary-emphasis" href="#" aria-label="Previous">
+          <a
+            class="page-link text-primary-emphasis"
+            aria-label="Previous"
+            @click="prevPage"
+            :disabled="currentPage == 1"
+            style="cursor: pointer"
+          >
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
-        <li class="page-item"><a class="page-link text-primary-emphasis" href="#">1</a></li>
-        <li class="page-item"><a class="page-link text-primary-emphasis" href="#">2</a></li>
-        <li class="page-item"><a class="page-link text-primary-emphasis" href="#">3</a></li>
+        <li
+          class="page-item"
+          v-for="page in totalPages"
+          :key="page"
+          :class="{ active: currentPage === page }"
+          @click="setPage(page)"
+        >
+          <a class="page-link text-primary-emphasis" href="#">{{ page }}</a>
+        </li>
         <li class="page-item">
-          <a class="page-link text-primary-emphasis" href="#" aria-label="Next">
+          <a
+            class="page-link text-primary-emphasis"
+            aria-label="Next"
+            @click="nextPage"
+            :disabled="currentPage == totalPages"
+            style="cursor: pointer"
+          >
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>
@@ -81,19 +99,15 @@
 export default {
   data() {
     return {
-      entries: [],
       adminData: [],
       searchData: [],
       search: '',
-      switchState: true
+      switchState: true,
+      currentPage: 1, // 當前頁碼
+      itemsPerPage: 10 // 每頁顯示的資料數量
     }
   },
-  created() {
-    // const { name, account, access } = this.$route.query
-    // if (name && account && access) {
-    //   this.entries.push({ name, account, access, switchState: true })
-    // }
-  },
+  created() {},
   methods: {
     clearData(index) {
       const url = `http://localhost/CID101_G2_php/back/admin/deleteAdminData.php?index=${index}`
@@ -139,6 +153,23 @@ export default {
           data.admin_access == this.identity
         )
       })
+    },
+    setPage(page) {
+      this.currentPage = page
+    },
+    nextPage() {
+      if (this.currentPage >= 1 && this.currentPage < this.totalPages) {
+        this.currentPage++
+      } else {
+        return
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1 && this.currentPage != 1) {
+        this.currentPage--
+      } else {
+        return
+      }
     }
   },
   mounted() {
@@ -153,6 +184,13 @@ export default {
       } else {
         return this.search
       }
+    },
+    totalPages() {
+      return Math.ceil(this.adminData.length / this.itemsPerPage)
+    },
+    paginatedQuiz() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage
+      return this.searchData.slice(startIndex, startIndex + this.itemsPerPage)
     }
   }
 }
