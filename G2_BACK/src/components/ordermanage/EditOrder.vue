@@ -119,9 +119,7 @@ export default {
   methods: {
     fetchOrderData() {
       const selectValue = 0
-      fetch(
-        `${import.meta.env.VITE_API_URL}/back/orderManage/orderManage.php?identity=${selectValue}`
-      )
+      fetch(`${import.meta.env.VITE_API_URL}/orderManage/orderManage.php?identity=${selectValue}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
@@ -172,6 +170,7 @@ export default {
           } else {
             alert('訂單狀態修改成功')
             this.localCartStatus = statusValue // 更新本地狀態
+            this.fetchOrderData()
           }
         })
     },
@@ -214,15 +213,6 @@ export default {
     this.fetchOrderData()
     this.handleOrderStatus()
   },
-  watch: {
-    // memberOrderInfo: {
-    //   handle(newValue) {
-    //     if (newValue.cart_status !== this.localCartStatus) {
-    //       this.localCartStatus = newValue.cart_status
-    //     }
-    //   },
-    //   deep: true
-    // }
-  }
+  watch: {}
 }
 </script>

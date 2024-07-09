@@ -30,9 +30,15 @@
       >
         新增
       </button>
-      <button type="button" class="btn btn-secondary fs-4" style="width: 50%" @click="clearForm">
+      <router-link
+        to="/administratorManage"
+        type="button"
+        class="btn btn-secondary fs-4"
+        style="width: 50%"
+        @click="clearForm"
+      >
         返回
-      </button>
+      </router-link>
     </div>
   </div>
 </template>

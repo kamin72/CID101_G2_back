@@ -5,7 +5,13 @@
       <form @submit.prevent="submitForm">
         <div class="mb-3">
           <label for="courseName" class="form-label">課程名稱</label>
-          <input type="text" class="form-control" id="courseName" v-model="course.name" placeholder="請輸入課程名稱">
+          <input
+            type="text"
+            class="form-control"
+            id="courseName"
+            v-model="course.name"
+            placeholder="請輸入課程名稱"
+          />
         </div>
         <div class="mb-3">
           <label for="courseTagVisibility" class="form-label">課程標籤顯示</label>
@@ -14,36 +20,50 @@
             <option value="show">顯示</option>
           </select>
           <label for="courseTag" class="form-label">課程標籤</label>
-          <input 
-            type="text" 
-            class="form-control" 
-            id="courseTag" 
-            v-model="course.tag" 
+          <input
+            type="text"
+            class="form-control"
+            id="courseTag"
+            v-model="course.tag"
             placeholder="請輸入課程標籤"
             :disabled="courseTagVisibility === 'hide'"
-            :class="{'is-invalid': courseTagVisibility === 'hide'}"
-          >
-          <div class="invalid-feedback">
-            課程標籤目前設置為不顯示
-          </div>
+            :class="{ 'is-invalid': courseTagVisibility === 'hide' }"
+          />
+          <div class="invalid-feedback">課程標籤目前設置為不顯示</div>
         </div>
         <div class="mb-3">
           <label for="teacherName" class="form-label">老師姓名</label>
-          <input type="text" class="form-control" id="teacherName" v-model="course.teacher" placeholder="請輸入老師姓名">
+          <input
+            type="text"
+            class="form-control"
+            id="teacherName"
+            v-model="course.teacher"
+            placeholder="請輸入老師姓名"
+          />
         </div>
         <div class="mb-3">
           <label for="originalPrice" class="form-label">課程原價</label>
-          <input type="number" class="form-control" id="originalPrice" v-model="course.originalPrice"
-            placeholder="請輸入課程原價">
+          <input
+            type="number"
+            class="form-control"
+            id="originalPrice"
+            v-model="course.originalPrice"
+            placeholder="請輸入課程原價"
+          />
         </div>
         <div class="mb-3">
           <label for="discountPrice" class="form-label">課程優惠價</label>
-          <input type="number" class="form-control" id="discountPrice" v-model="course.discountPrice"
-            placeholder="請輸入課程優惠價">
+          <input
+            type="number"
+            class="form-control"
+            id="discountPrice"
+            v-model="course.discountPrice"
+            placeholder="請輸入課程優惠價"
+          />
         </div>
         <div class="mb-3">
           <label for="courseDate" class="form-label">上課時間</label>
-          <input type="date" class="form-control" id="courseDate" v-model="course.date">
+          <input type="date" class="form-control" id="courseDate" v-model="course.date" />
         </div>
         <div class="mb-3">
           <label for="classroom" class="form-label">上課教室</label>
@@ -56,7 +76,11 @@
         </div>
         <div class="mb-3">
           <label for="courseContent" class="form-label">上課內容</label>
-          <Editor v-model="course.content" :init="editorConfig" api-key="2plkyvquu1c7u3ajwp111jy99tfb0zahvamohkrdg3epfc7q" />
+          <Editor
+            v-model="course.content"
+            :init="editorConfig"
+            api-key="2plkyvquu1c7u3ajwp111jy99tfb0zahvamohkrdg3epfc7q"
+          />
         </div>
         <div class="d-flex justify-content-end">
           <RouterLink to="/courseManage">
@@ -72,12 +96,12 @@
 </template>
 
 <script>
-import Editor from '@tinymce/tinymce-vue'
+// import Editor from '@tinymce/tinymce-vue'
 
 export default {
   name: 'AddCourseForm',
   components: {
-    Editor
+    // Editor
   },
   data() {
     return {
@@ -94,13 +118,14 @@ export default {
       },
       editorConfig: {
         height: 400,
-        menubar: true,  // 啟用菜單欄以訪問更多功能
+        menubar: true, // 啟用菜單欄以訪問更多功能
         plugins: [
           'advlist autolink lists link image charmap print preview anchor',
           'searchreplace visualblocks code fullscreen',
           'insertdatetime media table paste code help wordcount'
         ],
-        toolbar: 'undo redo | formatselect | ' +
+        toolbar:
+          'undo redo | formatselect | ' +
           'bold italic backcolor | alignleft aligncenter ' +
           'alignright alignjustify | bullist numlist outdent indent | ' +
           'removeformat | code | help',
@@ -109,27 +134,27 @@ export default {
         extended_valid_elements: 'script[src|async|defer|type|charset]',
         custom_elements: 'script',
         valid_children: '+body[style]',
-        verify_html: false,  // 禁用 HTML 驗證，允許所有 HTML（請謹慎使用）
+        verify_html: false // 禁用 HTML 驗證，允許所有 HTML（請謹慎使用）
       }
     }
   },
   methods: {
     submitForm() {
-      console.log('提交的課程資料:', this.course);
+      console.log('提交的課程資料:', this.course)
       // 這裡添加提交邏輯
     },
     cancelForm() {
       // 這裡添加取消邏輯
-      console.log('表單已取消');
-      this.resetForm();
+      console.log('表單已取消')
+      this.resetForm()
     },
     resetForm() {
       // 重置表單數據
-      Object.keys(this.course).forEach(key => {
-        this.course[key] = '';
-      });
-      this.course.originalPrice = null;
-      this.course.discountPrice = null;
+      Object.keys(this.course).forEach((key) => {
+        this.course[key] = ''
+      })
+      this.course.originalPrice = null
+      this.course.discountPrice = null
     }
   }
 }
