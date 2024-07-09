@@ -106,14 +106,13 @@ export default {
       search: '',
       switchState: true,
       currentPage: 1, // 當前頁碼
-      itemsPerPage: 10, // 每頁顯示的資料數量
-      switchState: null
+      itemsPerPage: 10 // 每頁顯示的資料數量
     }
   },
   created() {},
   methods: {
     clearData(index) {
-      const url = `http://localhost/CID101_G2_php/back/admin/deleteAdminData.php?index=${index}`
+      const url = `${import.meta.env.VITE_API_URL}/admin/deleteAdminData.php?index=${index}`
       fetch(url)
         .then((res) => res.json())
         .then((data) => {
@@ -123,7 +122,7 @@ export default {
         })
     },
     getAdminData() {
-      const url = 'http://localhost/CID101_G2_php/back/admin/getAdminData.php'
+      const url = `${import.meta.env.VITE_API_URL}/admin/getAdminData.php`
       fetch(url)
         .then((res) => res.json())
         .then((data) => {
@@ -187,7 +186,7 @@ export default {
       item.admin_status = newStatus
 
       fetch(
-        `http://localhost/CID101_G2_php/back/admin/updateStatus.php?status=${newStatus}&admin_no=${item.admin_no}`
+        `${import.meta.env.VITE_API_URL}/admin/updateStatus.php?status=${newStatus}&admin_no=${item.admin_no}`
       )
         .then((res) => res.json())
         .then((data) => {

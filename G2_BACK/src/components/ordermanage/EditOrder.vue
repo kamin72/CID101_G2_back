@@ -120,7 +120,7 @@ export default {
     fetchOrderData() {
       const selectValue = 0
       fetch(
-        `http://localhost/CID101_G2_php/back/orderManage/orderManage.php?identity=${selectValue}`
+        `${import.meta.env.VITE_API_URL}/back/orderManage/orderManage.php?identity=${selectValue}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -147,7 +147,7 @@ export default {
     },
     getMemberOrderItem() {
       const id = this.cartId
-      const url = `http://localhost/CID101_G2_php/back/orderManage/getMemberOrderItem.php?cart_id=${id}`
+      const url = `${import.meta.env.VITE_API_URL}/orderManage/getMemberOrderItem.php?cart_id=${id}`
       fetch(url)
         .then((res) => res.json())
         .then((data) => {
@@ -163,7 +163,7 @@ export default {
       const id = this.cartId
       const statusValue = event.target.value
       fetch(
-        `http://localhost/CID101_G2_php/back/orderManage/updateOrderstatus.php?cart_ststus=${statusValue}&cart_id=${id}`
+        `${import.meta.env.VITE_API_URL}/orderManage/updateOrderstatus.php?cart_ststus=${statusValue}&cart_id=${id}`
       )
         .then((res) => res.json())
         .then((data) => {
@@ -177,7 +177,7 @@ export default {
     },
     deleteOrder() {
       const id = this.cartId
-      fetch(`http://localhost/CID101_G2_php/back/orderManage/deletOrder.php?&cart_id=${id}`)
+      fetch(`${import.meta.env.VITE_API_URL}/orderManage/deletOrder.php?&cart_id=${id}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {

@@ -128,7 +128,7 @@ export default {
         access: this.access,
         status: this.status
       }
-      const url = `http://localhost/CID101_G2_php/back/admin/updateAdminData.php?index=${this.index}`
+      const url = `${import.meta.env.VITE_API_URL}/admin/updateAdminData.php?index=${this.index}`
       const form = new URLSearchParams(formData)
 
       fetch(url, {

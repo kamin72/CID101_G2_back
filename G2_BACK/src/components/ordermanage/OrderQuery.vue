@@ -116,9 +116,7 @@ export default {
   methods: {
     fetchOrderData(event) {
       const selectValue = event ? event.target.value : 0
-      fetch(
-        `http://localhost/CID101_G2_php/back/orderManage/orderManage.php?identity=${selectValue}`
-      )
+      fetch(`${import.meta.env.VITE_API_URL}/orderManage/orderManage.php?identity=${selectValue}`)
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {

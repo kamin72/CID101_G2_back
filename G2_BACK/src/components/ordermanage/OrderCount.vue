@@ -168,7 +168,7 @@ export default {
         variety: this.selectedVariety,
         identity: this.selectedIdentity
       }
-      fetch(`http://localhost/CID101_G2_php/back/orderManage/getAllOrderitem.php`, {
+      fetch(`${import.meta.env.VITE_API_URL}/orderManage/getAllOrderitem.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
