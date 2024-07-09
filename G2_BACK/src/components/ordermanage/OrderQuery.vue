@@ -20,6 +20,7 @@
         placeholder=""
         aria-label="Example text with two button addons"
         v-model.trim="content"
+        @keyup.enter="searchList"
       />
       <button class="btn btn-outline-primary" type="button" @click="searchList">搜尋</button>
     </div>

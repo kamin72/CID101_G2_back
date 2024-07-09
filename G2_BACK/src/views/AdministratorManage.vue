@@ -9,6 +9,7 @@
           placeholder=""
           aria-label="Example text with two button addons"
           v-model.trim="search"
+          @keyup.enter="searchDataResult"
         />
         <button class="btn btn-outline-primary" type="button" @click="searchDataResult">
           搜尋
@@ -103,13 +104,10 @@ export default {
       adminData: [],
       searchData: [],
       search: '',
-<<<<<<< HEAD
       switchState: true,
       currentPage: 1, // 當前頁碼
-      itemsPerPage: 10 // 每頁顯示的資料數量
-=======
+      itemsPerPage: 10, // 每頁顯示的資料數量
       switchState: null
->>>>>>> ed66c6b79e5b11b5b320a6dbfbcb67bf7b17bdf5
     }
   },
   created() {},
@@ -175,6 +173,7 @@ export default {
       } else {
         return
       }
+    },
     switchStatus(item) {
       let newStatus
       switch (item.admin_status) {
