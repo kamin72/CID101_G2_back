@@ -57,6 +57,9 @@
                 :checked = "item.prod_state == 1"
                 @change = "ProductState(item, $event)"
               />
+              <label class="form-check-label" for="flexSwitchCheckChecked">{{
+                  item.prod_state === 1 ? '上架' : '下架'
+                }}</label>
             </div>
           </td>
           <td>
@@ -78,7 +81,7 @@
         </tr>
       </tbody>
     </table>
-
+    <button class="w-100 h-40" @click="help">拯救東哥</button>
     <nav aria-label="Page navigation example" class="d-flex justify-content-center">
       <ul class="pagination">
         <li class="page-item">
@@ -124,7 +127,7 @@ export default {
       return new URL(`../assets/img/wine/${file}`, import.meta.url).href
     },
     fetchData() {
-      fetch('http://localhost/CID101_G2_php/back/productManage/product_read.php')
+      fetch('http://localhost/CID101_G2/CID101_G2_php/back/productManage/product_read.php')
         .then((response) => response.json())
         .then((data) => {
           // console.log('Fetched data:', data) // 添加這行來檢查接收到的數據
@@ -134,7 +137,7 @@ export default {
     },
     async ProductState(product, event) {
       try {
-         const response = await fetch('http://localhost/CID101_G2_php/back/productManage/product_state.php', {
+         const response = await fetch('http://localhost/CID101_G2/CID101_G2_php/back/productManage/product_state.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -172,7 +175,7 @@ export default {
         // 發送刪除請求
         // 使用 fetch API 發送GET請求到刪除API。URL中包含要刪除的商品ID。
         const response = await fetch(
-          `http://localhost/CID101_G2_php/back/productManage/product_delete.php?prod_id=${productId}`
+          `http://localhost/CID101_G2/CID101_G2_php/back/productManage/product_delete.php?prod_id=${productId}`
         )
         const result = await response.json()
 
@@ -186,6 +189,9 @@ export default {
         console.error('Error', error)
         alert('發生錯誤，請稍後再試')
       }
+    },
+    async help(){
+      feteh(``)
     }
   },
   mounted() {
