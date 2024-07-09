@@ -31,8 +31,8 @@
                     <div class="mt-3 d-flex justify-content-between">
                         <button @click="cancelOrder" class="btn btn-danger" v-if="isEditing">取消訂單</button>
                         <div>
-                            <button @click="saveChanges" class="btn btn-primary me-2">儲存</button>
-                            <button @click="discardChanges" class="btn btn-secondary">取消</button>
+                            <button @click.prevent="saveChanges" class="btn btn-primary me-2">儲存</button>
+                            <button @click.prevent="goBack" class="btn btn-secondary">取消</button>
                         </div>
                     </div>
                 </div>
@@ -110,29 +110,116 @@ export default {
             }
             console.log(this.order)
         },
+
         formatDate(dateString) {
             const date = new Date(dateString);
             return date.toLocaleDateString('zh-TW');
         },
-        cancelOrder() {
-            if (confirm(`確定要取消訂單 ${this.order.book_id} 嗎？`)) {
-                console.log(`正在取消訂單 ${this.order.book_id}`);
-                // 這裡添加取消訂單的邏輯
-                // 可能需要發送 AJAX 請求到服務器
-            }
-        },
-        saveChanges() {
-            // 這裡添加儲存更改的邏輯
-            // 需要發送 AJAX 請求到服務器
-            // 如果是新訂單，可能需要使用 POST 請求；如果是編輯現有訂單，可能需要使用 PUT 請求
-            const remark = this.order.book_remark;
-            console.log(`發送訂單 ${this.order.book_id} 的備註為 ${remark}`);
 
-        },
-        discardChanges() {
-            if (confirm('確定要放棄更改嗎？')) {
-                this.order = JSON.parse(JSON.stringify(this.originalOrder));
+        cancelOrder() {
+            if (confirm(`確定要取消訂單 ${this.order.book_id} 嗎？此操作不可逆。`)) {
+                console.log(`正在取消訂單 ${this.order.book_id}`);
+
+                const xhr = new XMLHttpRequest();
+                const url = `${import.meta.env.VITE_API_URL}/courseOrderManage/cancelOrder.php`;
+
+                xhr.open('POST', url, true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+                xhr.onload = () => {
+                    if (xhr.status === 200) {
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.success) {
+                                alert('訂單已成功取消！');
+                                this.$router.push({
+                                    name: 'courseOrderManage',
+                                    query: { refresh: 'true' }
+                                });
+                            } else {
+                                alert('取消訂單失敗：' + response.message);
+                            }
+                        } catch (e) {
+                            console.error('解析響應時出錯：', e);
+                            alert('取消訂單過程中發生錯誤，請稍後再試。');
+                        }
+                    } else {
+                        console.error('HTTP 錯誤', xhr.status, xhr.statusText);
+                        alert('取消訂單失敗，請檢查網絡連接並稍後再試。');
+                    }
+                };
+
+                xhr.onerror = () => {
+                    console.error('網絡錯誤');
+                    alert('網絡錯誤，請檢查您的網絡連接。');
+                };
+
+                const data = `book_id=${encodeURIComponent(this.order.book_id)}`;
+                xhr.send(data);
             }
+        },
+
+        saveChanges() {
+            const remark = this.order.book_remark;
+            console.log(`準備發送訂單 ${this.order.book_id} 的備註：${remark}`);
+
+            // 創建 XMLHttpRequest 對象
+            const xhr = new XMLHttpRequest();
+            const url = `${import.meta.env.VITE_API_URL}/courseOrderManage/updateOrderRemark.php`;
+
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            alert('備註更新成功！');
+                            // 更新原始數據
+                            this.originalOrder.book_remark = this.order.book_remark;
+                            // 使用路由導航回課程管理頁面，並帶上 refresh 參數
+                            this.$router.push({
+                                path: '/courseManage',
+                                query: { refresh: Date.now() } // 使用當前時間戳確保每次都是不同的值
+                            });
+                        } else {
+                            alert('更新失敗：' + response.message);
+                        }
+                    } catch (e) {
+                        console.error('解析響應時出錯：', e);
+                        alert('更新過程中發生錯誤，請稍後再試。');
+                    }
+                } else {
+                    console.error('HTTP 錯誤', xhr.status, xhr.statusText);
+                    alert('更新失敗，請檢查網絡連接並稍後再試。');
+                }
+            };
+
+            xhr.onerror = () => {
+                console.error('網絡錯誤');
+                alert('網絡錯誤，請檢查您的網絡連接。');
+            };
+
+            // 準備要發送的數據
+            const data = `book_id=${encodeURIComponent(this.order.book_id)}&remark=${encodeURIComponent(remark)}`;
+
+            // 發送請求
+            xhr.send(data);
+        },
+
+        goBack() {
+            if (this.isEditing && !this.hasNoChanges()) {
+                if (confirm('您有未保存的更改。確定要放棄這些更改嗎？')) {
+                    this.$router.go(-1);
+                }
+            } else {
+                this.$router.go(-1);
+            }
+        },
+
+        hasNoChanges() {
+            return JSON.stringify(this.order) === JSON.stringify(this.originalOrder);
         },
     },
     mounted() {

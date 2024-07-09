@@ -4,15 +4,8 @@
 
     <div class="d-flex justify-content-end py-4">
       <div style="width: 320px" class="input-group mb-3">
-        <input
-          style="height: 40px"
-          type="text"
-          class="form-control"
-          v-model="search"
-          placeholder="請輸入商品資訊"
-          aria-label="search-course-info"
-          aria-describedby="button-search"
-        />
+        <input style="height: 40px" type="text" class="form-control" v-model="search" placeholder="請輸入商品資訊"
+          aria-label="search-course-info" aria-describedby="button-search" />
         <button class="btn btn-primary me-1" type="button" id="button-search">搜尋</button>
       </div>
       <RouterLink to="/addProduct">
@@ -36,12 +29,8 @@
         <tr v-for="item in displayList" :key="item.prod_id">
           <td scope="row">{{ item?.prod_id }}</td>
           <td>
-            <img
-              :src="parseServerImg(item?.prod_img)"
-              class="rounded d-block"
-              alt="..."
-              style="max-width: 100px; max-height: 100px"
-            />
+            <img :src="parseServerImg(item?.prod_img)" class="rounded d-block" alt="..."
+              style="max-width: 100px; max-height: 100px" />
           </td>
           <!-- <td><img :src="parseServerImg(item?.prod_img)" class="rounded mx-auto d-block" alt="..." style="max-width: 100px; max-height: 100px;"></td> -->
           <td>{{ item?.prod_name }}</td>
@@ -49,14 +38,8 @@
           <td>NT$ {{ item?.prod_price }}</td>
           <td>
             <div class="form-check form-switch">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                role="switch"
-                id="flexSwitchCheckDefault"
-                :checked = "item.prod_state == 1"
-                @change = "ProductState(item, $event)"
-              />
+              <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
+                :checked="item.prod_state == 1" @change="ProductState(item, $event)" />
             </div>
           </td>
           <td>
@@ -66,11 +49,8 @@
                   編輯
                 </button>
               </RouterLink>
-              <button
-                type="button"
-                class="btn btn-secondary d-flex align-items-center"
-                @click="deleteProduct(item.prod_id)"
-              >
+              <button type="button" class="btn btn-secondary d-flex align-items-center"
+                @click="deleteProduct(item.prod_id)">
                 刪除
               </button>
             </div>
@@ -134,7 +114,7 @@ export default {
     },
     async ProductState(product, event) {
       try {
-         const response = await fetch('http://localhost/CID101_G2_php/back/productManage/product_state.php', {
+        const response = await fetch('http://localhost/CID101_G2_php/back/productManage/product_state.php', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -143,16 +123,16 @@ export default {
             prod_id: product.prod_id,
             prod_state: product.prod_state == 1 ? 0 : 1
           }),
-         })
-         const result = await response.json();
-         if(!result.error) {
+        })
+        const result = await response.json();
+        if (!result.error) {
           product.prod_state = product.prod_state == 1 ? 0 : 1;
 
         } else {
           alert('更新失敗:' + result.msg);
           // 恢復 checkbox 狀態
           event.target.checked = !event.target.checked;
-         }
+        }
 
       } catch (error) {
         // console.error('Error:', error);

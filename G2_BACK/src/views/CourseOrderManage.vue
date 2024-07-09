@@ -117,6 +117,18 @@ export default {
     },
     mounted() {
         this.fetchOrders();
+
+        this.$watch(
+            () => this.$route.query,
+            (query) => {
+                if (query.refresh === 'true') {
+                    this.fetchOrders();
+                    // 清除 refresh 參數
+                    this.$router.replace({ query: {} });
+                }
+            },
+            { immediate: true }
+        );
     },
 }
 </script>
