@@ -88,7 +88,7 @@ export default {
       products: [],
       search: '',
       currentPage: 1,
-      itemsPerPage: 5
+      itemsPerPage: 8
     }
   },
   computed: {
@@ -112,11 +112,12 @@ export default {
   },
   methods: {
     parseServerImg(file) {
-      // return `${import.meta.env.VITE_FILE_URL}/${file}`
-      return new URL(`../assets/img/wine/${file}`, import.meta.url).href
+      return `${import.meta.env.VITE_FILE_URL}/${file}`
+      // return new URL(`../assets/img/wine/${file}`, import.meta.url).href
     },
     fetchData() {
-      fetch('http://localhost/CID101_G2/CID101_G2_php/back/productManage/product_read.php')
+      fetch(`${import.meta.env.VITE_API_URL}/productManage/product_read.php`)
+      // fetch('http://localhost/CID101_G2/CID101_G2_php/back/productManage/product_read.php')
         .then((response) => response.json())
         .then((data) => {
           // console.log('Fetched data:', data) // 添加這行來檢查接收到的數據
@@ -127,7 +128,7 @@ export default {
     async ProductState(product, event) {
       try {
         const response = await fetch(
-          'http://localhost/CID101_G2/CID101_G2_php/back/productManage/product_state.php',
+          `${import.meta.env.VITE_API_URL}/productManage/product_state.php`,
           {
             method: 'POST',
             headers: {
@@ -148,10 +149,10 @@ export default {
           event.target.checked = !event.target.checked
         }
       } catch (error) {
-        // console.error('Error:', error);
-        // alert('發生錯誤，請稍後再試');
+         console.error('Error:', error);
+         alert('發生錯誤，請稍後再試');
         // 恢復 checkbox 狀態
-        // event.target.checked = !event.target.checked;
+         event.target.checked = !event.target.checked;
       }
     },
 
@@ -165,7 +166,7 @@ export default {
         // 發送刪除請求
         // 使用 fetch API 發送GET請求到刪除API。URL中包含要刪除的商品ID。
         const response = await fetch(
-          `http://localhost/CID101_G2/CID101_G2_php/back/productManage/product_delete.php?prod_id=${productId}`
+          `${import.meta.env.VITE_API_URL}/productManage/product_delete.php?prod_id=${productId}`
         )
         const result = await response.json()
 

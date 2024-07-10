@@ -146,7 +146,7 @@ export default {
           formData.append('bg_img', this.detail.bg_img); // 保留原始圖片
         }
 
-        const response = await fetch('http://localhost/CID101_G2_php/back/productManage/product_update.php', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/productManage/product_update.php`, {
           body: formData,
           method: 'POST'
         })
@@ -167,8 +167,8 @@ export default {
     },
 
     parseServerImg(file) {
-      // return `${import.meta.env.VITE_FILE_URL}/${file}`
-      return new URL(`../../assets/img/wine/${file}`, import.meta.url).href
+      return `${import.meta.env.VITE_FILE_URL}/${file}`
+      // return new URL(`../../assets/img/wine/${file}`, import.meta.url).href
     },
     fetchData() {
       fetch('http://localhost/CID101_G2_php/front/product.php')

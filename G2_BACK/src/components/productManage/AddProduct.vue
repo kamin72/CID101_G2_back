@@ -125,7 +125,7 @@ export default {
           formData.append('bg_img', this.formData.bg_img)
         }
 
-        const response = await fetch('http://localhost/CID101_G2_php/back/productManage/product_add.php', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/productManage/product_add.php`, {
           body: formData,
           method: 'POST'
         })
