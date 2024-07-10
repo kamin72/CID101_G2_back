@@ -53,7 +53,9 @@
             <RouterLink :to="{ path: '/editAdministrator', query: { index: index } }">
               <button type="button" class="btn btn-primary">編輯</button>
             </RouterLink>
-            <button type="button" class="btn btn-secondary" @click="clearData(index)">刪除</button>
+            <button type="button" class="btn btn-secondary" @click="confirmDeleteData(index)">
+              刪除
+            </button>
           </td>
         </tr>
       </tbody>
@@ -192,6 +194,12 @@ export default {
         .then((data) => {
           alert(data.msg)
         })
+    },
+    confirmDeleteData(index) {
+      if (confirm('確認是否刪除該筆資料?')) {
+        this.clearData(index)
+        this.getAdminData()
+      } else return
     }
   },
   mounted() {

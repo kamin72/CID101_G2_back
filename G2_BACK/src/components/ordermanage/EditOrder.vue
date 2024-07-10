@@ -85,7 +85,7 @@
         <option value="4">請求取消</option>
         <option value="5">已取消</option>
       </select>
-      <button class="ms-5 btn btn-outline-primary" type="button" @click="deleteOrder">
+      <button class="ms-5 btn btn-outline-primary" type="button" @click="comfirmCancelOrder">
         取消訂單
       </button>
     </div>
@@ -182,16 +182,21 @@ export default {
           if (data.error) {
             alert(data.msg)
           } else {
-            if (confirm('確定要取消此訂單嗎？')) {
-              alert(data.msg)
-              this.$router.push('/orderManage/orderquery')
-            }
+            alert(data.msg)
+            this.$router.push('/orderManage/orderquery')
           }
         })
     },
     handleOrderStatus() {
       if (this.memberOrderInfo.cart_status !== this.localCartStatus) {
         this.localCartStatus = this.memberOrderInfo.cart_status
+      }
+    },
+    comfirmCancelOrder() {
+      if (confirm('確認是否刪除該筆訂單?')) {
+        this.deleteOrder()
+      } else {
+        return
       }
     }
   },

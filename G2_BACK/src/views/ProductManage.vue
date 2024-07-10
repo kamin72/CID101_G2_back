@@ -4,9 +4,16 @@
 
     <div class="d-flex justify-content-end py-4">
       <div style="width: 320px" class="input-group mb-3">
-        <input style="height: 40px" type="text" class="form-control" v-model="search" placeholder="請輸入商品資訊"
-          aria-label="search-course-info" aria-describedby="button-search" />
-        <button class="btn btn-primary me-1" type="button" id="button-search">搜尋</button>
+        <input
+          style="height: 40px"
+          type="text"
+          class="form-control"
+          v-model="search"
+          placeholder="請輸入商品資訊"
+          aria-label="search-course-info"
+          aria-describedby="button-search"
+        />
+        <button class="btn btn-primary me-1 z-0" type="button" id="button-search ">搜尋</button>
       </div>
       <RouterLink to="/addProduct">
         <button type="button" class="btn btn-primary" style="height: 40px">新增</button>
@@ -29,8 +36,12 @@
         <tr v-for="item in paginatedList" :key="item.prod_id">
           <td scope="row">{{ item?.prod_id }}</td>
           <td>
-            <img :src="parseServerImg(item?.prod_img)" class="rounded d-block" alt="..."
-              style="max-width: 100px; max-height: 100px" />
+            <img
+              :src="parseServerImg(item?.prod_img)"
+              class="rounded d-block"
+              alt="..."
+              style="max-width: 100px; max-height: 100px"
+            />
           </td>
           <!-- <td><img :src="parseServerImg(item?.prod_img)" class="rounded mx-auto d-block" alt="..." style="max-width: 100px; max-height: 100px;"></td> -->
           <td>{{ item?.prod_name }}</td>
@@ -38,8 +49,14 @@
           <td>NT$ {{ item?.prod_price }}</td>
           <td>
             <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault"
-                :checked="item.prod_state == 1" @change="ProductState(item, $event)" />
+              <input
+                class="form-check-input"
+                type="checkbox"
+                role="switch"
+                id="flexSwitchCheckDefault"
+                :checked="item.prod_state == 1"
+                @change="ProductState(item, $event)"
+              />
               <label class="form-check-label" for="flexSwitchCheckChecked">{{
                 item.prod_state === 1 ? '上架' : '下架'
               }}</label>
@@ -52,8 +69,11 @@
                   編輯
                 </button>
               </RouterLink>
-              <button type="button" class="btn btn-secondary d-flex align-items-center"
-                @click="deleteProduct(item.prod_id)">
+              <button
+                type="button"
+                class="btn btn-secondary d-flex align-items-center"
+                @click="deleteProduct(item.prod_id)"
+              >
                 刪除
               </button>
             </div>
@@ -64,15 +84,32 @@
     <nav aria-label="Page navigation example" class="d-flex justify-content-center">
       <ul class="pagination">
         <li class="page-item" :class="{ disabled: currentPage === 1 }">
-          <a class="page-link text-primary-emphasis" href="#" aria-label="Previous" @click.prevent="prevPage">
+          <a
+            class="page-link text-primary-emphasis"
+            href="#"
+            aria-label="Previous"
+            @click.prevent="prevPage"
+          >
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
-        <li v-for="page in totalPages" :key="page" class="page-item" :class="{ active: currentPage === page }">
-          <a class="page-link text-primary-emphasis" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
+        <li
+          v-for="page in totalPages"
+          :key="page"
+          class="page-item"
+          :class="{ active: currentPage === page }"
+        >
+          <a class="page-link text-primary-emphasis" href="#" @click.prevent="goToPage(page)">{{
+            page
+          }}</a>
         </li>
         <li class="page-item" :class="{ disabled: currentPage === totalPages }">
-          <a class="page-link text-primary-emphasis" href="#" aria-label="Next" @click.prevent="nextPage">
+          <a
+            class="page-link text-primary-emphasis"
+            href="#"
+            aria-label="Next"
+            @click.prevent="nextPage"
+          >
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>
@@ -106,7 +143,7 @@ export default {
       const end = start + this.itemsPerPage
       return this.displayList.slice(start, end)
     },
-    totalPages(){
+    totalPages() {
       return Math.ceil(this.displayList.length / this.itemsPerPage)
     }
   },
@@ -117,7 +154,7 @@ export default {
     },
     fetchData() {
       fetch(`${import.meta.env.VITE_API_URL}/productManage/product_read.php`)
-      // fetch('http://localhost/CID101_G2/CID101_G2_php/back/productManage/product_read.php')
+        // fetch('http://localhost/CID101_G2/CID101_G2_php/back/productManage/product_read.php')
         .then((response) => response.json())
         .then((data) => {
           // console.log('Fetched data:', data) // 添加這行來檢查接收到的數據
@@ -149,10 +186,10 @@ export default {
           event.target.checked = !event.target.checked
         }
       } catch (error) {
-         console.error('Error:', error);
-         alert('發生錯誤，請稍後再試');
+        console.error('Error:', error)
+        alert('發生錯誤，請稍後再試')
         // 恢復 checkbox 狀態
-         event.target.checked = !event.target.checked;
+        event.target.checked = !event.target.checked
       }
     },
 
@@ -182,16 +219,16 @@ export default {
       }
     },
     prevPage() {
-      if(this.currentPage > 1) {
+      if (this.currentPage > 1) {
         this.currentPage--
       }
     },
-    nextPage(){
-      if(this.currentPage < this.totalPages) {
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
         this.currentPage++
       }
     },
-    goToPage(page){
+    goToPage(page) {
       this.currentPage = page
     }
   },
