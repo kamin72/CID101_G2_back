@@ -26,7 +26,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in displayList" :key="item.prod_id">
+        <tr v-for="item in paginatedList" :key="item.prod_id">
           <td scope="row">{{ item?.prod_id }}</td>
           <td>
             <img :src="parseServerImg(item?.prod_img)" class="rounded d-block" alt="..."
@@ -63,16 +63,16 @@
     </table>
     <nav aria-label="Page navigation example" class="d-flex justify-content-center">
       <ul class="pagination">
-        <li class="page-item">
-          <a class="page-link text-primary-emphasis" href="#" aria-label="Previous">
+        <li class="page-item" :class="{ disabled: currentPage === 1 }">
+          <a class="page-link text-primary-emphasis" href="#" aria-label="Previous" @click.prevent="prevPage">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
-        <li class="page-item"><a class="page-link text-primary-emphasis" href="#">1</a></li>
-        <li class="page-item"><a class="page-link text-primary-emphasis" href="#">2</a></li>
-        <li class="page-item"><a class="page-link text-primary-emphasis" href="#">3</a></li>
-        <li class="page-item">
-          <a class="page-link text-primary-emphasis" href="#" aria-label="Next">
+        <li v-for="page in totalPages" :key="page" class="page-item" :class="{ active: currentPage === page }">
+          <a class="page-link text-primary-emphasis" href="#" @click.prevent="goToPage(page)">{{ page }}</a>
+        </li>
+        <li class="page-item" :class="{ disabled: currentPage === totalPages }">
+          <a class="page-link text-primary-emphasis" href="#" aria-label="Next" @click.prevent="nextPage">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>
@@ -86,7 +86,9 @@ export default {
   data() {
     return {
       products: [],
-      search: ''
+      search: '',
+      currentPage: 1,
+      itemsPerPage: 5
     }
   },
   computed: {
@@ -98,6 +100,14 @@ export default {
         const variety = item.prod_variety
         return name.includes(this.search) || variety.includes(this.search)
       })
+    },
+    paginatedList() {
+      const start = (this.currentPage - 1) * this.itemsPerPage
+      const end = start + this.itemsPerPage
+      return this.displayList.slice(start, end)
+    },
+    totalPages(){
+      return Math.ceil(this.displayList.length / this.itemsPerPage)
     }
   },
   methods: {
@@ -170,6 +180,19 @@ export default {
         alert('發生錯誤，請稍後再試')
       }
     },
+    prevPage() {
+      if(this.currentPage > 1) {
+        this.currentPage--
+      }
+    },
+    nextPage(){
+      if(this.currentPage < this.totalPages) {
+        this.currentPage++
+      }
+    },
+    goToPage(page){
+      this.currentPage = page
+    }
   },
   mounted() {
     this.fetchData()
