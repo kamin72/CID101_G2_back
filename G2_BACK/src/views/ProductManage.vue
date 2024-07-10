@@ -18,6 +18,7 @@
       <RouterLink to="/addProduct">
         <button type="button" class="btn btn-primary" style="height: 40px">新增</button>
       </RouterLink>
+      <button type="button" class="btn btn-primary" style="height: 40px" @click="help">help</button>
     </div>
 
     <table class="table align-middle">
@@ -148,8 +149,11 @@ export default {
     }
   },
   methods: {
+    help() {
+      fetch(`${import.meta.env.VITE_API_URL}/productManage/test.php`).then((res) => res.json())
+    },
     parseServerImg(file) {
-      return `${import.meta.env.VITE_FILE_URL}/${file}`
+      return `${import.meta.env.VITE_FILE_URL}/img/${file}`
       // return new URL(`../assets/img/wine/${file}`, import.meta.url).href
     },
     fetchData() {
