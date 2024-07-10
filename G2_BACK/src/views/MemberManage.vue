@@ -4,10 +4,11 @@
       <h1>會員管理</h1>
       <div class="button-wrap d-flex justify-content-between py-4">
         <div class="left-wrap d-flex justify-content-between">
-          <button type="button" class="btn btn-primary me-1" style="height: 40px;">一般會員</button>
-          <button type="button" class="btn btn-secondary" style="height: 40px;">批發商會員</button>
-          <button type="button" class="btn btn-secondary" style="height: 40px;margin: 0 4px">審核列表</button>
+          <button @click="searchMember(1,1)" type="button" class="btn me-1" :class="{'btn-primary': this.normal_button_action, 'btn-secondary': !normal_button_action}" style="height: 40px;">一般會員</button>
+          <button @click="searchMember(1,2)" type="button" class="btn" :class="{'btn-primary': this.wholesaler_button_action, 'btn-secondary': !wholesaler_button_action}" style="height: 40px;">批發商會員</button>
+          <button @click="searchMember(0,2)" type="button" class="btn" :class="{'btn-primary': this.review_button_action, 'btn-secondary': !review_button_action}" style="height: 40px;margin: 0 4px">審核列表</button>
         </div>
+
         <div class="right-wrap d-flex">
           <div style="width: 320px;" class="input-group mb-3">
             <input style="height: 40px;" type="text" class="form-control" placeholder="請輸入會員資料"
@@ -30,7 +31,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="member in members['members']" :key="member.no">
+        <tr v-for="member in members" :key="member.no">
           <th scope="row" class="align-middle">{{ member.no }}</th>
           <td class="align-middle">{{ member?.name }}</td>
           <td class="align-middle">{{ member?.account }}</td>
@@ -75,7 +76,10 @@
 export default {
   data() {
     return {
-      members: []
+      members: [],
+      normal_button_action:true,
+      wholesaler_button_action:false,
+      review_button_action:false,
     }
   },
   methods: {
@@ -83,18 +87,52 @@ export default {
     //   // return ${import.meta.env.VITE_FILE_URL}/${file}
     //   return new URL(`../assets/img/wine/${file}`, import.meta.url).href
     // },
-    fetchData() {
-      fetch('http://localhost/CID101_G2_php/back/orderManage/memberManage.php')
+
+    searchMember(status,identity){
+
+      this.normal_button_action=false
+      this.wholesaler_button_action=false
+      this.review_button_action=false
+
+      if(status==1 && identity==1){
+        this.normal_button_action=true
+      }else if(status==1 && identity==2){
+        this.wholesaler_button_action=true
+      }else{
+        this.review_button_action=true
+      }
+
+      const formData = {
+        status: status,
+        identity: identity,
+      }
+      const form = new URLSearchParams(formData)
+      fetch('http://localhost/CID101_G2_php/back/memberManage/getMember.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: form
+      })
       .then((response) => response.json())
       .then((data) => {
-         // 添加這行來檢查接收到的數據
-          this.members = data;
-          console.log(this.members);
-        })
+        // 添加這行來檢查接收到的數據
+        this.members = data.members;
+      })
     },
+
+    // fetchData() {
+    //   fetch('http://localhost/CID101_G2_php/back/memberManage/getMember.php')
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //      // 添加這行來檢查接收到的數據
+    //       this.members = data;
+    //       console.log(this.members);
+    //     })
+    // },
   },
   mounted() {
-    this.fetchData();
+    this.searchMember(1,1);
   },
   created() {},
 }
