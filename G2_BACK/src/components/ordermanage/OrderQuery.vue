@@ -184,7 +184,6 @@ export default {
   },
   mounted() {
     this.fetchOrderData()
-    // console.log(this.totalPages)
   }
 }
 </script>
