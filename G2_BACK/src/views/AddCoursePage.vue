@@ -89,12 +89,12 @@
 </template>
 
 <script>
-// import Editor from '@tinymce/tinymce-vue'
+import Editor from '@tinymce/tinymce-vue'
 
 export default {
   name: 'AddCourseForm',
   components: {
-    // Editor
+    Editor
   },
 
   data() {
