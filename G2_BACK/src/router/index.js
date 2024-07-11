@@ -44,17 +44,6 @@ const router = createRouter({
       meta: { title: '會員管理' }
     },
     {
-      path: '/addNew',
-      component: () => import('@/components/membermange/AddNew.vue'),
-      meta: { title: '新增會員' }
-    },
-    {
-      path: '/editMember',
-      name: 'editMember',
-      component: () => import('@/components/membermange/EditMember.vue'),
-      meta: { title: '編輯會員' }
-    },
-    {
       path: '/courseManage',
       name: 'courseManage',
       component: () => import('@/views/CourseManage.vue'),
