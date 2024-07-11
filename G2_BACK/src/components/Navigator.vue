@@ -5,7 +5,7 @@
       class="d-flex align-items-center justify-content-center login position-fixed z-1"
     >
       <div class="col-11 login-wrap d-flex align-items-center justify-content-end">
-        <span class="pe-4">黃韻如，您好</span>
+        <span class="pe-4">{{ adminName }}，您好</span>
         <span @click="logout" class="material-symbols-outlined" style="cursor: pointer">
           login
         </span>
@@ -54,7 +54,7 @@
 export default {
   data() {
     return {
-      adminName: '黃韻如' // 你可能想要從 localStorage 或 Vuex store 中獲取這個名字
+      adminName: '' // 你可能想要從 localStorage 或 Vuex store 中獲取這個名字
     }
   },
   methods: {
@@ -63,12 +63,25 @@ export default {
       localStorage.removeItem('adminData')
       // 跳轉到登入頁面
       this.$router.push('/login')
+    },
+    updateAdminName() {
+      const adminData = JSON.parse(localStorage.getItem('adminData'))
+      if (adminData && adminData.admin_name) {
+        this.adminName = adminData.admin_name
+      }
     }
   },
   computed: {
     isLoginPage() {
       return this.$route.path === '/login'
     }
+  },
+  created() {
+    this.updateAdminName()
+    // 监听路由变化，每次路由变化时更新管理员名称
+    this.$router.afterEach(() => {
+      this.updateAdminName()
+    })
   }
 }
 </script>
