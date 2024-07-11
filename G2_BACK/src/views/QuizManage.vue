@@ -36,8 +36,8 @@
           <tr v-for="(item, index) in paginatedQuiz" :key="index">
             <th scope="row">{{ item.q_no }}</th>
             <td style="width: 250px">{{ item.q_name }}</td>
-            <td style="width: 220px">{{ item.q_option_a }}</td>
-            <td style="width: 220px">{{ item.q_option_b }}</td>
+            <td style="width: 120px">{{ item.q_option_a }}</td>
+            <td style="width: 120px">{{ item.q_option_b }}</td>
             <td>{{ item.q_ans }}</td>
             <td>
               <div class="button-wrap d-flex">
@@ -143,16 +143,7 @@
       </div>
       <div class="mb-3">
         <label for="quizAnswer" class="form-label">答案</label>
-        <select
-          class="form-select"
-          aria-label="Default select example"
-          id="quizAnswer"
-          v-model="newQuestion.q_ans"
-        >
-          <option selected>請選擇</option>
-          <option value="A">A</option>
-          <option value="B">B</option>
-        </select>
+        <input class="form-control" id="quizAnswer" v-model="newQuestion.q_ans" />
       </div>
       <div class="d-grid gap-2 d-md-flex justify-content-md-center">
         <button type="submit" class="btn btn-primary col-6">
