@@ -56,7 +56,9 @@ export default {
         const result = await response.json()
 
         if (result.success) {
+          // 登入成功後導航到最新消息頁面
           this.$emit('login', result.adminData)
+          this.$router.push('/news') // 導航到最新消息頁面
         } else {
           alert(result.msg)
         }
