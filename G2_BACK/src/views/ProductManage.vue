@@ -116,8 +116,8 @@ export default {
       // return new URL(`../assets/img/wine/${file}`, import.meta.url).href
     },
     fetchData() {
-      fetch(`${import.meta.env.VITE_API_URL}/productManage/product_read.php`)
-      // fetch('http://localhost/CID101_G2/CID101_G2_php/back/productManage/product_read.php')
+       fetch(`${import.meta.env.VITE_API_URL}/productManage/product_read.php`)
+      //  fetch('http://localhost/CID101_G2/CID101_G2_php/back/productManage/product_read.php')
         .then((response) => response.json())
         .then((data) => {
           // console.log('Fetched data:', data) // 添加這行來檢查接收到的數據
