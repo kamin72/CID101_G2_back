@@ -1,57 +1,75 @@
 <template>
-  <div
-    style="height: 50px; width: 100%"
-    class="d-flex align-items-center justify-content-center login position-fixed z-1"
-  >
-    <div class="col-11 login-wrap d-flex align-items-center justify-content-end">
-      <span class="pe-4">黃韻如，您好</span>
-      <span class="material-symbols-outlined" style="cursor: pointer"> login </span>
+  <div v-if="!isLoginPage">
+    <div
+      style="height: 50px; width: 100%"
+      class="d-flex align-items-center justify-content-center login position-fixed z-1"
+    >
+      <div class="col-11 login-wrap d-flex align-items-center justify-content-end">
+        <span class="pe-4">黃韻如，您好</span>
+        <span @click="logout" class="material-symbols-outlined" style="cursor: pointer">
+          login
+        </span>
+      </div>
     </div>
-  </div>
-  <aside class="navBar position-fixed z-2">
-    <div class="logo">
-      <router-link to="/">
-        <img src="../assets/image/logo/logo1-w.png" />
-      </router-link>
-    </div>
+    <aside class="navBar position-fixed z-2">
+      <div class="logo">
+        <router-link to="/">
+          <img src="../assets/image/logo/logo1-w.png" />
+        </router-link>
+      </div>
 
-    <nav>
-      <ul>
-        <router-link to="/administratormanage" active-class="active-link">
-          <li>管理員管理</li>
-        </router-link>
-        <router-link to="/news" active-class="active-link">
-          <li>最新消息管理</li>
-        </router-link>
-        <router-link to="/courseManage" active-class="active-link">
-          <li>課程管理</li>
-        </router-link>
-        <router-link to="/membermanage" active-class="active-link">
-          <li>會員管理</li>
-        </router-link>
-        <router-link to="/OrderManage" active-class="active-link">
-          <li>詢價單管理</li>
-        </router-link>
-        <router-link to="/productManage" active-class="active-link">
-          <li>商品管理</li>
-        </router-link>
-        <router-link to="/quiz" active-class="active-link">
-          <li>問答管理</li>
-        </router-link>
-        <router-link to="/discount" active-class="active-link">
-          <li>優惠券管理</li>
-        </router-link>
-      </ul>
-    </nav>
-  </aside>
+      <nav>
+        <ul>
+          <router-link to="/administratormanage" active-class="active-link">
+            <li>管理員管理</li>
+          </router-link>
+          <router-link to="/news" active-class="active-link">
+            <li>最新消息管理</li>
+          </router-link>
+          <router-link to="/courseManage" active-class="active-link">
+            <li>課程管理</li>
+          </router-link>
+          <router-link to="/membermanage" active-class="active-link">
+            <li>會員管理</li>
+          </router-link>
+          <router-link to="/OrderManage" active-class="active-link">
+            <li>詢價單管理</li>
+          </router-link>
+          <router-link to="/productManage" active-class="active-link">
+            <li>商品管理</li>
+          </router-link>
+          <router-link to="/quiz" active-class="active-link">
+            <li>問答管理</li>
+          </router-link>
+          <router-link to="/discount" active-class="active-link">
+            <li>優惠券管理</li>
+          </router-link>
+        </ul>
+      </nav>
+    </aside>
+  </div>
 </template>
 
 <script>
 export default {
   data() {
-    return {}
+    return {
+      adminName: '黃韻如' // 你可能想要從 localStorage 或 Vuex store 中獲取這個名字
+    }
   },
-  computed: {}
+  methods: {
+    logout() {
+      // 清除 localStorage 中的管理員資料
+      localStorage.removeItem('adminData')
+      // 跳轉到登入頁面
+      this.$router.push('/login')
+    }
+  },
+  computed: {
+    isLoginPage() {
+      return this.$route.path === '/login'
+    }
+  }
 }
 </script>
 
