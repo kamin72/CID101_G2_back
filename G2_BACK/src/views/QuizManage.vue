@@ -253,70 +253,74 @@ export default {
     },
     //新增視窗
     openAddForm() {
-      this.showAddUpdateForm = true
-      this.isEditing = false
+        this.showAddUpdateForm = true;
+        this.isEditing = false;
     },
     //編輯視窗
     openEditForm(item) {
-      this.showAddUpdateForm = true
-      this.isEditing = true
-      this.newQuestion = { ...item }
+        this.showAddUpdateForm = true;
+        this.isEditing = true;
+        this.newQuestion = { ...item };
     },
     //關閉視窗
     closeForm() {
-      this.showAddUpdateForm = false
-      this.isEditing = false
-      this.newQuestion = {}
+        this.showAddUpdateForm = false;
+        this.isEditing = false;
+        this.newQuestion = {};
     },
     //新增or修改
     addUpdateQuiz() {
-      let apiUrl = `${import.meta.env.VITE_API_URL}/quizManage/question_add.php`
-      if (this.isEditing) {
-        apiUrl = `${import.meta.env.VITE_API_URL}/quizManage/question_update.php`
-      }
+        if (this.newQuestion.q_ans !== 'A' && this.newQuestion.q_ans !== 'B') {
+            alert('請選擇答案');
+            return;
+        }
+        let apiUrl = `${import.meta.env.VITE_API_URL}/quizManage/question_add.php`;
+        if (this.isEditing) {
+            apiUrl = `${import.meta.env.VITE_API_URL}/quizManage/question_update.php`;
+        }
 
-      let quizData = {
+    let quizData = {
         q_name: this.newQuestion.q_name,
         q_option_a: this.newQuestion.q_option_a,
         q_option_b: this.newQuestion.q_option_b,
         q_ans: this.newQuestion.q_ans,
         q_no: this.newQuestion.q_no //有序號才能更新
-      }
+    }
 
-      fetch(apiUrl, {
+    fetch(apiUrl, {
         method: 'post',
         headers: {
-          'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
         },
         body: JSON.stringify(quizData)
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          if (!result.error) {
+    })
+    .then((response) => response.json())
+    .then((result) => {
+        if (!result.error) {
             alert(this.isEditing ? '題目修改成功' : '題目新增成功')
             this.showAddUpdateForm = false
             this.isEditing = false //重置編輯狀態
             this.newQuestion = {
-              q_name: '',
-              q_option_a: '',
-              q_option_b: '',
-              q_ans: '',
-              q_no: ''
+            q_name: '',
+            q_option_a: '',
+            q_option_b: '',
+            q_ans: '',
+            q_no: ''
             }
             this.fetchQuizData()
-          } else {
+        } else {
             alert(result.msg)
-          }
-        })
-        .catch((error) => {
-          console.error('操作失敗:', error)
-          alert('操作失敗: ' + error.message)
-        })
+        }
+    })
+    .catch((error) => {
+        console.error('操作失敗:', error)
+        alert('操作失敗: ' + error.message)
+    })
     }
-  },
-  mounted() {
+},
+mounted() {
     this.fetchQuizData()
     // this.setDefaultTime();
-  }
+}
 }
 </script>
