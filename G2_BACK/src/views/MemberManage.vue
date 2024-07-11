@@ -96,7 +96,7 @@
   <!-- 遮罩 -->
   <div v-if="showMemberInfo" class="overlay z-2" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%;background-color: rgba(0, 0, 0, 0.5);"></div>
   <!--Lightbox -->
-  <div v-if="showMemberInfo" class="mb-3 z-3 d-flex flex-wrap" style="padding: 20px; border: 1px black solid; border-radius: 10px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white;">
+  <div v-if="showMemberInfo" class="mb-3 z-3 d-flex flex-wrap" style="max-width:1000px;padding: 20px; border: 1px black solid; border-radius: 10px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white;">
     <div class="card-header w-100">
       <legend>{{ memberInfo.identity == 1 ? "一般會員詳情" : "批發商詳情"}} </legend>
     </div>
@@ -141,43 +141,44 @@
                     <div class="mb-3 row">
                         <label for="memberEmail" class="col-sm-4 col-form-label">email</label>
                         <div class="col-sm-8">
-                          <input type="text" readonly class="form-control-plaintext" id="memberEmail" v-model="memberInfo.email" />
+                          <p id="memberEmail">{{memberInfo.email}}</p>
                         </div>
                     </div>
         </div>
         <div class="retailerInfo col" v-if="memberInfo.identity == 2">
           <div class="mb-3 row">
-                        <label for="retailerNo" class="col-sm-4 col-form-label">批發商編號</label>
-                        <div class="col-sm-8">
+                        <label for="retailerNo" class="col-sm-5 col-form-label">批發商編號</label>
+                        <div class="col-sm-7">
                           <input type="text" readonly class="form-control-plaintext" id="retailerNo" v-model="memberInfo.retailer_no" />
                         </div>
           </div>
           <div class="mb-3 row">
-                        <label for="taxId" class="col-sm-4 col-form-label">統一編號</label>
-                        <div class="col-sm-8">
-                          <input type="text" readonly class="form-control-plaintext" id="taxId" v-model="memberInfo.tax_id" />
+                        <label for="taxId" class="col-sm-5 col-form-label">統一編號</label>
+                        <div class="col-sm-12">
+                          <input type="text" class="form-control" id="taxId" v-model="memberInfo.tax_id" />
                         </div>
           </div>
           <div class="mb-3 row">
-                        <label for="companyName" class="col-sm-4 col-form-label">公司名稱</label>
-                        <div class="col-sm-8">
-                          <input type="text" readonly class="form-control-plaintext" id="companyName" v-model="memberInfo.company_name" />
+                        <label for="companyName" class="col-sm-5 col-form-label">公司名稱</label>
+                        <div class="col-sm-12">
+                          <input type="text" class="form-control" id="companyName" v-model="memberInfo.company_name" />
                         </div>
           </div>
           <div class="mb-3 row">
-                        <label for="address" class="col-sm-4 col-form-label">公司地址</label>
-                        <div class="col-sm-8">
-                          <input type="text" readonly class="form-control-plaintext" id="address" v-model="memberInfo.address" />
+                        <label for="address" class="col-sm-5 col-form-label">公司地址</label>
+                        <div class="col-sm-12">
+                          <input type="text" class="form-control" id="address" v-model="memberInfo.address" />
                         </div>
           </div>
           
           
           <div class="mb-3 row">
-                        <label for="license" class="col-sm-4 col-form-label">許可證</label>
-                        <div class="col-sm-8">
+                        <label for="license" class="col-sm-5 col-form-label">許可證</label>
+                        <div class="col-sm-12">
                           <a :href="downloadLink" download="license.jpg" class="form-control-plaintext">查看</a>
-                          <input type="text" readonly class="form-control-plaintext" id="license" v-model="memberInfo.license" />
+                          <p id="license" >{{memberInfo.license}}</p>
                         </div>
+
           </div>
         </div>           
                     
@@ -218,7 +219,6 @@ export default {
       search:'',
       showMemberInfo: false,
       members: [],
-      // filteredMembers: [],
       memberInfo: {
          license: 'path/to/license.jpg'
         // created_at: '',
@@ -273,65 +273,24 @@ export default {
     totalPages() {
       return Math.ceil(this.filteredMember.length / this.itemsPerPage)
     },
-  //   searchMember(n) {
-  //   this.normal_button_action = false;
-  //   this.wholesaler_button_action = false;
-  //   this.review_button_action = false;
-
-  //   if (n === 1) {
-  //     this.normal_button_action = true;
-  //   } else if (n === 2) {
-  //     this.wholesaler_button_action = true;
-  //   } else if (n === 3) {
-  //     this.review_button_action = true;
-  //   }
-  // },
-  // filteredMember() {
-  //   const searchTerm = this.search.toLowerCase();
-
-  //   // 初步筛选，基于搜索字段
-  //   let filtered = this.members.filter(
-  //     (item) =>
-  //       String(item.no).toLowerCase().includes(searchTerm) ||
-  //       item.name.toLowerCase().includes(searchTerm) ||
-  //       item.account.toLowerCase().includes(searchTerm) ||
-  //       item.phone.toLowerCase().includes(searchTerm) ||
-  //       item.email.toLowerCase().includes(searchTerm)
-  //   );
-
-  //   // 应用身份和状态的筛选条件
-  //   if (this.normal_button_action) {
-  //     filtered = filtered.filter(item => item.identity === 1 && (item.status === 1 || item.status === 0));
-  //   } else if (this.wholesaler_button_action) {
-  //     filtered = filtered.filter(item => item.identity === 2 && (item.status === 1 || item.status === 0));
-  //   } else if (this.review_button_action) {
-  //     filtered = filtered.filter(item => item.identity === 2 && item.status === 0);
-  //   }
-
-  //   // 排序
-  //   return filtered.sort((a, b) => b.no - a.no);
-  // },
-    
   },
   methods: {
     searchMember(n) {
-    this.normal_button_action = false;
-    this.wholesaler_button_action = false;
-    this.review_button_action = false;
-    this.failed_button_action = false;
+      this.normal_button_action = false;
+      this.wholesaler_button_action = false;
+      this.review_button_action = false;
+      this.failed_button_action = false;
 
-    if (n === 1) {
-      this.normal_button_action = true;
-    } else if (n === 2) {
-      this.wholesaler_button_action = true;
-    } else if (n === 3) {
-      this.review_button_action = true;
-    } else if (n === 4) {
-      this.failed_button_action = true;
-    }
-  },
-  
-  
+      if (n === 1) {
+        this.normal_button_action = true;
+      } else if (n === 2) {
+        this.wholesaler_button_action = true;
+      } else if (n === 3) {
+        this.review_button_action = true;
+      } else if (n === 4) {
+        this.failed_button_action = true;
+      }
+    },
     setPage(page) {
       this.currentPage = page
     },
@@ -340,32 +299,6 @@ export default {
       this.memberInfo = { ...member };
       this.memberInfo.originalStatus = this.memberInfo.status;
     },
-    // searchMember(n) {
-    //   this.normal_button_action = false;
-    //   this.wholesaler_button_action = false;
-    //   this.review_button_action = false;
-    //   let identity = 0;
-    //   let status = 0;
-
-    //   if (n===1) {
-    //     this.normal_button_action = true;
-    //     identity = 1;
-    //     status = [1, 2];
-    //   } else if (n===2) {
-    //     this.wholesaler_button_action = true;
-    //     identity = 2;
-    //     status = [1, 2];
-    //   } else if (n===3) {
-    //     this.review_button_action = true;
-    //     identity = 2;
-    //     status = 0;
-    //   }
-    //   if (Array.isArray(status)) {
-    //     this.filteredMembers = this.members.filter(member => member.identity === identity && status.includes(member.status));
-    //   } else {
-    //     this.filteredMembers = this.members.filter(member => member.identity === identity && member.status === status);
-    //   }
-    // },
     fetchMemberData() {
       fetch(`${import.meta.env.VITE_API_URL}/memberManage/getMember.php`)
         .then((res) => res.json())
@@ -382,23 +315,32 @@ export default {
         });
     },
     updateStatus() {
+      // 准备要发送的数据
+      let updateData = {
+        no: this.memberInfo.no,
+        status: this.memberInfo.status
+      };
+
+      // 如果是批发商会员，添加其他需要更新的字段
+      if (this.memberInfo.identity === 2) {
+        updateData.company_name = this.memberInfo.company_name;
+        updateData.tax_id = this.memberInfo.tax_id;
+        updateData.address = this.memberInfo.address;
+      }
+
       fetch(`${import.meta.env.VITE_API_URL}/memberManage/updateStatus.php`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          no: this.memberInfo.no,
-          status: this.memberInfo.status
-        })
+        body: JSON.stringify(updateData)
       })
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
             alert(data.msg);
           } else {
-
-            alert("更新狀態成功");
+            alert("更新資料/狀態成功");
             this.fetchMemberData();
             this.showMemberInfo = false;
           }
