@@ -34,7 +34,9 @@ export default {
       // 存儲管理員數據
       localStorage.setItem('adminData', JSON.stringify(adminData))
       // 導航到後台首頁
-      this.$router.push('/admin/dashboard')
+      if (this.$route.path === '/login') {
+        this.$router.push('/news')
+      }
     },
     checkAuth() {
       // 檢查 localStorage 中是否有管理員資訊
@@ -42,12 +44,11 @@ export default {
       return adminData !== null
     }
   },
-  mounted() {
-    // 檢查用戶是否已經登入
+  created() {
     this.isLoggedIn = this.checkAuth()
-    if (this.isLoggedIn) {
-      // 如果已登入，直接導航到後台首頁
-      this.$router.push('/admin/dashboard')
+    if (!this.isLoggedIn && this.$route.path !== '/login') {
+      // 如果未登录且不在登录页，则重定向到登录页
+      this.$router.push('/login')
     }
   }
 }

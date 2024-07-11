@@ -36,8 +36,8 @@
           <tr v-for="(item, index) in paginatedQuiz" :key="index">
             <th scope="row">{{ item.q_no }}</th>
             <td style="width: 250px">{{ item.q_name }}</td>
-            <td style="width: 220px">{{ item.q_option_a }}</td>
-            <td style="width: 220px">{{ item.q_option_b }}</td>
+            <td style="width: 120px">{{ item.q_option_a }}</td>
+            <td style="width: 120px">{{ item.q_option_b }}</td>
             <td>{{ item.q_ans }}</td>
             <td>
               <div class="button-wrap d-flex">
@@ -143,16 +143,7 @@
       </div>
       <div class="mb-3">
         <label for="quizAnswer" class="form-label">答案</label>
-        <select
-          class="form-select"
-          aria-label="Default select example"
-          id="quizAnswer"
-          v-model="newQuestion.q_ans"
-        >
-          <option selected>請選擇</option>
-          <option value="A">A</option>
-          <option value="B">B</option>
-        </select>
+        <input class="form-control" id="quizAnswer" v-model="newQuestion.q_ans" />
       </div>
       <div class="d-grid gap-2 d-md-flex justify-content-md-center">
         <button type="submit" class="btn btn-primary col-6">
@@ -253,70 +244,74 @@ export default {
     },
     //新增視窗
     openAddForm() {
-      this.showAddUpdateForm = true
-      this.isEditing = false
+        this.showAddUpdateForm = true;
+        this.isEditing = false;
     },
     //編輯視窗
     openEditForm(item) {
-      this.showAddUpdateForm = true
-      this.isEditing = true
-      this.newQuestion = { ...item }
+        this.showAddUpdateForm = true;
+        this.isEditing = true;
+        this.newQuestion = { ...item };
     },
     //關閉視窗
     closeForm() {
-      this.showAddUpdateForm = false
-      this.isEditing = false
-      this.newQuestion = {}
+        this.showAddUpdateForm = false;
+        this.isEditing = false;
+        this.newQuestion = {};
     },
     //新增or修改
     addUpdateQuiz() {
-      let apiUrl = `${import.meta.env.VITE_API_URL}/quizManage/question_add.php`
-      if (this.isEditing) {
-        apiUrl = `${import.meta.env.VITE_API_URL}/quizManage/question_update.php`
-      }
+        if (this.newQuestion.q_ans !== 'A' && this.newQuestion.q_ans !== 'B') {
+            alert('請選擇答案');
+            return;
+        }
+        let apiUrl = `${import.meta.env.VITE_API_URL}/quizManage/question_add.php`;
+        if (this.isEditing) {
+            apiUrl = `${import.meta.env.VITE_API_URL}/quizManage/question_update.php`;
+        }
 
-      let quizData = {
+    let quizData = {
         q_name: this.newQuestion.q_name,
         q_option_a: this.newQuestion.q_option_a,
         q_option_b: this.newQuestion.q_option_b,
         q_ans: this.newQuestion.q_ans,
         q_no: this.newQuestion.q_no //有序號才能更新
-      }
+    }
 
-      fetch(apiUrl, {
+    fetch(apiUrl, {
         method: 'post',
         headers: {
-          'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
         },
         body: JSON.stringify(quizData)
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          if (!result.error) {
+    })
+    .then((response) => response.json())
+    .then((result) => {
+        if (!result.error) {
             alert(this.isEditing ? '題目修改成功' : '題目新增成功')
             this.showAddUpdateForm = false
             this.isEditing = false //重置編輯狀態
             this.newQuestion = {
-              q_name: '',
-              q_option_a: '',
-              q_option_b: '',
-              q_ans: '',
-              q_no: ''
+            q_name: '',
+            q_option_a: '',
+            q_option_b: '',
+            q_ans: '',
+            q_no: ''
             }
             this.fetchQuizData()
-          } else {
+        } else {
             alert(result.msg)
-          }
-        })
-        .catch((error) => {
-          console.error('操作失敗:', error)
-          alert('操作失敗: ' + error.message)
-        })
+        }
+    })
+    .catch((error) => {
+        console.error('操作失敗:', error)
+        alert('操作失敗: ' + error.message)
+    })
     }
-  },
-  mounted() {
+},
+mounted() {
     this.fetchQuizData()
     // this.setDefaultTime();
-  }
+}
 }
 </script>
