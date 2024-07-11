@@ -1,20 +1,20 @@
 <template>
-  <div>
-    <LoginView v-if="!isLoggedIn" @login="handleLogin" />
-    <div v-else>
+  <!-- <div>
+    <LoginView v-if="!isLoggedIn" @login="handleLogin" /> -->
+    <!-- <div v-else> -->
       <Navigator />
       <keep-alive>
         <RouterView v-if="$route.meta.keepAlive" />
       </keep-alive>
       <RouterView v-if="!$route.meta.keepAlive" />
-    </div>
-  </div>
+    <!-- </div> -->
+  <!-- </div> -->
 </template>
 
 <script>
 import { RouterView } from 'vue-router'
 import Navigator from '@/components/Navigator.vue'
-import LoginView from '@/views/LoginView.vue'
+// import LoginView from '@/views/LoginView.vue'
 
 export default {
   data() {
@@ -25,7 +25,7 @@ export default {
   components: {
     RouterView,
     Navigator,
-    LoginView
+    // LoginView
   },
   methods: {
     handleLogin(adminData) {

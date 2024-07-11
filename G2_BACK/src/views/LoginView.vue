@@ -42,7 +42,7 @@ export default {
   methods: {
     async handleLogin() {
       try {
-        const response = await fetch('http://localhost/CID101_G2_php/back/Login/login.php', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/Login/login.php`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
