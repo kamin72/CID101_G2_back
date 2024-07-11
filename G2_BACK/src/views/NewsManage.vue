@@ -36,16 +36,22 @@
         <tbody>
           <tr v-for="(item, index) in paginatedNews" :key="item.news_id">
             <th scope="row">{{ item.news_id }}</th>
-            <td style="width: 150px">
-              <img :src="'../../../../image/news/' + item.news_img" alt="Image Preview" />{{
-                item.news_img
-              }}
+            <td>
+                <img :src="parseServerImg(item.news_img)" alt="Image Preview" style="width: 150px; aspect-ratio: 4/3; object-fit: cover; object-position: center;" />
+                <div>
+                  {{item.news_img}}
+                </div>
+          
             </td>
-            <td style="width: 150px">{{ item.news_title }}</td>
+            <td >
+              <div style="width: 120px">
+                {{ item.news_title }}
+              </div>
+            </td>
             <td>
               <div
                 class="text-nowrap"
-                style="width: 10rem; text-overflow: ellipsis; overflow: hidden"
+                style="width: 120px; text-overflow: ellipsis; overflow: hidden"
               >
                 {{ item.news_content }}
               </div>
@@ -61,9 +67,9 @@
                   :checked="item.news_state === 1"
                   @change="toggleActive(item)"
                 />
-                <label class="form-check-label" for="flexSwitchCheckChecked">{{
-                  item.news_state === 1 ? '上架' : '下架'
-                }}</label>
+                <label class="form-check-label" for="flexSwitchCheckChecked">
+                  {{item.news_state === 1 ? '上架' : '下架'}}
+                </label>
               </div>
             </td>
             <td>
@@ -167,7 +173,7 @@
         />
         <img
           v-if="!previewImage && originalImage"
-          :src="'../../../../image/news/' + originalImage"
+          :src="parseServerImg(originalImage)"
           alt="Image"
           style="max-width: 100%; height: 100px; margin-top: 10px"
         />
@@ -211,7 +217,7 @@ export default {
   data() {
     return {
       currentPage: 1, // 當前頁碼
-      itemsPerPage: 3, // 每頁顯示的資料數量
+      itemsPerPage: 10, // 每頁顯示的資料數量
       search: '', //搜尋
       showAddUpdateForm: false, //新增or編輯視窗
       isEditing: false, //讓程式判斷是否為編輯模式的狀態
@@ -248,6 +254,9 @@ export default {
     }
   },
   methods: {
+    parseServerImg(imgURL) {
+            return `${import.meta.env.VITE_FILE_URL}/news/${imgURL}`
+    },
     setPage(page) {
       this.currentPage = page
     },

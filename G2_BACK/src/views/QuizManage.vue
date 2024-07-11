@@ -200,6 +200,10 @@ export default {
         },
         //新增or修改
         addUpdateQuiz() {
+        if (this.newQuestion.q_ans !== 'A' && this.newQuestion.q_ans !== 'B') {
+            alert('請選擇答案');
+            return;
+        }
         let apiUrl = `${import.meta.env.VITE_API_URL}/quizManage/question_add.php`;
         if (this.isEditing) {
             apiUrl = `${import.meta.env.VITE_API_URL}/quizManage/question_update.php`;
