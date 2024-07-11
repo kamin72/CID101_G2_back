@@ -1,20 +1,20 @@
 <template>
-  <div>
-    <LoginView v-if="!isLoggedIn" @login="handleLogin" />
-    <div v-else>
+  <!-- <div>
+    <LoginView v-if="!isLoggedIn" @login="handleLogin" /> -->
+    <!-- <div v-else> -->
       <Navigator />
       <keep-alive>
         <RouterView v-if="$route.meta.keepAlive" />
       </keep-alive>
       <RouterView v-if="!$route.meta.keepAlive" />
-    </div>
-  </div>
+    <!-- </div> -->
+  <!-- </div> -->
 </template>
 
 <script>
 import { RouterView } from 'vue-router'
 import Navigator from '@/components/Navigator.vue'
-import LoginView from '@/views/LoginView.vue'
+// import LoginView from '@/views/LoginView.vue'
 
 export default {
   data() {
@@ -25,7 +25,7 @@ export default {
   components: {
     RouterView,
     Navigator,
-    LoginView
+    // LoginView
   },
   methods: {
     handleLogin(adminData) {
@@ -34,7 +34,9 @@ export default {
       // 存儲管理員數據
       localStorage.setItem('adminData', JSON.stringify(adminData))
       // 導航到後台首頁
-      this.$router.push('/admin/dashboard')
+      if (this.$route.path === '/login') {
+        this.$router.push('/news')
+      }
     },
     checkAuth() {
       // 檢查 localStorage 中是否有管理員資訊
@@ -42,12 +44,11 @@ export default {
       return adminData !== null
     }
   },
-  mounted() {
-    // 檢查用戶是否已經登入
+  created() {
     this.isLoggedIn = this.checkAuth()
-    if (this.isLoggedIn) {
-      // 如果已登入，直接導航到後台首頁
-      this.$router.push('/admin/dashboard')
+    if (!this.isLoggedIn && this.$route.path !== '/login') {
+      // 如果未登录且不在登录页，则重定向到登录页
+      this.$router.push('/login')
     }
   }
 }

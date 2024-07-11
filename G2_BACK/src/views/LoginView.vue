@@ -42,7 +42,7 @@ export default {
   methods: {
     async handleLogin() {
       try {
-        const response = await fetch('http://localhost/CID101_G2_php/back/Login/login.php', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/Login/login.php`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -56,6 +56,9 @@ export default {
         const result = await response.json()
 
         if (result.success) {
+          // 登入成功后保存管理员信息到 localStorage
+          localStorage.setItem('adminData', JSON.stringify(result.adminData))
+
           // 登入成功後導航到最新消息頁面
           this.$emit('login', result.adminData)
           this.$router.push('/news') // 導航到最新消息頁面
