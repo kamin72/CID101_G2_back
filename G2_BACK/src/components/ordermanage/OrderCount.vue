@@ -23,7 +23,11 @@
       >
         <option value="0" selected>品種</option>
         <option value="波爾多混釀">波爾多混釀</option>
-        <option value="阿里戈蝶">阿里戈蝶</option>
+        <option value="卡本內蘇維濃">卡本內蘇維濃</option>
+        <option value="希哈">希哈</option>
+        <option value="夏多內">夏多內</option>
+        <option value="麗絲玲">麗絲玲</option>
+        <option value="白蘇維濃">白蘇維濃</option>
       </select>
     </div>
     <!-- <div class="mt-3 w-50">

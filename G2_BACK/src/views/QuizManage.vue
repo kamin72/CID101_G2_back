@@ -261,7 +261,10 @@ export default {
     },
     //新增or修改
     addUpdateQuiz() {
-      if (this.newQuestion.q_ans !== 'A' && this.newQuestion.q_ans !== 'B') {
+      if (
+        this.newQuestion.q_ans !== this.newQuestion.q_option_a &&
+        this.newQuestion.q_ans !== this.newQuestion.q_option_b
+      ) {
         alert('請選擇答案')
         return
       }
