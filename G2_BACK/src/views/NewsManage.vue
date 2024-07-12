@@ -37,13 +37,16 @@
           <tr v-for="(item, index) in paginatedNews" :key="item.news_id">
             <th scope="row">{{ item.news_id }}</th>
             <td>
-                <img :src="parseServerImg(item.news_img)" alt="Image Preview" style="width: 150px; aspect-ratio: 4/3; object-fit: cover; object-position: center;" />
-                <div>
-                  {{item.news_img}}
-                </div>
-          
+              <img
+                :src="parseServerImg(item.news_img)"
+                alt="Image Preview"
+                style="width: 150px; aspect-ratio: 4/3; object-fit: cover; object-position: center"
+              />
+              <div>
+                {{ item.news_img }}
+              </div>
             </td>
-            <td >
+            <td>
               <div style="width: 120px">
                 {{ item.news_title }}
               </div>
@@ -68,7 +71,7 @@
                   @change="toggleActive(item)"
                 />
                 <label class="form-check-label" for="flexSwitchCheckChecked">
-                  {{item.news_state === 1 ? '上架' : '下架'}}
+                  {{ item.news_state === 1 ? '上架' : '下架' }}
                 </label>
               </div>
             </td>
@@ -255,7 +258,7 @@ export default {
   },
   methods: {
     parseServerImg(imgURL) {
-            return `${import.meta.env.VITE_FILE_URL}/news/${imgURL}`
+      return `${import.meta.env.VITE_FILE_URL}/${imgURL}`
     },
     setPage(page) {
       this.currentPage = page
@@ -287,12 +290,9 @@ export default {
       }
     },
     deleteNews(item) {
-      fetch(
-        `${import.meta.env.VITE_API_URL}/newsManage/news_delete.php?news_id=${item.news_id}`,
-        {
-          method: 'GET'
-        }
-      )
+      fetch(`${import.meta.env.VITE_API_URL}/newsManage/news_delete.php?news_id=${item.news_id}`, {
+        method: 'GET'
+      })
         .then((response) => response.json())
         .then((result) => {
           if (!result.error) {
