@@ -149,7 +149,7 @@ export default {
   },
   methods: {
     parseServerImg(file) {
-      return `${import.meta.env.VITE_FILE_URL}/img/${file}`
+      return `${import.meta.env.VITE_FILE_URL}/${file}`
       // return new URL(`../assets/img/wine/${file}`, import.meta.url).href
     },
     fetchData() {

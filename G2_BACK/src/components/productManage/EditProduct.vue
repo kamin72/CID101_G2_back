@@ -44,12 +44,7 @@
       </div>
       <div class="mb-3">
         <label for="productImg" class="form-label fw-bolder">商品圖片</label>
-        <input 
-          type="file" 
-          class="form-control" 
-          id="productImg" 
-          @change="handleProductImgChange" 
-        />
+        <input type="file" class="form-control" id="productImg" @change="handleProductImgChange" />
 
         <img
           v-if="productImgPreview || productImg"
@@ -137,24 +132,27 @@ export default {
         if (this.detail.prod_img instanceof Blob) {
           formData.append('prod_img', this.detail.prod_img)
         } else {
-          formData.append('prod_img', this.detail.prod_img); // 保留原始圖片
+          formData.append('prod_img', this.detail.prod_img) // 保留原始圖片
         }
 
         if (this.detail.bg_img instanceof Blob) {
           formData.append('bg_img', this.detail.bg_img)
         } else {
-          formData.append('bg_img', this.detail.bg_img); // 保留原始圖片
+          formData.append('bg_img', this.detail.bg_img) // 保留原始圖片
         }
 
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/productManage/product_update.php`, {
-          body: formData,
-          method: 'POST'
-        })
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/productManage/product_update.php`,
+          {
+            body: formData,
+            method: 'POST'
+          }
+        )
 
         const result = await response.json()
         if (!result.error) {
           // 更新成功
-          alert('商品更新成功') 
+          alert('商品更新成功')
           this.$router.push('/productManage')
         } else {
           // 更新失敗
@@ -171,7 +169,7 @@ export default {
       // return new URL(`../../assets/img/wine/${file}`, import.meta.url).href
     },
     fetchData() {
-      fetch('http://localhost/CID101_G2_php/front/product.php')
+      fetch(`${import.meta.env.VITE_API_URL}/productManage/product_read.php`)
         .then((response) => response.json())
         .then((data) => {
           console.log('Fetched data:', data) // 添加這行來檢查接收到的數據
