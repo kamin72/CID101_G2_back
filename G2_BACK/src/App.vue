@@ -1,20 +1,20 @@
 <template>
-  <!-- <div>
-    <LoginView v-if="!isLoggedIn" @login="handleLogin" /> -->
-    <!-- <div v-else> -->
+  <div>
+    <LoginView v-if="!isLoggedIn" @login="handleLogin" />
+    <div v-else>
       <Navigator />
       <keep-alive>
         <RouterView v-if="$route.meta.keepAlive" />
       </keep-alive>
       <RouterView v-if="!$route.meta.keepAlive" />
-    <!-- </div> -->
-  <!-- </div> -->
+    </div>
+  </div>
 </template>
 
 <script>
 import { RouterView } from 'vue-router'
 import Navigator from '@/components/Navigator.vue'
-// import LoginView from '@/views/LoginView.vue'
+import LoginView from '@/views/LoginView.vue'
 
 export default {
   data() {
@@ -25,14 +25,14 @@ export default {
   components: {
     RouterView,
     Navigator,
-    // LoginView
+    LoginView
   },
   methods: {
-    handleLogin(adminData) {
+    handleLogin(loginAdminData) {
       // 登入成功後調用此方法設置 isLoggedIn 為 true
       this.isLoggedIn = true
       // 存儲管理員數據
-      localStorage.setItem('adminData', JSON.stringify(adminData))
+      localStorage.setItem('loginAdminData', JSON.stringify(loginAdminData))
       // 導航到後台首頁
       if (this.$route.path === '/login') {
         this.$router.push('/news')
@@ -40,8 +40,8 @@ export default {
     },
     checkAuth() {
       // 檢查 localStorage 中是否有管理員資訊
-      const adminData = localStorage.getItem('adminData')
-      return adminData !== null
+      const loginAdminData = localStorage.getItem('loginAdminData')
+      return loginAdminData !== null
     }
   },
   created() {

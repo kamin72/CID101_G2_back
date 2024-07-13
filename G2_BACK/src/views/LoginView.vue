@@ -31,6 +31,7 @@
     </form>
   </div>
 </template>
+
 <script>
 export default {
   data() {
@@ -57,11 +58,15 @@ export default {
 
         if (result.success) {
           // 登入成功后保存管理员信息到 localStorage
-          localStorage.setItem('adminData', JSON.stringify(result.adminData))
+          localStorage.setItem('loginAdminData', JSON.stringify(result.loginAdminData))
+          localStorage.setItem('isSuperAdmin', result.isSuperAdmin)
 
-          // 登入成功後導航到最新消息頁面
-          this.$emit('login', result.adminData)
-          this.$router.push('/news') // 導航到最新消息頁面
+          // 根據 isSuperAdmin 決定導航到哪個頁面
+          if (result.isSuperAdmin) {
+            this.$router.push('/administratormanage') // 導航到 administratormanage 頁面
+          } else {
+            this.$router.push('/news') // 導航到最新消息頁面
+          }
         } else {
           alert(result.msg)
         }
