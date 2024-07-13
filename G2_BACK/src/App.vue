@@ -28,11 +28,11 @@ export default {
     LoginView
   },
   methods: {
-    handleLogin(adminData) {
+    handleLogin(loginAdminData) {
       // 登入成功後調用此方法設置 isLoggedIn 為 true
       this.isLoggedIn = true
       // 存儲管理員數據
-      localStorage.setItem('adminData', JSON.stringify(adminData))
+      localStorage.setItem('loginAdminData', JSON.stringify(loginAdminData))
       // 導航到後台首頁
       if (this.$route.path === '/login') {
         this.$router.push('/news')
@@ -40,8 +40,8 @@ export default {
     },
     checkAuth() {
       // 檢查 localStorage 中是否有管理員資訊
-      const adminData = localStorage.getItem('adminData')
-      return adminData !== null
+      const loginAdminData = localStorage.getItem('loginAdminData')
+      return loginAdminData !== null
     }
   },
   created() {

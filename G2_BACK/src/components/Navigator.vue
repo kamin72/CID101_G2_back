@@ -5,7 +5,7 @@
       class="d-flex align-items-center justify-content-center login position-fixed z-1"
     >
       <div class="col-11 login-wrap d-flex align-items-center justify-content-end">
-        <span class="pe-4">{{ adminName }}，您好</span>
+        <span class="pe-4">{{ navAdminName }}，您好</span>
         <span @click="logout" class="material-symbols-outlined" style="cursor: pointer">
           login
         </span>
@@ -20,7 +20,7 @@
 
       <nav>
         <ul>
-          <router-link to="/administratormanage" active-class="active-link">
+          <router-link to="/administratormanage" active-class="active-link" v-if="isSuperAdmin == true">
             <li>管理員管理</li>
           </router-link>
           <router-link to="/news" active-class="active-link">
@@ -54,31 +54,56 @@
 export default {
   data() {
     return {
-      adminName: '' // 你可能想要從 localStorage 或 Vuex store 中獲取這個名字
+      isSuperAdmin: false,
+      loginAdminData:[],
+      navAdminName: '' 
     }
   },
   methods: {
     logout() {
+      this.loginAdminData = '';
+      this.navAdminName = '';
+      this.isSuperAdmin = false;
       // 清除 localStorage 中的管理員資料
+      localStorage.removeItem('loginAdminData')
       localStorage.removeItem('adminData')
+      localStorage.removeItem('isSuperAdmin')
       // 跳轉到登入頁面
       this.$router.push('/login')
     },
     updateAdminName() {
-      const adminData = JSON.parse(localStorage.getItem('adminData'))
-      if (adminData && adminData.admin_name) {
-        this.adminName = adminData.admin_name
+      const loginAdminData = JSON.parse(localStorage.getItem('loginAdminData'))
+      const isSuperAdmin = JSON.parse(localStorage.getItem('isSuperAdmin'))
+      if (loginAdminData && loginAdminData.admin_name) {
+        this.navAdminName = loginAdminData.admin_name
+        this.loginAdminData = loginAdminData
+        if (isSuperAdmin) {
+        this.isSuperAdmin = true
+        }else{
+          this.isSuperAdmin = false
+        }
+      }
+      
+    },
+    checkLoginStatus() {
+      const loginAdminData = JSON.parse(localStorage.getItem('loginAdminData')) 
+      if (!loginAdminData) {
+        // 如果沒有管理員資料，跳轉到登入頁面
+        this.$router.push('/login')
       }
     }
   },
   computed: {
     isLoginPage() {
-      return this.$route.path === '/login'
-    }
+        return this.$route.path === '/login'
+    },
+    
   },
   created() {
+    this.checkLoginStatus()
     this.updateAdminName()
-    // 监听路由变化，每次路由变化时更新管理员名称
+  },
+  mounted() {
     this.$router.afterEach(() => {
       this.updateAdminName()
     })

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-if="isSuperAdmin">
     <span class="fs-1 fw-bolder">管理員管理</span>
     <div class="d-flex gap-3 justify-content-end">
       <div class="input-group z-0 col-6 w-auto">
@@ -103,6 +103,7 @@
 export default {
   data() {
     return {
+      isSuperAdmin: false,
       adminData: [],
       searchData: [],
       search: '',
@@ -221,6 +222,15 @@ export default {
     paginatedQuiz() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage
       return this.searchData.slice(startIndex, startIndex + this.itemsPerPage)
+    }
+  },
+  created() {
+    const isSuperAdmin = JSON.parse(localStorage.getItem('isSuperAdmin'))
+    if (isSuperAdmin) {
+      this.isSuperAdmin = true
+    } else {
+      this.isSuperAdmin = true
+      this.$router.push('/news') // 或者导航到其他页面
     }
   }
 }
