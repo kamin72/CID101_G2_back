@@ -225,6 +225,7 @@ export default {
       showAddUpdateForm: false, //新增or編輯視窗
       isEditing: false, //讓程式判斷是否為編輯模式的狀態
       news: [],
+      temp: [],
       newsForm: {
         news_img: '',
         news_title: '',
@@ -239,14 +240,19 @@ export default {
   },
   computed: {
     filteredNews() {
-      const searchTerm = this.search.toLowerCase()
-      return this.news
-        .filter(
-          (item) =>
-            item.news_title.toLowerCase().includes(searchTerm) ||
-            item.news_content.toLowerCase().includes(searchTerm)
+      if (this.search == '') {
+        return this.news
+      } else {
+        return (
+          this.temp
+            .filter(
+              (item) =>
+                item.news_title.toLowerCase().includes(this.search) ||
+                item.news_content.toLowerCase().includes(this.search)
+            )
+            .sort((a, b) => b.news_id - a.news_id) || []
         )
-        .sort((a, b) => b.news_id - a.news_id)
+      }
     },
     paginatedNews() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage
@@ -316,7 +322,8 @@ export default {
             alert(data.msg)
           } else if (data.news) {
             this.news = data.news
-            localStorage.setItem('news', JSON.stringify(this.news))
+            this.temp = data.news
+            // localStorage.setItem('news', JsSON.stringify(this.news))
           }
         })
     },
