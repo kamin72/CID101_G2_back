@@ -79,30 +79,49 @@ export default {
   },
 
   methods: {
-    fetchCourses() {
-      const xhr = new XMLHttpRequest();
-      const url = `${import.meta.env.VITE_API_URL}/courseManage/getCourses.php`;
-      xhr.open('GET', url, true);
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          try {
-            const response = JSON.parse(xhr.responseText);
-            if (response.error) {
-              console.error('Error fetching courses:', response.message);
-            } else {
-              this.courses = response.courses;
-            }
-          } catch (e) {
-            console.error('Error parsing JSON:', e);
-          }
-        } else {
-          console.error('HTTP error', xhr.status, xhr.statusText);
+
+    // fetchCourses() {
+    //   const xhr = new XMLHttpRequest();
+    //   const url = `${import.meta.env.VITE_API_URL}/courseManage/getCourses.php`;
+    //   xhr.open('GET', url, true);
+    //   xhr.onload = () => {
+    //     if (xhr.status === 200) {
+    //       try {
+    //         const response = JSON.parse(xhr.responseText);
+    //         if (response.error) {
+    //           console.error('Error fetching courses:', response.message);
+    //         } else {
+    //           this.courses = response.courses;
+    //         }
+    //       } catch (e) {
+    //         console.error('Error parsing JSON:', e);
+    //       }
+    //     } else {
+    //       console.error('HTTP error', xhr.status, xhr.statusText);
+    //     }
+    //   };
+    //   xhr.onerror = () => {
+    //     console.error('Network error');
+    //   };
+    //   xhr.send();
+    // },
+
+    async fetchCourses() {
+      try {
+        const url = `${import.meta.env.VITE_API_URL}/courseManage/getCourses.php`;
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      };
-      xhr.onerror = () => {
-        console.error('Network error');
-      };
-      xhr.send();
+        const data = await response.json();
+        if (data.error) {
+          console.error('Error fetching courses:', data.message);
+        } else {
+          this.courses = data.courses;
+        }
+      } catch (e) {
+        console.error('Error fetching courses:', e);
+      }
     },
 
     formatDateTime(dateTimeString) {
@@ -119,11 +138,6 @@ export default {
       if (confirm(`確定要刪除課程編號 ${courseId} 嗎？`)) {
         this.deleteCourse(courseId);
       }
-    },
-
-    deleteCourse(courseId) {
-      // 這裡添加刪除課程的邏輯
-      console.log(`刪除課程 ${courseId}`);
     },
 
     deleteCourse(courseId) {
@@ -160,47 +174,9 @@ export default {
       xhr.send(JSON.stringify({ course_id: courseId }));
     },
 
-    toggleCourseStatus(courseId, currentStatus) {
-      const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
-      const xhr = new XMLHttpRequest();
-      const url = `${import.meta.env.VITE_API_URL}/courseManage/updateCourseStatus.php`;
-      xhr.open('POST', url, true);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          try {
-            const response = JSON.parse(xhr.responseText);
-            if (response.success) {
-              // 更新本地狀態
-              const course = this.courses.find(c => c.course_id === courseId);
-              if (course) {
-                course.course_status = newStatus;
-              }
-            } else {
-              alert('更新課程狀態失敗：' + response.message);
-            }
-          } catch (e) {
-            console.error('Error parsing JSON:', e);
-            alert('發生錯誤，請稍後再試。');
-          }
-        } else {
-          console.error('HTTP error', xhr.status, xhr.statusText);
-          alert('發生錯誤，請稍後再試。');
-        }
-      };
-
-      xhr.onerror = () => {
-        console.error('Network error');
-        alert('網絡錯誤，請檢查您的連接。');
-      };
-
-      xhr.send(JSON.stringify({ course_id: courseId, course_status: newStatus }));
+    mounted() {
+      this.fetchCourses();
     }
-  },
-
-  mounted() {
-    this.fetchCourses();
   }
 }
 </script>
