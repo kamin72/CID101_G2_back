@@ -13,14 +13,8 @@
         </div>
         <div class="right-wrap d-flex">
           <div style="width: 320px" class="input-group mb-3">
-            <input
-              style="height: 40px"
-              type="text"
-              class="form-control"
-              placeholder="請輸入課程內容資訊"
-              aria-label="search-course-info"
-              aria-describedby="button-search"
-            />
+            <input style="height: 40px" type="text" class="form-control" placeholder="請輸入課程內容資訊"
+              aria-label="search-course-info" aria-describedby="button-search" />
             <button class="btn btn-primary me-1" type="button" id="button-search">搜尋</button>
           </div>
           <RouterLink to="/addCoursePage">
@@ -56,31 +50,19 @@
             <td class="fs-6 nowrap">{{ course.course_discount || '無' }}</td>
             <td class="fs-6 nowrap">
               <div class="form-check form-switch">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  role="switch"
-                  :id="'flexSwitchCheck' + course.course_id"
-                  :checked="course.course_status === 'active'"
-                  @change="toggleCourseStatus(course.course_id)"
-                />
+                <input class="form-check-input" type="checkbox" role="switch" :id="'flexSwitchCheck' + course.course_id"
+                  :checked="course.course_status === 'active'" @change="toggleCourseStatus(course.course_id)" />
               </div>
             </td>
             <td class="fs-6 nowrap">
               <div class="button-wrap d-flex">
                 <RouterLink :to="{ name: 'editCoursePage', params: { id: course.course_id } }">
-                  <button
-                    type="button"
-                    class="btn btn-primary btn-sm d-flex align-items-center me-1"
-                  >
+                  <button type="button" class="btn btn-primary btn-sm d-flex align-items-center me-1">
                     編輯
                   </button>
                 </RouterLink>
-                <button
-                  type="button"
-                  class="btn btn-danger btn-sm d-flex align-items-center"
-                  @click="confirmDelete(course.course_id)"
-                >
+                <button type="button" class="btn btn-danger btn-sm d-flex align-items-center"
+                  @click="confirmDelete(course.course_id)">
                   刪除
                 </button>
               </div>
@@ -101,32 +83,6 @@ export default {
   },
 
   methods: {
-    // fetchCourses() {
-    //   const xhr = new XMLHttpRequest();
-    //   const url = `${import.meta.env.VITE_API_URL}/courseManage/getCourses.php`;
-    //   xhr.open('GET', url, true);
-    //   xhr.onload = () => {
-    //     if (xhr.status === 200) {
-    //       try {
-    //         const response = JSON.parse(xhr.responseText);
-    //         if (response.error) {
-    //           console.error('Error fetching courses:', response.message);
-    //         } else {
-    //           this.courses = response.courses;
-    //         }
-    //       } catch (e) {
-    //         console.error('Error parsing JSON:', e);
-    //       }
-    //     } else {
-    //       console.error('HTTP error', xhr.status, xhr.statusText);
-    //     }
-    //   };
-    //   xhr.onerror = () => {
-    //     console.error('Network error');
-    //   };
-    //   xhr.send();
-    // },
-
     async fetchCourses() {
       try {
         const url = `${import.meta.env.VITE_API_URL}/courseManage/getCourses.php`
