@@ -79,33 +79,6 @@ export default {
   },
 
   methods: {
-
-    // fetchCourses() {
-    //   const xhr = new XMLHttpRequest();
-    //   const url = `${import.meta.env.VITE_API_URL}/courseManage/getCourses.php`;
-    //   xhr.open('GET', url, true);
-    //   xhr.onload = () => {
-    //     if (xhr.status === 200) {
-    //       try {
-    //         const response = JSON.parse(xhr.responseText);
-    //         if (response.error) {
-    //           console.error('Error fetching courses:', response.message);
-    //         } else {
-    //           this.courses = response.courses;
-    //         }
-    //       } catch (e) {
-    //         console.error('Error parsing JSON:', e);
-    //       }
-    //     } else {
-    //       console.error('HTTP error', xhr.status, xhr.statusText);
-    //     }
-    //   };
-    //   xhr.onerror = () => {
-    //     console.error('Network error');
-    //   };
-    //   xhr.send();
-    // },
-
     async fetchCourses() {
       try {
         const url = `${import.meta.env.VITE_API_URL}/courseManage/getCourses.php`;
