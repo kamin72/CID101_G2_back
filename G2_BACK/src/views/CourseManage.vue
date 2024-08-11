@@ -152,7 +152,17 @@ export default {
     }
   },
   mounted() {
-    this.fetchCourses()
+    this.fetchCourses();
+
+    this.$watch(
+      () => this.$route.query,
+      (query) => {
+        if (query.refresh) {
+          this.fetchCourses();
+        }
+      },
+      { immediate: true }
+    );
   }
 }
 </script>
